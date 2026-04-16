@@ -1,0 +1,13 @@
+# Sistema
+.DS_Store
+
+# Entornos locales
+.env
+.env.*
+
+# Dependencias / builds futuros
+node_modules/
+vendor/
+dist/
+build/
+

@@ -2,25 +2,58 @@
 
 ## Que es
 
-Oferta de entrada para colegios privados que permite medir el estado inicial de competencias financieras de estudiantes y abrir una conversacion institucional sobre implementacion de Finanzas Desde La Escuela.
+Instrumento de entrada para colegios privados que permite medir el estado inicial de competencias financieras de estudiantes y abrir una conversacion institucional sobre implementacion de **Finanzas Desde La Escuela**.
+
+No se presenta como una encuesta suelta. Se presenta como una herramienta institucional para que el colegio entienda que saben sus estudiantes, que brechas existen y que ruta de formacion podria implementar.
 
 ## Para quien
 
-Colegios privados con estudiantes de bachillerato.
+Colegios privados con estudiantes de bachillerato, especialmente grados 8, 9, 10 y 11.
 
 ## Problema que aborda
 
 El colegio puede reconocer que la educacion financiera es importante, pero no saber como medir el nivel actual de sus estudiantes ni como implementar una solucion completa.
 
+El diagnostico ayuda a convertir una preocupacion general en evidencia concreta.
+
 ## Resultado esperado
 
-Un reporte inicial que muestre brechas, oportunidades y una recomendacion de implementacion.
+Un reporte inicial que muestre:
+
+- nivel general de los estudiantes;
+- fortalezas;
+- brechas;
+- diferencias por grupo o grado, si aplica;
+- recomendaciones de formacion;
+- ruta sugerida hacia piloto o implementacion.
 
 ## Por que esta oferta primero
 
 Porque reduce friccion comercial.
 
 En vez de pedirle al colegio comprar todo el curso desde la primera conversacion, se le propone comenzar con una medicion concreta.
+
+La conversacion cambia de:
+
+> Compren nuestro curso.
+
+a:
+
+> Midamos como estan sus estudiantes y conversemos sobre una ruta concreta para fortalecer sus competencias financieras.
+
+## Versiones de la oferta
+
+### Diagnostico exploratorio
+
+Aplicacion corta a un grupo limitado. Sirve para abrir conversacion, mostrar valor y validar interes.
+
+### Diagnostico institucional
+
+Aplicacion a varios grupos o grados. Incluye reporte formal y reunion ejecutiva de resultados.
+
+### Diagnostico + piloto
+
+Incluye medicion inicial, acceso a una unidad o modulo del curso, medicion posterior y recomendacion de implementacion.
 
 ## Conexion con el curso
 
@@ -30,4 +63,8 @@ El diagnostico debe servir como puerta de entrada hacia:
 - implementacion del curso completo;
 - licencia institucional;
 - programa patrocinado.
+
+## Proxima decision
+
+Camilo debe validar el alcance real del diagnostico con base en las preguntas, evaluaciones y capacidades actuales de la plataforma.
 

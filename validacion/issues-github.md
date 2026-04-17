@@ -24,10 +24,13 @@ Estos issues deben crearse cuando el repositorio este en GitHub.
 12. Definir estructura del reporte de diagnostico.
 13. Preparar copy de landing o pagina comercial.
 14. Preparar caso de ejemplo.
+15. Validar dimensiones y preguntas del diagnostico con Camilo.
+16. Definir paquetes comerciales del diagnostico.
+17. Preparar ejemplo visual del reporte de resultados.
+18. Definir metodologia de aplicacion en colegios.
 
 ## Tecnologia
 
-15. Documentar estado actual del repositorio tecnico de plataforma.
-16. Definir si el diagnostico puede ejecutarse con la plataforma actual.
-17. Evaluar requisitos minimos para tutor IA.
-
+19. Documentar estado actual del repositorio tecnico de plataforma.
+20. Definir si el diagnostico puede ejecutarse con la plataforma actual.
+21. Evaluar requisitos minimos para tutor IA.

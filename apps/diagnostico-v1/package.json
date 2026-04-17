@@ -1,0 +1,10 @@
+{
+  "name": "diagnostico-v1",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "qa": "node qa/simulate-300.mjs baseline"
+  }
+}
+

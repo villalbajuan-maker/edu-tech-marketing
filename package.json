@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/build-diagnostico.mjs",
+    "build": "node apps/diagnostico-v1/scripts/build.mjs && rm -rf dist && cp -R apps/diagnostico-v1/dist ./dist",
     "qa:diagnostico": "node apps/diagnostico-v1/qa/simulate-300.mjs baseline"
   }
 }

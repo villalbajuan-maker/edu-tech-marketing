@@ -52,3 +52,11 @@ Install command: npm install --ignore-scripts
 ```
 
 El build copia esta app a `dist/`, para que Vercel sirva el diagnostico desde la raiz del dominio.
+
+Si en Vercel se configura `Root Directory` como `apps/diagnostico-v1`, esta carpeta tambien incluye su propio `package.json` y `vercel.json`. En ese modo la configuracion esperada es la misma:
+
+```text
+Build command: npm run build
+Output directory: dist
+Install command: npm install --ignore-scripts
+```

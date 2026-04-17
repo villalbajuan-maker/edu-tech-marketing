@@ -35,6 +35,14 @@ El primer foco de validación es **colegios privados en Colombia**.
 
 La hipótesis inicial es que los colegios privados necesitan una forma lista para implementar, medir y comunicar educación financiera escolar sin construir contenidos, plataforma ni reportes desde cero.
 
+## Prototipo funcional
+
+La primera UI funcional del diagnostico esta en:
+
+[apps/diagnostico-v1](apps/diagnostico-v1)
+
+Incluye aplicacion de la prueba, scoring, reporte vivo, companion basico y simulacion QA de 300 estudiantes.
+
 ## Primera oferta de validación
 
 La primera oferta propuesta es el **Diagnóstico Escolar de Educación Financiera**.
@@ -46,4 +54,3 @@ Esta oferta busca abrir conversaciones comerciales con colegios privados, medir 
 La documentación solo tiene valor si ayuda a vender mejor, decidir mejor, construir mejor, validar mejor o colaborar mejor.
 
 Este workbench debe empujar conversaciones reales con el mercado, no reemplazarlas.
-

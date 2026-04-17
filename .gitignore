@@ -11,3 +11,5 @@ vendor/
 dist/
 build/
 
+# Vercel
+.vercel/

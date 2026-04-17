@@ -39,3 +39,16 @@ node apps/diagnostico-v1/qa/simulate-300.mjs foundations
 
 La app es estatica. Puede desplegarse en GitHub Pages, Netlify, Vercel o servirse desde la plataforma actual.
 
+## Vercel
+
+El repo ya incluye `vercel.json` en la raiz.
+
+Configuracion esperada:
+
+```text
+Build command: npm run build
+Output directory: dist
+Install command: npm install --ignore-scripts
+```
+
+El build copia esta app a `dist/`, para que Vercel sirva el diagnostico desde la raiz del dominio.

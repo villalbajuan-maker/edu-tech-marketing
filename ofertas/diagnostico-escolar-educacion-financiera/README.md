@@ -68,3 +68,11 @@ El diagnostico debe servir como puerta de entrada hacia:
 
 Camilo debe validar el alcance real del diagnostico con base en las preguntas, evaluaciones y capacidades actuales de la plataforma.
 
+## Version 1 congelada
+
+La V1 del diagnostico ya esta definida en:
+
+[v1/README.md](v1/README.md)
+
+Esta version contiene el alcance congelado, banco de preguntas, matriz de evaluacion, sistema de puntaje, reglas de recomendacion de piloto, modelo de reporte vivo, companion, operacion en colegio, seguimiento comercial y checklist de lanzamiento.
+

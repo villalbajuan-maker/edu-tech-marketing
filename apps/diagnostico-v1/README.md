@@ -2,6 +2,10 @@
 
 UI funcional del **Diagnostico Escolar de Competencias Financieras**.
 
+## URL publicada
+
+https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
+
 ## Que incluye
 
 - Aplicacion de la prueba de 30 preguntas.
@@ -11,6 +15,10 @@ UI funcional del **Diagnostico Escolar de Competencias Financieras**.
 - Companion basico del reporte.
 - Simulacion QA de 300 estudiantes.
 - Script de QA por consola.
+
+## Trazabilidad
+
+Ver [TRAZABILIDAD.md](TRAZABILIDAD.md) para entender de donde surgieron las preguntas, que documentos soportan la V1 y que debe revisar el equipo.
 
 ## Como probar localmente
 

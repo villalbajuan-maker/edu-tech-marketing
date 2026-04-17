@@ -39,9 +39,17 @@ La hipótesis inicial es que los colegios privados necesitan una forma lista par
 
 La primera UI funcional del diagnostico esta en:
 
+[https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/](https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/)
+
+Codigo:
+
 [apps/diagnostico-v1](apps/diagnostico-v1)
 
 Incluye aplicacion de la prueba, scoring, reporte vivo, companion basico y simulacion QA de 300 estudiantes.
+
+La trazabilidad entre origen conceptual, documentos V1 y codigo esta en:
+
+[apps/diagnostico-v1/TRAZABILIDAD.md](apps/diagnostico-v1/TRAZABILIDAD.md)
 
 ## Primera oferta de validación
 

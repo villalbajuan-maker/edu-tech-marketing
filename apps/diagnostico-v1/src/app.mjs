@@ -14,6 +14,7 @@ let companionMediaRecorder = null;
 let companionAudioChunks = [];
 let companionAudioStream = null;
 let companionDiscardRecording = false;
+let companionScrollTarget = "";
 
 const state = {
   view: "inicio",
@@ -137,6 +138,7 @@ function render() {
   `;
   bindEvents();
   scrollConversationThread();
+  scrollCompanionThread();
 }
 
 function renderView() {
@@ -952,10 +954,10 @@ function renderCompanionModal() {
   `;
 }
 
-function renderCompanionMessage(message) {
+function renderCompanionMessage(message, index) {
   const content = message.role === "assistant" ? renderCompanionMarkdown(message.content) : `<p>${escapeHtml(message.content)}</p>`;
   return `
-    <div class="companion-message ${message.role}">
+    <div class="companion-message ${message.role}" data-companion-message="${index}" data-companion-role="${message.role}">
       <strong>${message.role === "assistant" ? "Companion" : "Usuario"}</strong>
       <div class="companion-message-content">${content}</div>
     </div>
@@ -1430,6 +1432,24 @@ function scrollConversationThread() {
   });
 }
 
+function scrollCompanionThread() {
+  if (!companionScrollTarget) return;
+  const thread = document.querySelector(".companion-thread");
+  if (!thread) return;
+
+  window.requestAnimationFrame(() => {
+    const target =
+      companionScrollTarget === "typing"
+        ? thread.querySelector(".typing-message")
+        : [...thread.querySelectorAll('[data-companion-role="assistant"]')].at(-1);
+
+    if (target) {
+      thread.scrollTop = Math.max(0, target.offsetTop - thread.offsetTop - 8);
+    }
+    companionScrollTarget = "";
+  });
+}
+
 function readMeta() {
   return {
     school: document.querySelector("#school")?.value || defaultMeta.school,
@@ -1458,6 +1478,7 @@ async function askCompanion(rawQuestion) {
   state.companionMessages = [...state.companionMessages, { role: "user", content: question }];
   state.companionLoading = true;
   state.companionDraft = "";
+  companionScrollTarget = "typing";
   render();
 
   try {
@@ -1474,8 +1495,10 @@ async function askCompanion(rawQuestion) {
     const data = await response.json();
     const answer = response.ok ? data.answer : data.fallback || data.error || buildLocalCompanionReply(question);
     state.companionMessages = [...state.companionMessages, { role: "assistant", content: answer }];
+    companionScrollTarget = "latest-assistant";
   } catch (error) {
     state.companionMessages = [...state.companionMessages, { role: "assistant", content: buildLocalCompanionReply(question) }];
+    companionScrollTarget = "latest-assistant";
   } finally {
     state.companionLoading = false;
     render();

@@ -376,43 +376,94 @@ function renderReport(report, mode) {
 
 function renderQuestionVisual(visual) {
   if (!visual) return "";
+  const meta = getVisualMeta(visual.type);
   if (visual.type === "chat") {
     return `
-      <div class="question-visual chat-visual">
-        <strong>${visual.title}</strong>
-        ${visual.messages.map((message) => `<div class="chat-bubble">${escapeHtml(message)}</div>`).join("")}
+      <div class="question-visual ${meta.className}">
+        ${renderVisualHeader(visual.title, meta.label)}
+        <div class="phone-frame">
+          <div class="phone-bar"><span></span><span></span><span></span></div>
+          <div class="chat-screen">
+            ${visual.messages.map((message) => `<div class="chat-bubble">${escapeHtml(message)}</div>`).join("")}
+          </div>
+        </div>
       </div>
     `;
   }
   if (visual.type === "installments") {
     return `
-      <div class="question-visual installment-visual">
-        <strong>${visual.title}</strong>
-        <div class="visual-grid">
-          ${visual.options.map((item) => `<div class="visual-tile"><span>${escapeHtml(item.label)}</span><b>${escapeHtml(item.value)}</b></div>`).join("")}
+      <div class="question-visual ${meta.className}">
+        ${renderVisualHeader(visual.title, meta.label)}
+        <div class="comparison-grid">
+          ${visual.options
+            .map(
+              (item) => `
+                <div class="comparison-card">
+                  <span>${escapeHtml(item.label)}</span>
+                  <b>${escapeHtml(item.value)}</b>
+                </div>
+              `,
+            )
+            .join("")}
         </div>
       </div>
     `;
   }
   if (visual.type === "cashbook" || visual.type === "receipt" || visual.type === "budget") {
     return `
-      <div class="question-visual ${visual.type}-visual">
-        <strong>${visual.title}</strong>
-        <div class="visual-rows">
-          ${visual.rows.map(([label, value]) => `<div class="visual-row"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b></div>`).join("")}
+      <div class="question-visual ${meta.className}">
+        ${renderVisualHeader(visual.title, meta.label)}
+        <div class="visual-ledger">
+          ${visual.rows.map(([label, value]) => renderVisualRow(label, value, visual.type)).join("")}
         </div>
       </div>
     `;
   }
   if (visual.type === "decision") {
     return `
-      <div class="question-visual decision-visual">
-        <strong>${visual.title}</strong>
-        <div class="decision-items">${visual.items.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>
+      <div class="question-visual ${meta.className}">
+        ${renderVisualHeader(visual.title, meta.label)}
+        <div class="decision-board">
+          ${visual.items.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}
+        </div>
       </div>
     `;
   }
   return "";
+}
+
+function renderVisualHeader(title, label) {
+  return `
+    <div class="visual-header">
+      <span class="visual-mark" aria-hidden="true"></span>
+      <div>
+        <span class="visual-label">${label}</span>
+        <strong>${escapeHtml(title)}</strong>
+      </div>
+    </div>
+  `;
+}
+
+function renderVisualRow(label, value, type) {
+  const normalizedLabel = label.toLowerCase();
+  const isKeyRow = ["total", "pago", "cambio", "disponible", "saldo", "utilidad"].some((term) =>
+    normalizedLabel.includes(term),
+  );
+  const rowClass = isKeyRow ? "visual-row key-row" : "visual-row";
+  const safeValue = value === "?" ? '<b class="unknown-value">?</b>' : `<b>${escapeHtml(value)}</b>`;
+  return `<div class="${rowClass}" data-type="${type}"><span>${escapeHtml(label)}</span>${safeValue}</div>`;
+}
+
+function getVisualMeta(type) {
+  const meta = {
+    receipt: { label: "Comprobante", className: "receipt-visual" },
+    budget: { label: "Presupuesto", className: "budget-visual" },
+    installments: { label: "Comparador", className: "installment-visual" },
+    chat: { label: "Conversacion", className: "chat-visual" },
+    cashbook: { label: "Registro de caja", className: "cashbook-visual" },
+    decision: { label: "Decision", className: "decision-visual" },
+  };
+  return meta[type] || { label: "Instrumento", className: "generic-visual" };
 }
 
 function renderDimensionBar(dimension) {

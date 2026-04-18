@@ -114,59 +114,6 @@ const INTERNAL_COMPANION_GUIDE = [
   },
 ];
 
-const COMPANION_REFERENCE_CARDS = [
-  {
-    id: "oecd-student-financial-literacy",
-    label: "OECD",
-    title: "Student financial literacy",
-    source: "OECD",
-    url: "https://www.oecd.org/en/topics/student-financial-literacy.html",
-    summary: "Marco internacional sobre alfabetizacion financiera juvenil y evidencia PISA.",
-    keywords: ["oecd", "ocde", "pisa", "financiera", "competencia", "estudiante", "riesgo", "presupuesto"],
-    imageQuery: "students financial education classroom",
-  },
-  {
-    id: "pisa-2022-framework",
-    label: "PISA",
-    title: "PISA 2022 Financial Literacy Framework",
-    source: "OECD",
-    url: "https://www.oecd.org/en/publications/pisa-2022-assessment-and-analytical-framework_dfe0bf9c-en/full-report/component-4.html",
-    summary: "Define constructo, procesos, contextos y niveles para evaluar alfabetizacion financiera.",
-    keywords: ["pisa", "framework", "marco", "evaluacion", "competencia", "niveles", "pregunta", "instrumento"],
-    imageQuery: "education assessment students",
-  },
-  {
-    id: "pisa-2022-results",
-    label: "PISA",
-    title: "How and why PISA assesses financial literacy",
-    source: "OECD",
-    url: "https://www.oecd.org/en/publications/pisa-2022-results-volume-iv_5a849c2a-en/full-report/component-8.html",
-    summary: "Explica por que PISA evalua decisiones financieras en jovenes de 15 anos.",
-    keywords: ["pisa", "resultado", "jovenes", "15", "decision", "futuro", "evidencia"],
-    imageQuery: "teen students learning classroom",
-  },
-  {
-    id: "men-eef",
-    label: "MEN",
-    title: "Orientaciones pedagogicas para EEF",
-    source: "Ministerio de Educacion Nacional",
-    url: "https://www.mineducacion.gov.co/1780/w3-article-340033.html",
-    summary: "Referente colombiano para incorporar educacion economica y financiera en colegios.",
-    keywords: ["colombia", "men", "ministerio", "colegio", "pedagogica", "eef", "curriculo", "docente", "rectoria"],
-    imageQuery: "school classroom teacher students",
-  },
-  {
-    id: "banrep-strategy",
-    label: "EEF",
-    title: "Estrategia Nacional de Educacion Economica y Financiera",
-    source: "Banco de la Republica / CIEEF",
-    url: "https://www.banrep.gov.co/es/publicaciones-investigaciones/estrategia-nacional-educacion-economica-financiera",
-    summary: "Contexto nacional de politica publica para educacion economica y financiera.",
-    keywords: ["estrategia", "nacional", "politica", "colombia", "educacion economica", "financiera", "bienestar"],
-    imageQuery: "financial planning education",
-  },
-];
-
 render();
 
 function render() {
@@ -197,7 +144,6 @@ function render() {
   bindEvents();
   scrollConversationThread();
   scrollCompanionThread();
-  hydrateCompanionReferenceImages();
 }
 
 function renderView() {
@@ -1042,12 +988,10 @@ function renderCompanionModal() {
 
 function renderCompanionMessage(message, index) {
   const content = message.role === "assistant" ? renderCompanionMarkdown(message.content) : `<p>${escapeHtml(message.content)}</p>`;
-  const references = message.role === "assistant" ? renderCompanionReferences(message.content) : "";
   return `
     <div class="companion-message ${message.role}" data-companion-message="${index}" data-companion-role="${message.role}">
       <strong>${message.role === "assistant" ? "Companion" : "Usuario"}</strong>
       <div class="companion-message-content">${content}</div>
-      ${references}
     </div>
   `;
 }
@@ -1063,98 +1007,6 @@ function renderTypingIndicator() {
       </div>
     </div>
   `;
-}
-
-function renderCompanionReferences(content) {
-  const references = getCompanionReferences(content);
-  if (!references.length) return "";
-
-  return `
-    <div class="companion-reference-strip" aria-label="Fuentes y contexto relacionado">
-      ${references
-        .map(
-          (reference) => `
-            <article class="companion-reference-card">
-              <span class="reference-thumb" data-reference-image data-image-query="${escapeHtml(reference.imageQuery || reference.title)}" aria-hidden="true"></span>
-              <span class="reference-body">
-                <small>${escapeHtml(reference.source)}</small>
-                <a class="reference-main-link" href="${escapeHtml(reference.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(reference.title)}</a>
-                <em>${escapeHtml(reference.summary)}</em>
-              </span>
-            </article>
-          `,
-        )
-        .join("")}
-    </div>
-  `;
-}
-
-function getCompanionReferences(content) {
-  const normalized = String(content || "").toLowerCase();
-  const scored = COMPANION_REFERENCE_CARDS.map((reference) => {
-    const score = reference.keywords.reduce((total, keyword) => {
-      return normalized.includes(keyword.toLowerCase()) ? total + 1 : total;
-    }, 0);
-    return { reference, score };
-  })
-    .filter((item) => item.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .map((item) => ({ ...item.reference, score: item.score }));
-
-  if (!scored.length) return [];
-
-  const limit = getReferenceLimit(normalized, scored.length);
-  return uniqueReferences(scored).slice(0, limit);
-}
-
-function uniqueReferences(references) {
-  const seen = new Set();
-  return references.filter((reference) => {
-    if (seen.has(reference.id)) return false;
-    seen.add(reference.id);
-    return true;
-  });
-}
-
-function getReferenceLimit(content, scoredCount) {
-  if (/(fuente|referencia|pisa|oecd|ocde|men|ministerio|politica publica|marco)/i.test(content)) {
-    return Math.min(3, scoredCount);
-  }
-  if (/(piloto|decision|rectoria|coordinacion|brecha)/i.test(content)) {
-    return Math.min(2, scoredCount);
-  }
-  return 1;
-}
-
-async function hydrateCompanionReferenceImages() {
-  const targets = [...document.querySelectorAll("[data-reference-image]")].filter((target) => !target.dataset.imageLoaded);
-  if (!targets.length) return;
-
-  await Promise.all(
-    targets.map(async (target) => {
-      target.dataset.imageLoaded = "true";
-      try {
-        const query = target.dataset.imageQuery || "";
-        const response = await fetch(`/api/reference-media?query=${encodeURIComponent(query)}`);
-        if (!response.ok) return;
-        if (response.status === 204) return;
-        const media = await response.json();
-        if (!media?.imageUrl) return;
-        target.style.backgroundImage = `url("${media.imageUrl}")`;
-        target.classList.add("has-image");
-        const card = target.closest(".companion-reference-card");
-        if (card && media.credit) {
-          card.setAttribute("title", media.credit);
-          card.insertAdjacentHTML(
-            "beforeend",
-            `<a class="reference-credit" href="${escapeHtml(media.sourceUrl || media.photographerUrl || "https://unsplash.com/")}" target="_blank" rel="noopener noreferrer">${escapeHtml(media.credit)}</a>`,
-          );
-        }
-      } catch (error) {
-        target.dataset.imageLoaded = "error";
-      }
-    }),
-  );
 }
 
 function renderGroupCard(group) {

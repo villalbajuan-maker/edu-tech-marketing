@@ -237,8 +237,6 @@ El Companion queda reforzado como herramienta visible de lectura institucional:
 - deja de depender de botones secundarios de texto como `Abrir Companion`;
 - mantiene sugerencias de preguntas y contexto de vista colegio/vista interna;
 - cambia los pills sugeridos segun avance la conversacion para guiar lectura inicial, evidencia, ruta a piloto y decision;
-- muestra referencias inline variables debajo de las respuestas del Companion cuando el contenido conecta con OECD/PISA, MEN o politica publica de educacion economica y financiera;
-- puede hidratar thumbnails contextuales desde Unsplash si Vercel tiene `UNSPLASH_ACCESS_KEY`; las imagenes usan endpoint propio para no exponer la llave y muestran atribucion;
 - consolida shell de herramientas del Companion con adjunto, Web, Agente y selector de modelo como base de futuras capacidades;
 - incorpora dictado por microfono: el usuario inicia grabacion, presiona `Enviar`, OpenAI transcribe y la pregunta se envia automaticamente al Companion;
 - la transcripcion usa el endpoint `/api/transcribe` con `gpt-4o-mini-transcribe`;

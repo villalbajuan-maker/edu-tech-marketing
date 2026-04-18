@@ -28,7 +28,7 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 - Navegacion principal reorganizada por audiencia: aplicacion, demo institucional e interno.
 - Vista interna para QA, sesion colegio y reporte tecnico.
 - Modo conversacional guiado para la aplicacion de preguntas a estudiantes.
-- Thumbnails contextuales del diagnostico hidratables con Unsplash via `/api/diagnostic-media`.
+- Imagenes locales por bloque de competencia dentro del splash contextual del diagnostico.
 - Simulacion QA de 300 estudiantes.
 - Script de QA por consola.
 
@@ -101,12 +101,9 @@ Configuracion esperada en Vercel:
 ```text
 OPENAI_API_KEY
 OPENAI_TRANSCRIPTION_MODEL
-UNSPLASH_ACCESS_KEY
 ```
 
 `OPENAI_TRANSCRIPTION_MODEL` es opcional. Por defecto se usa `gpt-4o-mini-transcribe`.
-
-`UNSPLASH_ACCESS_KEY` es opcional. Si existe, los thumbnails contextuales de la prueba del estudiante se hidratan temporalmente con imagenes de Unsplash mediante `/api/diagnostic-media`. Si no existe, se mantienen los visuales livianos en HTML/CSS.
 
 Decision actual: mantener `gpt-4o-mini-transcribe` por estabilidad, costo y suficiencia para preguntas cortas. Si las pruebas reales muestran baja calidad en espanol colombiano o ambientes con ruido, evaluar `gpt-4o-transcribe`.
 

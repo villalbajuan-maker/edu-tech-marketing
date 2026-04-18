@@ -15,8 +15,6 @@ let companionAudioChunks = [];
 let companionAudioStream = null;
 let companionDiscardRecording = false;
 let companionScrollTarget = "";
-const diagnosticImageCache = new Map();
-const diagnosticImageRequests = new Map();
 
 const state = {
   view: "inicio",
@@ -146,7 +144,6 @@ function render() {
   bindEvents();
   scrollConversationThread();
   scrollCompanionThread();
-  hydrateDiagnosticContextImages();
 }
 
 function renderView() {
@@ -362,13 +359,14 @@ function renderCompletedQuestionExchange(question) {
 
 function renderInlineContextSplash(question, dimension, mode = "active") {
   const context = getInlineContext(question, dimension);
-  const visualType = question.visual?.type || "decision";
   const compactClass = mode === "compact" ? "compact-context" : "";
   return `
     <div class="inline-context-splash chat-message ${compactClass}">
-      <span class="inline-context-label">Contexto de la situacion</span>
-      <div class="inline-thumbnail-row" aria-label="${escapeHtml(context.copy)}">
-        ${context.thumbnails.map((thumbnail) => renderInlineThumbnail(thumbnail, visualType)).join("")}
+      <img class="inline-context-image" src="${escapeHtml(context.image)}" alt="${escapeHtml(context.alt)}" loading="lazy" />
+      <div class="inline-context-copy">
+        <span class="inline-context-label">Contexto de la situacion</span>
+        <strong>${escapeHtml(context.title)}</strong>
+        <p>${escapeHtml(context.copy)}</p>
       </div>
     </div>
   `;
@@ -379,181 +377,55 @@ function getInlineContext(question, dimension) {
     "dinero-transacciones": {
       title: "Compra cotidiana con informacion verificable",
       copy: "Observa valores, pagos, descuentos o comprobantes antes de decidir.",
+      image: "src/assets/context-blocks/01-dinero-transacciones.png",
+      alt: "Mesa escolar con recibo de compra, monedas, cuaderno y lapiz.",
       tags: ["precio", "total", "comprobante"],
-      thumbnails: [
-        { label: "Precio", type: "receipt" },
-        { label: "Total", type: "receipt" },
-        { label: "Cambio", type: "decision" },
-      ],
     },
     "presupuesto-planificacion": {
       title: "Decision con dinero limitado",
       copy: "Identifica prioridades, compromisos y metas antes de elegir.",
+      image: "src/assets/context-blocks/02-presupuesto-planificacion.png",
+      alt: "Libreta de presupuesto, calculadora, lapiz y dinero sobre un escritorio.",
       tags: ["prioridad", "ahorro", "plan"],
-      thumbnails: [
-        { label: "Prioridad", type: "budget" },
-        { label: "Ahorro", type: "budget" },
-        { label: "Opcion", type: "decision" },
-      ],
     },
     "credito-deuda": {
       title: "Compromiso financiero hacia adelante",
       copy: "Compara cuotas, costo total y consecuencias futuras.",
+      image: "src/assets/context-blocks/03-credito-deuda.png",
+      alt: "Calculadora, tabla de cuotas y tarjeta generica sobre una mesa de estudio.",
       tags: ["cuotas", "costo total", "deuda"],
-      thumbnails: [
-        { label: "Cuotas", type: "installments" },
-        { label: "Total", type: "receipt" },
-        { label: "Futuro", type: "decision" },
-      ],
     },
     "riesgo-digital": {
       title: "Entorno digital con senales de riesgo",
       copy: "Verifica fuente, seguridad y datos antes de actuar.",
+      image: "src/assets/context-blocks/04-riesgo-digital.png",
+      alt: "Celular con alerta generica sobre un escritorio escolar.",
       tags: ["verificacion", "datos", "seguridad"],
-      thumbnails: [
-        { label: "Mensaje", type: "chat" },
-        { label: "Datos", type: "receipt" },
-        { label: "Verificar", type: "decision" },
-      ],
     },
     "trabajo-empresa": {
       title: "Ingreso, costo y resultado",
       copy: "Relaciona ventas, gastos, utilidad y manejo de caja.",
+      image: "src/assets/context-blocks/05-trabajo-empresa-ingresos.png",
+      alt: "Mesa de emprendimiento escolar con productos, libreta de ventas y monedas.",
       tags: ["ingresos", "costos", "utilidad"],
-      thumbnails: [
-        { label: "Ingreso", type: "budget" },
-        { label: "Costo", type: "receipt" },
-        { label: "Utilidad", type: "installments" },
-      ],
     },
     "hogar-ciudadania": {
       title: "Decision economica compartida",
       copy: "Piensa en necesidades, responsabilidades y efectos para otros.",
+      image: "src/assets/context-blocks/06-hogar-ciudadania.png",
+      alt: "Mesa familiar con recibos, libreta de presupuesto y manos conversando.",
       tags: ["hogar", "prioridades", "responsabilidad"],
-      thumbnails: [
-        { label: "Hogar", type: "decision" },
-        { label: "Necesidad", type: "budget" },
-        { label: "Acuerdo", type: "chat" },
-      ],
     },
   };
   return (
     contexts[dimension?.id] || {
       title: question.type || "Situacion financiera",
       copy: "Lee el contexto y reconoce la informacion clave para decidir.",
+      image: "src/assets/context-blocks/01-dinero-transacciones.png",
+      alt: "Contexto visual de decision financiera escolar.",
       tags: [question.competence || "criterio", question.difficulty || "lectura"],
-      thumbnails: [
-        { label: "Contexto", type: question.visual?.type || "decision" },
-        { label: "Decision", type: "decision" },
-      ],
     }
   );
-}
-
-function renderInlineThumbnail(thumbnail, fallbackType) {
-  const type = thumbnail.type || fallbackType || "decision";
-  const query = getDiagnosticImageQuery(type, thumbnail.label);
-  return `
-    <span class="inline-thumbnail ${type}-thumbnail" data-diagnostic-image data-image-type="${escapeHtml(type)}" data-image-query="${escapeHtml(query)}">
-      <span class="inline-thumbnail-image">
-        ${renderThumbnailGlyph(type)}
-      </span>
-      <b>${escapeHtml(thumbnail.label)}</b>
-    </span>
-  `;
-}
-
-function getDiagnosticImageQuery(type, label) {
-  const queryByType = {
-    receipt: "receipt payment shopping",
-    budget: "budget planning notebook",
-    installments: "calculator payment plan",
-    chat: "student phone online security",
-    cashbook: "small business cash register",
-    decision: "student decision planning",
-  };
-  return queryByType[type] || `${label || "financial"} education context`;
-}
-
-async function hydrateDiagnosticContextImages() {
-  const targets = [...document.querySelectorAll("[data-diagnostic-image]")].filter((target) => !target.dataset.imageLoaded);
-  if (!targets.length) return;
-
-  await Promise.all(
-    targets.map(async (target) => {
-      target.dataset.imageLoaded = "true";
-      const imageType = target.dataset.imageType || "decision";
-      const query = target.dataset.imageQuery || "";
-      const cacheKey = `${imageType}:${query}`;
-
-      try {
-        const cached = diagnosticImageCache.get(cacheKey);
-        const media = cached || (await fetchDiagnosticImage(imageType, query));
-        if (!media?.imageUrl) return;
-        diagnosticImageCache.set(cacheKey, media);
-
-        const imageSlot = target.querySelector(".inline-thumbnail-image");
-        if (!imageSlot) return;
-        imageSlot.style.backgroundImage = `url("${media.imageUrl}")`;
-        imageSlot.classList.add("has-image");
-        imageSlot.innerHTML = "";
-
-        if (media.credit && !target.querySelector(".inline-image-credit")) {
-          target.insertAdjacentHTML(
-            "beforeend",
-            `<a class="inline-image-credit" href="${escapeHtml(media.sourceUrl || "https://unsplash.com/")}" target="_blank" rel="noopener noreferrer">${escapeHtml(media.credit)}</a>`,
-          );
-        }
-      } catch (error) {
-        target.dataset.imageLoaded = "error";
-      }
-    }),
-  );
-}
-
-async function fetchDiagnosticImage(type, query) {
-  const cacheKey = `${type}:${query}`;
-  if (diagnosticImageRequests.has(cacheKey)) return diagnosticImageRequests.get(cacheKey);
-
-  const request = fetch(`/api/diagnostic-media?type=${encodeURIComponent(type)}&query=${encodeURIComponent(query)}`).then((response) =>
-    response.ok && response.status !== 204 ? response.json() : null,
-  );
-  diagnosticImageRequests.set(cacheKey, request);
-  return request;
-}
-
-function renderThumbnailGlyph(type) {
-  if (type === "chat") {
-    return `
-      <i class="mini-bubble wide"></i>
-      <i class="mini-bubble short"></i>
-    `;
-  }
-  if (type === "installments") {
-    return `
-      <i class="mini-bar tall"></i>
-      <i class="mini-bar"></i>
-      <i class="mini-bar low"></i>
-    `;
-  }
-  if (type === "budget" || type === "cashbook") {
-    return `
-      <i class="mini-pie"></i>
-      <i class="mini-line"></i>
-    `;
-  }
-  if (type === "receipt") {
-    return `
-      <i class="mini-row"></i>
-      <i class="mini-row short"></i>
-      <i class="mini-total"></i>
-    `;
-  }
-  return `
-    <i class="mini-node"></i>
-    <i class="mini-path"></i>
-    <i class="mini-node strong"></i>
-  `;
 }
 
 function renderStudentAnswerBubble(question, selected) {

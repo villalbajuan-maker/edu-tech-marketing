@@ -205,7 +205,7 @@ La V1.5 implementa el modo conversacional guiado:
 - transforma la pantalla de pregunta en una secuencia conversacional estructurada;
 - presenta contexto, situacion, artefacto visual, pregunta y opciones;
 - incorpora shell visual tipo conversacion, historial acumulado, burbuja de respuesta del estudiante y transicion con tres puntos entre preguntas;
-- suma thumbnails contextuales inline para preparar el marco mental de cada situacion; en prototipo pueden hidratarse con Unsplash desde `/api/diagnostic-media`;
+- suma imagenes locales por bloque de competencia para preparar el marco mental de cada situacion, sin enlaces externos durante la prueba;
 - convierte las opciones en botones de respuesta que guardan y avanzan sin boton Continuar;
 - reemplaza el boton global de anterior por edicion contextual de respuestas ya registradas;
 - mantiene scoring, progreso, navegacion, revision y QA;

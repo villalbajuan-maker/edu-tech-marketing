@@ -10,6 +10,11 @@ const defaultMeta = {
   group: "9A",
 };
 
+let companionMediaRecorder = null;
+let companionAudioChunks = [];
+let companionAudioStream = null;
+let companionDiscardRecording = false;
+
 const state = {
   view: "inicio",
   internalSection: "qa",
@@ -25,6 +30,10 @@ const state = {
   demoAudience: "school",
   companionOpen: false,
   companionLoading: false,
+  companionRecording: false,
+  companionTranscribing: false,
+  companionVoiceError: "",
+  companionDraft: "",
   companionMessages: [],
   qaResults: runQaSuite(),
 };
@@ -52,6 +61,7 @@ function render() {
         </div>
       </header>
       <main class="main">${renderView()}</main>
+      ${renderFloatingCompanionButton()}
       ${renderCompanionModal()}
     </div>
   `;
@@ -634,9 +644,6 @@ function renderReport(report, mode) {
         </div>
         <h3 class="companion-subtitle">Preguntas utiles</h3>
         <ul class="list">${companion.questions.map((question) => `<li>${question}</li>`).join("")}</ul>
-        <div class="actions">
-          <button class="button secondary" data-open-companion>Abrir Companion</button>
-        </div>
       </aside>
     </section>
   `;
@@ -678,7 +685,6 @@ function renderInstitutionalDemo() {
               <h3>${report.pilotRecommendation.name}</h3>
               <p>${report.pilotRecommendation.reason}</p>
               <button class="button" data-copy-id="executive">Copiar resumen para rectoria</button>
-              <button class="button secondary" data-open-companion>Abrir Companion</button>
             `
         }
       </aside>
@@ -804,16 +810,38 @@ function renderInternalDemoView(demo, companion) {
         </ul>
         <div class="actions">
           <button class="button" data-copy-id="commercial">Copiar mensaje comercial</button>
-          <button class="button secondary" data-open-companion>Abrir Companion</button>
         </div>
       </aside>
     </section>
   `;
 }
 
+function renderFloatingCompanionButton() {
+  if (state.companionOpen || !shouldShowFloatingCompanion()) return "";
+  return `
+    <button class="floating-companion-button" data-open-companion aria-label="Abrir Companion IA">
+      <span class="floating-ai-mark" aria-hidden="true">IA</span>
+      <span>
+        <strong>Companion</strong>
+        <small>Preguntar con IA</small>
+      </span>
+    </button>
+  `;
+}
+
+function shouldShowFloatingCompanion() {
+  if (state.view === "demo" || state.view === "interno") return true;
+  return state.view === "prueba" && state.quizStage === "done";
+}
+
 function renderCompanionModal() {
   if (!state.companionOpen) return "";
   const suggestions = getCompanionSuggestions(state.demoAudience);
+  const voiceStatus = state.companionRecording
+    ? "Grabando pregunta..."
+    : state.companionTranscribing
+      ? "Transcribiendo audio..."
+      : state.companionVoiceError;
   return `
     <div class="modal-backdrop" data-close-companion>
       <section class="companion-modal" role="dialog" aria-modal="true" aria-label="Companion del diagnostico" data-modal-panel>
@@ -840,9 +868,15 @@ function renderCompanionModal() {
         </div>
 
         <form class="companion-form" id="companionForm">
-          <textarea id="companionInput" rows="3" placeholder="Pregunta al Companion..."></textarea>
-          <button class="button" ${state.companionLoading ? "disabled" : ""}>Enviar</button>
+          <div class="companion-input-wrap">
+            <textarea id="companionInput" rows="3" placeholder="Pregunta al Companion...">${escapeHtml(state.companionDraft)}</textarea>
+            <button class="voice-button ${state.companionRecording ? "recording" : ""}" type="button" id="companionVoiceButton" ${state.companionLoading || state.companionTranscribing ? "disabled" : ""} aria-label="${state.companionRecording ? "Detener grabacion" : "Dictar pregunta por microfono"}">
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <button class="button" ${state.companionLoading || state.companionTranscribing ? "disabled" : ""}>Enviar</button>
         </form>
+        ${voiceStatus ? `<p class="voice-status ${state.companionVoiceError ? "error" : ""}">${escapeHtml(voiceStatus)}</p>` : ""}
         <p class="companion-scope">El Companion no reemplaza criterio pedagogico ni inventa resultados. Orienta decisiones con base en el diagnostico.</p>
       </section>
     </div>
@@ -1113,6 +1147,7 @@ function bindEvents() {
 
   document.querySelectorAll("[data-open-companion]").forEach((button) => {
     button.addEventListener("click", () => {
+      state.companionVoiceError = "";
       state.companionOpen = true;
       render();
     });
@@ -1120,6 +1155,7 @@ function bindEvents() {
 
   document.querySelectorAll("[data-close-companion]").forEach((element) => {
     element.addEventListener("click", () => {
+      cancelCompanionVoiceCapture();
       state.companionOpen = false;
       render();
     });
@@ -1142,6 +1178,24 @@ function bindEvents() {
       event.preventDefault();
       const input = document.querySelector("#companionInput");
       askCompanion(input?.value || "");
+    });
+  }
+
+  const companionInput = document.querySelector("#companionInput");
+  if (companionInput) {
+    companionInput.addEventListener("input", () => {
+      state.companionDraft = companionInput.value;
+    });
+  }
+
+  const companionVoiceButton = document.querySelector("#companionVoiceButton");
+  if (companionVoiceButton) {
+    companionVoiceButton.addEventListener("click", () => {
+      if (state.companionRecording) {
+        stopCompanionVoiceRecording();
+      } else {
+        startCompanionVoiceRecording();
+      }
     });
   }
 
@@ -1330,6 +1384,7 @@ async function askCompanion(rawQuestion) {
 
   state.companionMessages = [...state.companionMessages, { role: "user", content: question }];
   state.companionLoading = true;
+  state.companionDraft = "";
   render();
 
   try {
@@ -1352,6 +1407,136 @@ async function askCompanion(rawQuestion) {
     state.companionLoading = false;
     render();
   }
+}
+
+async function startCompanionVoiceRecording() {
+  if (!navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === "undefined") {
+    state.companionVoiceError = "Este navegador no permite grabacion de audio desde la pagina.";
+    render();
+    return;
+  }
+
+  try {
+    state.companionVoiceError = "";
+    companionAudioChunks = [];
+    companionDiscardRecording = false;
+    companionAudioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const mimeType = getSupportedAudioMimeType();
+    companionMediaRecorder = mimeType
+      ? new MediaRecorder(companionAudioStream, { mimeType })
+      : new MediaRecorder(companionAudioStream);
+
+    companionMediaRecorder.addEventListener("dataavailable", (event) => {
+      if (event.data?.size) companionAudioChunks.push(event.data);
+    });
+
+    companionMediaRecorder.addEventListener("stop", () => {
+      if (companionDiscardRecording) {
+        cleanupCompanionAudioStream();
+        companionAudioChunks = [];
+        companionDiscardRecording = false;
+        return;
+      }
+      const mimeType = companionMediaRecorder?.mimeType || "audio/webm";
+      const audioBlob = new Blob(companionAudioChunks, { type: mimeType });
+      cleanupCompanionAudioStream();
+      transcribeCompanionAudio(audioBlob);
+    });
+
+    companionMediaRecorder.start();
+    state.companionRecording = true;
+    render();
+  } catch (error) {
+    cleanupCompanionAudioStream();
+    state.companionRecording = false;
+    state.companionVoiceError = "No fue posible activar el microfono. Revisa permisos del navegador.";
+    render();
+  }
+}
+
+function stopCompanionVoiceRecording() {
+  if (!companionMediaRecorder || companionMediaRecorder.state === "inactive") return;
+  state.companionRecording = false;
+  state.companionTranscribing = true;
+  state.companionVoiceError = "";
+  companionMediaRecorder.stop();
+  render();
+}
+
+async function transcribeCompanionAudio(audioBlob) {
+  if (!audioBlob.size) {
+    state.companionTranscribing = false;
+    state.companionVoiceError = "No se detecto audio para transcribir.";
+    render();
+    return;
+  }
+
+  try {
+    const audio = await blobToBase64(audioBlob);
+    const response = await fetch("/api/transcribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        audio,
+        mimeType: audioBlob.type || "audio/webm",
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || data.detail || "No fue posible transcribir el audio.");
+
+    state.companionTranscribing = false;
+    state.companionVoiceError = "";
+    state.companionDraft = data.text || "";
+    render();
+    const input = document.querySelector("#companionInput");
+    if (input) {
+      input.focus();
+    }
+  } catch (error) {
+    state.companionTranscribing = false;
+    state.companionVoiceError = error.message || "No fue posible transcribir el audio.";
+    render();
+  }
+}
+
+function getSupportedAudioMimeType() {
+  const candidates = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"];
+  return candidates.find((type) => MediaRecorder.isTypeSupported(type)) || "";
+}
+
+function cleanupCompanionAudioStream() {
+  companionAudioStream?.getTracks().forEach((track) => track.stop());
+  companionAudioStream = null;
+  companionMediaRecorder = null;
+}
+
+function cancelCompanionVoiceCapture() {
+  if (companionMediaRecorder && companionMediaRecorder.state !== "inactive") {
+    companionDiscardRecording = true;
+    try {
+      companionMediaRecorder.stop();
+    } catch (error) {
+      // The recorder may already be stopping; cleanup below is still safe.
+      companionDiscardRecording = false;
+    }
+  }
+  cleanupCompanionAudioStream();
+  companionAudioChunks = [];
+  state.companionRecording = false;
+  state.companionTranscribing = false;
+  state.companionVoiceError = "";
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = String(reader.result || "");
+      resolve(result.includes(",") ? result.split(",")[1] : result);
+    };
+    reader.onerror = () => reject(new Error("No fue posible leer el audio grabado."));
+    reader.readAsDataURL(blob);
+  });
 }
 
 function getCompanionSuggestions(audience) {

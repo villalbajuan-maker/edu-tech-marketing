@@ -131,6 +131,17 @@ Incluye:
 - Companion reservado para el modal con IA;
 - panel fijo renombrado como Lectura decisional.
 
+### Companion institucional
+
+Estado: reforzado como acceso flotante.
+
+Decision:
+
+- el Companion se abre desde un boton flotante con marca IA en demo institucional, vista interna y reporte;
+- el input permite pregunta escrita o dictada por microfono;
+- la voz se transcribe con OpenAI antes de enviarse como pregunta;
+- el Companion conserva su rol de lectura institucional y no entra en la prueba del estudiante.
+
 ### V1.5
 
 Modo conversacional guiado para estudiante.

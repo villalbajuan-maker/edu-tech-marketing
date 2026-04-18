@@ -389,6 +389,61 @@ button {
   margin-bottom: 14px;
 }
 
+.floating-companion-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid rgba(36, 122, 90, 0.28);
+  border-radius: 8px;
+  padding: 11px 13px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 16px 46px rgba(23, 33, 28, 0.22);
+  cursor: pointer;
+  text-align: left;
+}
+
+.floating-companion-button strong,
+.floating-companion-button small {
+  display: block;
+  line-height: 1.1;
+}
+
+.floating-companion-button strong {
+  font-size: 14px;
+}
+
+.floating-companion-button small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.floating-ai-mark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.85), transparent 28px),
+    var(--green);
+  color: white;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.floating-companion-button:focus-visible {
+  outline: 3px solid rgba(36, 122, 90, 0.25);
+  outline-offset: 3px;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -556,13 +611,96 @@ button {
   padding: 14px 18px;
 }
 
+.companion-input-wrap {
+  position: relative;
+}
+
 .companion-form textarea {
   resize: vertical;
   min-height: 56px;
   max-height: 140px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 11px;
+  width: 100%;
+  padding: 11px 54px 11px 11px;
+}
+
+.voice-button {
+  position: absolute;
+  right: 9px;
+  bottom: 9px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(36, 122, 90, 0.28);
+  border-radius: 8px;
+  background: #f7faf8;
+  cursor: pointer;
+}
+
+.voice-button span {
+  position: relative;
+  width: 13px;
+  height: 18px;
+  border: 2px solid var(--green);
+  border-radius: 8px;
+}
+
+.voice-button span::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  width: 2px;
+  height: 8px;
+  background: var(--green);
+  transform: translateX(-50%);
+}
+
+.voice-button span::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  width: 16px;
+  height: 8px;
+  border-bottom: 2px solid var(--green);
+  border-radius: 0 0 10px 10px;
+  transform: translateX(-50%);
+}
+
+.voice-button.recording {
+  border-color: #b14d3a;
+  background: #fff3ef;
+}
+
+.voice-button.recording span,
+.voice-button.recording span::before,
+.voice-button.recording span::after {
+  border-color: #b14d3a;
+}
+
+.voice-button.recording span::before {
+  background-color: #b14d3a;
+}
+
+.voice-button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.voice-status {
+  margin: 0;
+  border-top: 1px solid var(--line);
+  color: var(--green-dark);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 9px 18px;
+}
+
+.voice-status.error {
+  color: #9b3d2e;
 }
 
 .companion-scope {
@@ -1848,9 +1986,19 @@ button {
     max-height: 94vh;
   }
 
+  .floating-companion-button {
+    right: 12px;
+    bottom: 12px;
+    max-width: calc(100vw - 24px);
+  }
+
   .companion-modal-header,
   .companion-form {
     grid-template-columns: 1fr;
+  }
+
+  .companion-form .button {
+    width: 100%;
   }
 
   .companion-message {

@@ -229,6 +229,17 @@ Decisiones congeladas:
 
 Esta base debe revisarse con criterio pedagogico de Camilo y Leonardo, criterio comercial de Leonardo y estrategia/implementacion tecnica de Juan Carlos.
 
+## Evolucion Companion institucional
+
+El Companion queda reforzado como herramienta visible de lectura institucional:
+
+- se abre desde un boton flotante de IA durante el scroll de la demo institucional, vista interna y reporte;
+- deja de depender de botones secundarios de texto como `Abrir Companion`;
+- mantiene sugerencias de preguntas y contexto de vista colegio/vista interna;
+- incorpora dictado por microfono: el usuario graba, OpenAI transcribe y el texto queda listo para enviar;
+- la transcripcion usa el endpoint `/api/transcribe` con `gpt-4o-mini-transcribe`;
+- el Companion sigue sin reemplazar criterio pedagogico ni inventar resultados.
+
 ## QA disponible
 
 La app incluye cuatro escenarios de simulacion:

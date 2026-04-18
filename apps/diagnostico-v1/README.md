@@ -21,6 +21,8 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 - Toggle de audiencia: vista colegio y vista interna.
 - Modo interno comercial con oportunidad, objeciones, mensaje sugerido y siguiente accion.
 - Companion Institucional en modal con preguntas sugeridas y conexion LLM via `/api/companion`.
+- Boton flotante de IA para abrir el Companion durante la revision institucional.
+- Microfono en el Companion para dictar preguntas y transcribirlas con OpenAI via `/api/transcribe`.
 - Navegacion principal reorganizada por audiencia: aplicacion, demo institucional e interno.
 - Vista interna para QA, sesion colegio y reporte tecnico.
 - Modo conversacional guiado para la aplicacion de preguntas a estudiantes.

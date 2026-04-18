@@ -19,6 +19,7 @@ const state = {
   studentReport: null,
   cohortResult: simulateCohort(300, "baseline"),
   institutionalDemo: buildInstitutionalDemo(),
+  demoAudience: "school",
   qaResults: runQaSuite(),
 };
 
@@ -383,6 +384,7 @@ function renderInstitutionalDemo() {
   const report = demo.report;
   const companion = buildDecisionCompanion(report);
   const pilotPath = buildPilotPath(report);
+  const isInternal = state.demoAudience === "internal";
   return `
     <section class="institutional-hero">
       <div>
@@ -394,15 +396,36 @@ function renderInstitutionalDemo() {
           <span>${demo.grades}</span>
           <span>${demo.completed}/${demo.expected} estudiantes finalizaron</span>
         </div>
+        <div class="view-toggle" role="group" aria-label="Cambiar audiencia de la demo">
+          <button class="${!isInternal ? "active" : ""}" data-demo-audience="school">Vista colegio</button>
+          <button class="${isInternal ? "active" : ""}" data-demo-audience="internal">Vista interna</button>
+        </div>
       </div>
       <aside class="decision-card">
-        <p class="kicker">Decision sugerida</p>
-        <h3>${report.pilotRecommendation.name}</h3>
-        <p>${report.pilotRecommendation.reason}</p>
-        <button class="button" data-copy-id="executive">Copiar resumen para rectoria</button>
+        ${
+          isInternal
+            ? `
+              <p class="kicker">Uso interno</p>
+              <h3>${demo.internal.title}</h3>
+              <p>${demo.internal.opportunity}</p>
+              <button class="button" data-copy-id="commercial">Copiar mensaje comercial</button>
+            `
+            : `
+              <p class="kicker">Decision sugerida</p>
+              <h3>${report.pilotRecommendation.name}</h3>
+              <p>${report.pilotRecommendation.reason}</p>
+              <button class="button" data-copy-id="executive">Copiar resumen para rectoria</button>
+            `
+        }
       </aside>
     </section>
 
+    ${isInternal ? renderInternalDemoView(demo, companion) : renderSchoolDemoView(demo, report, pilotPath)}
+  `;
+}
+
+function renderSchoolDemoView(demo, report, pilotPath) {
+  return `
     <section class="demo-grid">
       <article class="report-section">
         <p class="kicker">Resultado institucional</p>
@@ -431,14 +454,13 @@ function renderInstitutionalDemo() {
           <p class="kicker">Comparacion por grupos</p>
           <h3>Lectura institucional simulada</h3>
         </div>
-        <button class="button secondary" data-copy-id="commercial">Copiar mensaje comercial</button>
       </div>
       <div class="group-grid">
         ${demo.groups.map(renderGroupCard).join("")}
       </div>
     </section>
 
-    <section class="report-grid">
+    <section class="report-grid school-view-grid">
       <div>
         <article class="report-section">
           <p class="kicker">Lectura pedagogica</p>
@@ -448,24 +470,54 @@ function renderInstitutionalDemo() {
             ${demo.pedagogical.insights.map((insight) => `<div class="insight-card"><strong>${insight.title}</strong><p>${insight.body}</p></div>`).join("")}
           </div>
         </article>
-
-        <article class="report-section">
-          <p class="kicker">Ruta de decision</p>
-          <h3>De evidencia a piloto</h3>
-          <div class="pilot-path">
-            ${pilotPath
-              .map(
-                (step, index) => `
-                  <div class="path-step">
-                    <span class="path-index">${index + 1}</span>
-                    <div>
-                      <strong>${step.label}</strong>
-                      <p>${step.value}</p>
-                    </div>
+      </div>
+      <aside class="report-section">
+        <p class="kicker">Ruta de decision</p>
+        <h3>De evidencia a piloto</h3>
+        <div class="pilot-path">
+          ${pilotPath
+            .map(
+              (step, index) => `
+                <div class="path-step">
+                  <span class="path-index">${index + 1}</span>
+                  <div>
+                    <strong>${step.label}</strong>
+                    <p>${step.value}</p>
                   </div>
-                `,
-              )
-              .join("")}
+                </div>
+              `,
+            )
+            .join("")}
+        </div>
+      </aside>
+    </section>
+  `;
+}
+
+function renderInternalDemoView(demo, companion) {
+  return `
+    <section class="report-grid">
+      <div>
+        <article class="report-section">
+          <p class="kicker">Lectura interna</p>
+          <h3>Preparacion de conversacion comercial</h3>
+          <div class="internal-summary-grid">
+            <div class="commercial-score">
+              <span>Nivel de urgencia</span>
+              <strong>${demo.internal.urgency}</strong>
+            </div>
+            <div class="commercial-score">
+              <span>Decision buscada</span>
+              <strong>Piloto</strong>
+            </div>
+          </div>
+          <div class="companion-list">
+            <div class="companion-item"><strong>Oportunidad</strong><span>${demo.internal.opportunity}</span></div>
+            <div class="companion-item"><strong>Objeciones probables</strong><span>${demo.internal.objections}</span></div>
+            <div class="companion-item"><strong>Mensaje para Leonardo</strong><span>${demo.internal.message}</span></div>
+            <div class="companion-item"><strong>Validacion de Camilo</strong><span>${demo.internal.camilo}</span></div>
+            <div class="companion-item"><strong>Preparacion de Juan Carlos</strong><span>${demo.internal.juan}</span></div>
+            <div class="companion-item"><strong>Siguiente accion</strong><span>${demo.internal.nextAction}</span></div>
           </div>
         </article>
 
@@ -479,26 +531,16 @@ function renderInstitutionalDemo() {
       </div>
 
       <aside class="internal-panel">
-        <p class="kicker">Modo interno comercial</p>
-        <h3>${demo.internal.title}</h3>
-        <div class="commercial-score">
-          <span>Nivel de urgencia</span>
-          <strong>${demo.internal.urgency}</strong>
-        </div>
-        <div class="companion-list">
-          <div class="companion-item"><strong>Oportunidad</strong><span>${demo.internal.opportunity}</span></div>
-          <div class="companion-item"><strong>Objeciones probables</strong><span>${demo.internal.objections}</span></div>
-          <div class="companion-item"><strong>Mensaje para Leonardo</strong><span>${demo.internal.message}</span></div>
-          <div class="companion-item"><strong>Validacion de Camilo</strong><span>${demo.internal.camilo}</span></div>
-          <div class="companion-item"><strong>Preparacion de Juan Carlos</strong><span>${demo.internal.juan}</span></div>
-          <div class="companion-item"><strong>Siguiente accion</strong><span>${demo.internal.nextAction}</span></div>
-        </div>
-        <h3 class="companion-subtitle">Companion decisional</h3>
+        <p class="kicker">Companion interno</p>
+        <h3>Argumentos desde evidencia</h3>
         <ul class="list">
           <li>${companion.mainGap}</li>
           <li>${companion.whyItMatters}</li>
           <li>${companion.nextStep}</li>
         </ul>
+        <div class="actions">
+          <button class="button" data-copy-id="commercial">Copiar mensaje comercial</button>
+        </div>
       </aside>
     </section>
   `;
@@ -688,6 +730,13 @@ function bindEvents() {
   document.querySelectorAll("[data-scenario]").forEach((button) => {
     button.addEventListener("click", () => {
       state.cohortResult = simulateCohort(300, button.dataset.scenario);
+      render();
+    });
+  });
+
+  document.querySelectorAll("[data-demo-audience]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.demoAudience = button.dataset.demoAudience;
       render();
     });
   });

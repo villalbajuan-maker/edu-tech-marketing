@@ -163,6 +163,29 @@ button {
   font-weight: 750;
 }
 
+.view-toggle {
+  display: inline-flex;
+  gap: 4px;
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+}
+
+.view-toggle button {
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  padding: 9px 12px;
+  font-weight: 850;
+}
+
+.view-toggle button.active {
+  background: var(--green);
+  color: white;
+}
+
 .decision-card,
 .internal-panel {
   border: 1px solid var(--line);
@@ -187,6 +210,10 @@ button {
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: 22px;
   margin-bottom: 22px;
+}
+
+.school-view-grid {
+  margin-top: 22px;
 }
 
 .section-heading,
@@ -331,6 +358,13 @@ button {
 
 .commercial-score strong {
   font-size: 24px;
+}
+
+.internal-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
 .headline {
@@ -1100,6 +1134,7 @@ button {
   .metrics,
   .qa-grid,
   .group-grid,
+  .internal-summary-grid,
   .insight-grid {
     grid-template-columns: 1fr;
   }
@@ -1189,6 +1224,11 @@ button {
   }
 
   .button {
+    width: 100%;
+  }
+
+  .view-toggle {
+    display: grid;
     width: 100%;
   }
 

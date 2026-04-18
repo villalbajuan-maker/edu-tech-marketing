@@ -101,6 +101,11 @@ Debe responder:
 
 Una vista o panel no pensado para el colegio, sino para el equipo.
 
+En la app debe separarse mediante un selector de audiencia:
+
+- **Vista colegio:** reporte institucional, resumen para rectoria, comparacion por grupos, lectura pedagogica y ruta de decision.
+- **Vista interna:** oportunidad comercial, objeciones, mensaje para Leonardo, validaciones de Camilo, preparacion de Juan Carlos y siguiente accion.
+
 Debe incluir:
 
 - oportunidad comercial;

@@ -18,6 +18,7 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 - Ruta explicita hacia piloto.
 - Dashboard simulado de sesion para colegio.
 - Demo institucional con colegio ficticio, resumen para rectoria y comparacion por grupos.
+- Toggle de audiencia: vista colegio y vista interna.
 - Modo interno comercial con oportunidad, objeciones, mensaje sugerido y siguiente accion.
 - Simulacion QA de 300 estudiantes.
 - Script de QA por consola.
@@ -51,6 +52,7 @@ La V1.2 mejora claridad y valor percibido:
 La V1.3 convierte el diagnostico en una demo institucional vendible:
 
 - agrega una vista de colegio ficticio;
+- separa vista colegio y vista interna;
 - muestra resumen ejecutivo para rectoria;
 - compara resultados por grupos;
 - incorpora lectura pedagogica institucional;

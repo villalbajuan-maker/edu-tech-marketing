@@ -153,6 +153,7 @@ Reporte demo institucional + modo interno comercial
 Incluye:
 
 - vista demo institucional con colegio ficticio;
+- toggle de audiencia entre vista colegio y vista interna;
 - resumen ejecutivo para rectoria;
 - comparacion por grupos;
 - lectura pedagogica;

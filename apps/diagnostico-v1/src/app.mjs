@@ -38,6 +38,76 @@ const state = {
   qaResults: runQaSuite(),
 };
 
+const SCHOOL_COMPANION_GUIDE = [
+  {
+    label: "Lectura inicial",
+    questions: [
+      "¿Que significa este resultado para el colegio?",
+      "¿Cual es la brecha principal?",
+      "¿Que tan urgente es actuar?",
+    ],
+  },
+  {
+    label: "Evidencia pedagogica",
+    questions: [
+      "¿Que dimensiones explican mejor la brecha?",
+      "¿Como se relaciona esto con OECD/PISA?",
+      "¿Que deberia revisar coordinacion academica?",
+    ],
+  },
+  {
+    label: "Ruta a piloto",
+    questions: [
+      "¿Que piloto recomienda el diagnostico?",
+      "¿Con que grupo deberia iniciar el piloto?",
+      "¿Que resultado deberia esperar el colegio?",
+    ],
+  },
+  {
+    label: "Decision institucional",
+    questions: [
+      "¿Como presento esto a rectoria?",
+      "¿Que decisiones debe tomar el colegio ahora?",
+      "¿Cual seria el siguiente paso institucional?",
+    ],
+  },
+];
+
+const INTERNAL_COMPANION_GUIDE = [
+  {
+    label: "Oportunidad",
+    questions: [
+      "¿Cual es la oportunidad comercial mas clara?",
+      "¿Que tan fuerte es la evidencia de necesidad?",
+      "¿Donde esta el dolor comprador?",
+    ],
+  },
+  {
+    label: "Objeciones",
+    questions: [
+      "¿Que objeciones puede tener el colegio?",
+      "¿Como responderlas sin sobreprometer?",
+      "¿Que informacion falta para cerrar criterio?",
+    ],
+  },
+  {
+    label: "Oferta piloto",
+    questions: [
+      "¿Que piloto conviene proponer y por que?",
+      "¿Que deberia decir Leonardo en la reunion?",
+      "¿Que propuesta concreta sigue?",
+    ],
+  },
+  {
+    label: "Seguimiento",
+    questions: [
+      "¿Que mensaje de seguimiento enviamos?",
+      "¿Que riesgo comercial debemos cuidar?",
+      "¿Que aprendizaje interno deja esta conversacion?",
+    ],
+  },
+];
+
 render();
 
 function render() {
@@ -832,7 +902,8 @@ function shouldShowFloatingCompanion() {
 
 function renderCompanionModal() {
   if (!state.companionOpen) return "";
-  const suggestions = getCompanionSuggestions(state.demoAudience);
+  const suggestionStage = getCompanionSuggestionStage(state.demoAudience);
+  const suggestions = suggestionStage.questions;
   const voiceStatus = state.companionRecording
     ? "Grabando pregunta. Cuando termines, presiona Enviar."
     : state.companionTranscribing
@@ -851,7 +922,8 @@ function renderCompanionModal() {
           <button class="icon-button close-button" data-close-companion aria-label="Cerrar Companion">×</button>
         </header>
 
-        <div class="suggestion-pills">
+        <div class="suggestion-pills" aria-label="Guia sugerida para la conversacion">
+          <span>${escapeHtml(suggestionStage.label)}</span>
           ${suggestions.map((question) => `<button data-companion-question="${escapeHtml(question)}">${escapeHtml(question)}</button>`).join("")}
         </div>
 
@@ -1541,21 +1613,10 @@ function blobToBase64(blob) {
   });
 }
 
-function getCompanionSuggestions(audience) {
-  if (audience === "internal") {
-    return [
-      "¿Cuál es la oportunidad comercial más clara?",
-      "¿Qué objeciones puede tener el colegio?",
-      "¿Qué debería decir Leonardo en la reunión?",
-      "¿Qué piloto conviene proponer y por qué?",
-    ];
-  }
-  return [
-    "¿Qué significa este resultado para el colegio?",
-    "¿Cuál es la brecha principal?",
-    "¿Cómo se relaciona esto con OECD/PISA?",
-    "¿Qué piloto recomienda el diagnóstico?",
-  ];
+function getCompanionSuggestionStage(audience) {
+  const userTurns = state.companionMessages.filter((message) => message.role === "user").length;
+  const stages = audience === "internal" ? INTERNAL_COMPANION_GUIDE : SCHOOL_COMPANION_GUIDE;
+  return stages[Math.min(userTurns, stages.length - 1)];
 }
 
 function buildCompanionContext() {

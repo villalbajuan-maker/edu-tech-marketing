@@ -1,4 +1,4 @@
-# App Diagnostico V1.4.1
+# App Diagnostico V1.5
 
 UI funcional del **Diagnostico Escolar de Competencias Financieras**.
 
@@ -23,6 +23,7 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 - Companion Institucional en modal con preguntas sugeridas y conexion LLM via `/api/companion`.
 - Navegacion principal reorganizada por audiencia: aplicacion, demo institucional e interno.
 - Vista interna para QA, sesion colegio y reporte tecnico.
+- Modo conversacional guiado para la aplicacion de preguntas a estudiantes.
 - Simulacion QA de 300 estudiantes.
 - Script de QA por consola.
 
@@ -86,6 +87,17 @@ La V1.4.1 reorganiza la UI para reducir ruido:
 - Demo institucional queda como vista principal para colegios;
 - Companion queda reservado para el modal IA;
 - el panel fijo de reglas pasa a llamarse Lectura decisional.
+
+## V1.5
+
+La V1.5 implementa el modo conversacional guiado para estudiantes:
+
+- presenta contexto como mensajes;
+- separa situacion, artefacto visual, pregunta y opciones;
+- mantiene una pregunta por pantalla;
+- conserva progreso, navegacion, revision y envio;
+- no introduce IA durante la prueba;
+- no cambia scoring ni QA.
 
 ## Como probar localmente
 

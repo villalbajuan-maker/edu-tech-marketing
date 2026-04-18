@@ -38,7 +38,7 @@ function render() {
             <div class="brand-mark">FDE</div>
             <div>
               <h1 class="brand-title">Diagnostico Escolar de Competencias Financieras</h1>
-              <p class="brand-subtitle">V1.4.1 · arquitectura UI del diagnostico</p>
+              <p class="brand-subtitle">V1.5 · modo conversacional guiado</p>
             </div>
           </div>
           <nav class="tabs">
@@ -103,7 +103,7 @@ function renderWelcomeStep() {
       <article class="panel soft">
         <p class="kicker">Antes de comenzar</p>
         <h2 class="headline">Este diagnostico no es una nota academica.</h2>
-        <p class="lead">Vas a ver situaciones de la vida diaria sobre compras, ahorro, riesgo digital, trabajo, hogar y decisiones con dinero. Responde con calma y elige la opcion que consideres mas adecuada.</p>
+        <p class="lead">Vas a ver situaciones de la vida diaria sobre compras, ahorro, riesgo digital, trabajo, hogar y decisiones con dinero. La prueba se presenta en modo conversacional guiado: lee cada situacion, revisa el artefacto visual y elige la opcion que consideres mas adecuada.</p>
         <div class="metrics compact">
           <div class="metric"><p class="metric-value">30</p><p class="metric-label">Preguntas</p></div>
           <div class="metric"><p class="metric-value">30</p><p class="metric-label">Minutos aprox.</p></div>
@@ -175,14 +175,30 @@ function renderQuestionStep() {
 
 function renderSingleQuestion(question, selected) {
   const dimension = DIMENSIONS.find((item) => item.id === question.dimension);
+  const conversation = buildQuestionConversation(question, dimension);
   return `
-    <article class="question question-focus">
-      <div class="question-header">
+    <article class="question question-focus conversational-question">
+      <div class="question-header conversational-header">
         <span class="badge">Situacion ${question.id}</span>
         <span class="badge">${dimension?.shortName || question.dimension}</span>
+        <span class="badge">Modo conversacional guiado</span>
       </div>
-      <p class="question-context">${escapeHtml(question.prompt)}</p>
-      <div class="options">
+      <div class="guided-thread">
+        <div class="diagnostic-message">
+          <span>Diagnostico</span>
+          <p>${escapeHtml(conversation.intro)}</p>
+        </div>
+        <div class="diagnostic-message">
+          <span>Situacion</span>
+          <p>${escapeHtml(conversation.caseText)}</p>
+        </div>
+        ${question.visual ? `<div class="artifact-message">${renderQuestionVisual(question.visual)}</div>` : ""}
+        <div class="diagnostic-message question-message">
+          <span>Pregunta</span>
+          <p>${escapeHtml(conversation.questionText)}</p>
+        </div>
+      </div>
+      <div class="options conversational-options" aria-label="Opciones de respuesta">
         ${question.options
           .map(
             (option, index) => `
@@ -194,7 +210,6 @@ function renderSingleQuestion(question, selected) {
           )
           .join("")}
       </div>
-      ${renderQuestionVisual(question.visual)}
     </article>
   `;
 }
@@ -712,6 +727,42 @@ function renderQuestionVisual(visual) {
     `;
   }
   return "";
+}
+
+function buildQuestionConversation(question, dimension) {
+  const parts = splitPrompt(question.prompt);
+  return {
+    intro: getConversationIntro(question, dimension),
+    caseText: parts.caseText,
+    questionText: parts.questionText,
+  };
+}
+
+function splitPrompt(prompt) {
+  const normalized = String(prompt || "").trim();
+  const questionStart = normalized.lastIndexOf("¿");
+  if (questionStart > 0) {
+    return {
+      caseText: normalized.slice(0, questionStart).trim(),
+      questionText: normalized.slice(questionStart).trim(),
+    };
+  }
+  return {
+    caseText: normalized,
+    questionText: "Selecciona la opcion que responda mejor a esta situacion.",
+  };
+}
+
+function getConversationIntro(question, dimension) {
+  const dimensionIntro = {
+    "dinero-transacciones": "Vas a revisar una situacion de compra, pago o comprobante.",
+    "presupuesto-planificacion": "Vas a analizar una decision de presupuesto, ahorro o priorizacion.",
+    "credito-deuda": "Vas a comparar una decision relacionada con cuotas, deuda o costo total.",
+    "riesgo-digital": "Vas a evaluar una situacion digital donde conviene verificar antes de decidir.",
+    "trabajo-empresa": "Vas a revisar una situacion de ingresos, costos o manejo de dinero en un emprendimiento.",
+    "hogar-ciudadania": "Vas a analizar una decision financiera conectada con el hogar o la vida en comunidad.",
+  };
+  return `${dimensionIntro[question.dimension] || "Vas a resolver una situacion financiera."} Responde con calma; esta es una prueba diagnostica, no una conversacion libre.`;
 }
 
 function renderVisualHeader(title, label) {

@@ -744,6 +744,11 @@ button {
   margin-bottom: 12px;
 }
 
+.conversational-header {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -762,6 +767,60 @@ button {
 
 .question-context {
   font-size: 20px;
+}
+
+.conversational-question {
+  background:
+    linear-gradient(180deg, rgba(36, 122, 90, 0.06), transparent 220px),
+    white;
+}
+
+.guided-thread {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.diagnostic-message {
+  max-width: 850px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfdf9;
+  padding: 13px 14px;
+}
+
+.diagnostic-message span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.diagnostic-message p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.question-message {
+  border-color: rgba(36, 122, 90, 0.35);
+  background: #f2faf5;
+}
+
+.artifact-message {
+  max-width: 850px;
+}
+
+.artifact-message .question-visual {
+  margin-top: 0;
+  box-shadow: none;
+}
+
+.conversational-options {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
 }
 
 .options {

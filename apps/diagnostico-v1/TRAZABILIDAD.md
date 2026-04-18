@@ -198,6 +198,16 @@ La V1.4.1 reorganiza la arquitectura de UI:
 - reserva Companion para el modal IA;
 - renombra el panel fijo como Lectura decisional.
 
+## Evolucion V1.5
+
+La V1.5 implementa el modo conversacional guiado:
+
+- transforma la pantalla de pregunta en una secuencia conversacional estructurada;
+- presenta contexto, situacion, artefacto visual, pregunta y opciones;
+- mantiene scoring, progreso, navegacion, revision y QA;
+- no agrega IA durante la prueba del estudiante;
+- conserva el caracter institucional del diagnostico.
+
 ## QA disponible
 
 La app incluye cuatro escenarios de simulacion:

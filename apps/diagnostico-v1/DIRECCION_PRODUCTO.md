@@ -135,7 +135,7 @@ Incluye:
 
 Modo conversacional guiado para estudiante.
 
-Estado: definida para implementacion.
+Estado: implementada.
 
 Objetivo:
 

@@ -29,7 +29,7 @@ Implementacion = contrato institucional
 | V1.3 | Reporte demo institucional + modo interno comercial | Implementada |
 | V1.4 | Companion Institucional con LLM contextual inicial | Implementada inicial |
 | V1.4.1 | Arquitectura UI y jerarquia de vistas | Implementada |
-| V1.5 | Modo conversacional guiado para estudiante | Definida |
+| V1.5 | Modo conversacional guiado para estudiante | Implementada |
 | V2.0 | IA contextual real + datos persistentes + integracion a plataforma | Futura |
 
 ## V1.0
@@ -224,4 +224,4 @@ Alcance:
 
 Estado:
 
-> Definida para implementacion.
+> Implementada en la app como nueva pantalla de pregunta para estudiantes.

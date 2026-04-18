@@ -113,6 +113,30 @@ Incluye:
 - integracion con OpenAI Responses API;
 - fallback local si no hay llave configurada.
 
+### V1.5
+
+Modo conversacional guiado para estudiante.
+
+Estado: definida para implementacion.
+
+Objetivo:
+
+> Presentar las preguntas como una secuencia conversacional guiada, mas cercana a la psicologia digital del estudiante, sin convertir la prueba en chat libre ni reducir su caracter diagnostico.
+
+Documento de alcance:
+
+[../../ofertas/diagnostico-escolar-educacion-financiera/modo-conversacional-guiado.md](../../ofertas/diagnostico-escolar-educacion-financiera/modo-conversacional-guiado.md)
+
+Incluye:
+
+- contexto en mensajes;
+- artefactos visuales dentro de la secuencia;
+- opciones estructuradas;
+- progreso;
+- navegacion;
+- revision de pendientes;
+- scoring igual.
+
 ### V2.0
 
 IA contextual real + datos persistentes + integracion a plataforma.

@@ -28,6 +28,7 @@ Implementacion = contrato institucional
 | V1.2 | Visuales pedagogicos + companion decisional + ruta a piloto | Implementada |
 | V1.3 | Reporte demo institucional + modo interno comercial | Implementada |
 | V1.4 | Companion Institucional con LLM contextual inicial | Implementada inicial |
+| V1.5 | Modo conversacional guiado para estudiante | Definida |
 | V2.0 | IA contextual real + datos persistentes + integracion a plataforma | Futura |
 
 ## V1.0
@@ -180,3 +181,27 @@ Objetivo:
 Estado:
 
 > Implementacion inicial disponible con endpoint `/api/companion`, OpenAI Responses API y fallback local cuando no hay llave configurada.
+
+## V1.5
+
+Documento de alcance:
+
+[modo-conversacional-guiado.md](modo-conversacional-guiado.md)
+
+Objetivo:
+
+> Transformar la aplicacion de preguntas en una interfaz conversacional guiada para estudiantes, manteniendo el caracter diagnostico, el scoring, el progreso y la seriedad institucional.
+
+Alcance:
+
+- contexto presentado como mensajes;
+- artefactos visuales dentro de la secuencia;
+- opciones estructuradas;
+- progreso y navegacion;
+- revision de pendientes;
+- sin IA durante la prueba;
+- sin respuestas abiertas.
+
+Estado:
+
+> Definida para implementacion.

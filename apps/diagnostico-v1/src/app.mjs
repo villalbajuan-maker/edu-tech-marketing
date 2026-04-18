@@ -820,11 +820,7 @@ function renderFloatingCompanionButton() {
   if (state.companionOpen || !shouldShowFloatingCompanion()) return "";
   return `
     <button class="floating-companion-button" data-open-companion aria-label="Abrir Companion IA">
-      <span class="floating-ai-mark" aria-hidden="true">IA</span>
-      <span>
-        <strong>Companion</strong>
-        <small>Preguntar con IA</small>
-      </span>
+      <span class="floating-ai-mark" aria-hidden="true"></span>
     </button>
   `;
 }
@@ -851,7 +847,7 @@ function renderCompanionModal() {
             <h2>Interpreta resultados, brechas y ruta a piloto</h2>
             <p>Vista activa: ${state.demoAudience === "internal" ? "interna" : "colegio"}. Responde con contexto del diagnostico, OECD/PISA y evidencia del reporte.</p>
           </div>
-          <button class="icon-button" data-close-companion aria-label="Cerrar Companion">Cerrar</button>
+          <button class="icon-button close-button" data-close-companion aria-label="Cerrar Companion">×</button>
         </header>
 
         <div class="suggestion-pills">

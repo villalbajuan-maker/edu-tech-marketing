@@ -392,51 +392,46 @@ button {
 .floating-companion-button {
   position: fixed;
   right: 24px;
-  bottom: 24px;
+  bottom: 96px;
   z-index: 30;
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 10px;
-  align-items: center;
+  place-items: center;
+  width: 58px;
+  height: 58px;
   border: 1px solid rgba(36, 122, 90, 0.28);
   border-radius: 8px;
-  padding: 11px 13px;
+  padding: 0;
   background: #fff;
   color: var(--ink);
   box-shadow: 0 16px 46px rgba(23, 33, 28, 0.22);
   cursor: pointer;
-  text-align: left;
-}
-
-.floating-companion-button strong,
-.floating-companion-button small {
-  display: block;
-  line-height: 1.1;
-}
-
-.floating-companion-button strong {
-  font-size: 14px;
-}
-
-.floating-companion-button small {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 800;
 }
 
 .floating-ai-mark {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  background:
-    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.85), transparent 28px),
-    var(--green);
-  color: white;
-  font-size: 13px;
-  font-weight: 950;
+  position: relative;
+  width: 28px;
+  height: 28px;
+  color: var(--green);
+}
+
+.floating-ai-mark::before,
+.floating-ai-mark::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+  clip-path: polygon(54% 0, 100% 0, 64% 42%, 100% 42%, 35% 100%, 48% 56%, 0 56%);
+}
+
+.floating-ai-mark::before {
+  inset: 1px 7px 1px 4px;
+}
+
+.floating-ai-mark::after {
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  height: 10px;
+  opacity: 0.45;
 }
 
 .floating-companion-button:focus-visible {
@@ -451,14 +446,14 @@ button {
   display: grid;
   place-items: center;
   background: rgba(23, 33, 28, 0.48);
-  padding: 18px;
+  padding: 32px 18px;
 }
 
 .companion-modal {
   display: grid;
   grid-template-rows: auto auto minmax(180px, 1fr) auto auto;
-  width: min(920px, 100%);
-  max-height: min(820px, 92vh);
+  width: min(860px, calc(100vw - 36px));
+  max-height: min(720px, 84vh);
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -473,7 +468,7 @@ button {
   align-items: start;
   border-bottom: 1px solid var(--line);
   background: #f7faf8;
-  padding: 18px;
+  padding: 14px 16px;
 }
 
 .companion-modal-header h2,
@@ -496,12 +491,25 @@ button {
   font-weight: 850;
 }
 
+.close-button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  color: var(--muted);
+  font-size: 24px;
+  line-height: 1;
+}
+
 .suggestion-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   border-bottom: 1px solid var(--line);
-  padding: 12px 18px;
+  max-height: 82px;
+  overflow-y: auto;
+  padding: 8px 16px;
 }
 
 .suggestion-pills button {
@@ -509,7 +517,8 @@ button {
   border-radius: 999px;
   background: var(--paper);
   color: var(--ink);
-  padding: 8px 10px;
+  padding: 6px 8px;
+  font-size: 12px;
   font-weight: 800;
 }
 
@@ -518,7 +527,7 @@ button {
   align-content: start;
   gap: 12px;
   overflow-y: auto;
-  padding: 18px;
+  padding: 16px;
   background: #fbfcfa;
 }
 
@@ -1983,13 +1992,15 @@ button {
   }
 
   .companion-modal {
-    max-height: 94vh;
+    width: calc(100vw - 28px);
+    max-height: 86vh;
   }
 
   .floating-companion-button {
     right: 12px;
-    bottom: 12px;
-    max-width: calc(100vw - 24px);
+    bottom: 88px;
+    width: 54px;
+    height: 54px;
   }
 
   .companion-modal-header,

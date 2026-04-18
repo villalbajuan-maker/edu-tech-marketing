@@ -6,6 +6,16 @@ Instrumento de entrada para colegios privados que permite medir el estado inicia
 
 No se presenta como una encuesta suelta. Se presenta como una herramienta institucional para que el colegio entienda que saben sus estudiantes, que brechas existen y que ruta de formacion podria implementar.
 
+## Norte de producto
+
+El diagnostico debe evolucionar como un instrumento diagnostico institucional donde diseno grafico, experiencia de usuario, pedagogia, scoring y venta trabajan juntos.
+
+La prueba mide. El reporte interpreta. El companion orienta. La ruta a piloto convierte evidencia en decision.
+
+Documento rector:
+
+[norte-producto.md](norte-producto.md)
+
 ## Para quien
 
 Colegios privados con estudiantes de bachillerato, especialmente grados 8, 9, 10 y 11.
@@ -75,4 +85,3 @@ La V1 del diagnostico ya esta definida en:
 [v1/README.md](v1/README.md)
 
 Esta version contiene el alcance congelado, banco de preguntas, matriz de evaluacion, sistema de puntaje, reglas de recomendacion de piloto, modelo de reporte vivo, companion, operacion en colegio, seguimiento comercial y checklist de lanzamiento.
-

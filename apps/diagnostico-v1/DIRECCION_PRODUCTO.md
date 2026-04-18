@@ -2,7 +2,13 @@
 
 ## North Star
 
-El Diagnostico Escolar de Competencias Financieras sera una experiencia digital visual e inteligente que mide competencias financieras mediante situaciones reales, acompana la aplicacion institucional, genera un reporte vivo con interpretacion asistida y guia al colegio hacia un piloto formativo basado en evidencia.
+El Diagnostico Escolar de Competencias Financieras sera un instrumento diagnostico institucional donde diseno grafico, experiencia de usuario, pedagogia, scoring y venta trabajan juntos.
+
+Debe medir competencias financieras mediante situaciones reales, acompanar la aplicacion institucional, generar un reporte vivo con interpretacion asistida y guiar al colegio hacia un piloto formativo basado en evidencia.
+
+Documento rector:
+
+[../../ofertas/diagnostico-escolar-educacion-financiera/norte-producto.md](../../ofertas/diagnostico-escolar-educacion-financiera/norte-producto.md)
 
 ## Principio central
 

@@ -82,6 +82,16 @@ export const QUESTIONS = [
     options: ["$7.000", "$7.500", "$8.500", "$12.500"],
     answer: 1,
     rationale: "$8.000 + $4.500 = $12.500. $20.000 - $12.500 = $7.500.",
+    visual: {
+      type: "receipt",
+      title: "Cafeteria escolar",
+      rows: [
+        ["Sandwich", "$8.000"],
+        ["Jugo", "$4.500"],
+        ["Pago recibido", "$20.000"],
+        ["Cambio", "?"],
+      ],
+    },
   },
   {
     id: 2,
@@ -94,6 +104,15 @@ export const QUESTIONS = [
     options: ["$20.000", "$55.000", "$60.000", "$75.000"],
     answer: 2,
     rationale: "El 25% de $80.000 es $20.000. $80.000 - $20.000 = $60.000.",
+    visual: {
+      type: "receipt",
+      title: "Compra con descuento",
+      rows: [
+        ["Precio inicial", "$80.000"],
+        ["Descuento", "25%"],
+        ["Valor a pagar", "?"],
+      ],
+    },
   },
   {
     id: 3,
@@ -106,6 +125,15 @@ export const QUESTIONS = [
     options: ["$138.000", "$150.000", "$152.000", "$162.000"],
     answer: 3,
     rationale: "$150.000 + $12.000 = $162.000.",
+    visual: {
+      type: "receipt",
+      title: "Compra en linea",
+      rows: [
+        ["Tenis", "$150.000"],
+        ["Envio", "$12.000"],
+        ["Total", "?"],
+      ],
+    },
   },
   {
     id: 4,
@@ -123,6 +151,16 @@ export const QUESTIONS = [
     ],
     answer: 0,
     rationale: "$9.000 + $6.000 + $3.500 = $18.500. Le devuelven $1.500.",
+    visual: {
+      type: "receipt",
+      title: "Recibo de papeleria",
+      rows: [
+        ["Cuaderno", "$9.000"],
+        ["Lapices", "$6.000"],
+        ["Cartulina", "$3.500"],
+        ["Pago", "$20.000"],
+      ],
+    },
   },
   {
     id: 5,
@@ -157,6 +195,16 @@ export const QUESTIONS = [
     ],
     answer: 1,
     rationale: "Prioriza transporte y meta de ahorro antes del gasto opcional.",
+    visual: {
+      type: "budget",
+      title: "Dinero semanal de Andres",
+      rows: [
+        ["Disponible", "$70.000"],
+        ["Transporte", "$24.000"],
+        ["Ahorro salida", "$15.000"],
+        ["Audifonos", "$45.000"],
+      ],
+    },
   },
   {
     id: 7,
@@ -186,6 +234,16 @@ export const QUESTIONS = [
     ],
     answer: 1,
     rationale: "Primero cubre compromisos necesarios y luego revisa gastos opcionales.",
+    visual: {
+      type: "budget",
+      title: "Prioridades de Camila",
+      rows: [
+        ["Disponible", "$50.000"],
+        ["Transporte", "$18.000"],
+        ["Materiales", "$12.000"],
+        ["Gorra", "$35.000"],
+      ],
+    },
   },
   {
     id: 9,
@@ -232,6 +290,14 @@ export const QUESTIONS = [
     options: ["$85.000", "$900.000", "$985.000", "$1.020.000"],
     answer: 3,
     rationale: "12 x $85.000 = $1.020.000.",
+    visual: {
+      type: "installments",
+      title: "Compra de celular",
+      options: [
+        { label: "Contado", value: "$900.000" },
+        { label: "Cuotas", value: "12 x $85.000" },
+      ],
+    },
   },
   {
     id: 12,
@@ -248,6 +314,15 @@ export const QUESTIONS = [
     ],
     answer: 1,
     rationale: "La decision debe mirar costo total, no solo cuota mensual.",
+    visual: {
+      type: "installments",
+      title: "Comparacion antes de decidir",
+      options: [
+        { label: "Contado", value: "$900.000" },
+        { label: "Cuotas", value: "12 x $85.000" },
+        { label: "Dato clave", value: "Costo total" },
+      ],
+    },
   },
   {
     id: 13,
@@ -265,6 +340,15 @@ export const QUESTIONS = [
     ],
     answer: 2,
     rationale: "6 x $110.000 = $660.000.",
+    visual: {
+      type: "installments",
+      title: "Bicicleta a cuotas",
+      options: [
+        { label: "Precio contado", value: "$600.000" },
+        { label: "Plan de pago", value: "6 x $110.000" },
+        { label: "Total", value: "?" },
+      ],
+    },
   },
   {
     id: 14,
@@ -299,6 +383,11 @@ export const QUESTIONS = [
     ],
     answer: 1,
     rationale: "Los pagos recurrentes comprometen dinero futuro.",
+    visual: {
+      type: "decision",
+      title: "Pago recurrente",
+      items: ["$18.000 cada mes", "No es un pago unico", "Compromete dinero futuro"],
+    },
   },
   {
     id: 16,
@@ -316,6 +405,15 @@ export const QUESTIONS = [
     ],
     answer: 2,
     rationale: "La rentabilidad rapida, urgencia y secreto son senales de riesgo.",
+    visual: {
+      type: "chat",
+      title: "Mensaje por Instagram",
+      messages: [
+        "Invierte $50.000 hoy.",
+        "En cinco dias recibes $100.000.",
+        "No le cuentes a nadie. Es exclusivo.",
+      ],
+    },
   },
   {
     id: 17,
@@ -333,6 +431,11 @@ export const QUESTIONS = [
     ],
     answer: 2,
     rationale: "Las claves y codigos de seguridad no deben compartirse.",
+    visual: {
+      type: "chat",
+      title: "Mensaje sospechoso",
+      messages: ["Ganaste un premio.", "Envia tu clave o codigo de seguridad para reclamarlo."],
+    },
   },
   {
     id: 18,
@@ -350,6 +453,11 @@ export const QUESTIONS = [
     ],
     answer: 0,
     rationale: "Una promesa garantizada sin explicacion clara debe verificarse.",
+    visual: {
+      type: "chat",
+      title: "Grupo de WhatsApp",
+      messages: ["Ganancias altas todas las semanas.", "No necesitas entender como funciona.", "Cupos limitados."],
+    },
   },
   {
     id: 19,
@@ -367,6 +475,11 @@ export const QUESTIONS = [
     ],
     answer: 2,
     rationale: "Una decision responsable verifica informacion antes de transferir dinero.",
+    visual: {
+      type: "chat",
+      title: "Rifa digital",
+      messages: ["Todos van a comprar.", "No quedes mal con el grupo.", "Envia rapido el dinero."],
+    },
   },
   {
     id: 20,
@@ -396,6 +509,15 @@ export const QUESTIONS = [
     options: ["$45.000", "$75.000", "$120.000", "$195.000"],
     answer: 0,
     rationale: "Ingresos: $120.000. Ganancia: $120.000 - $75.000 = $45.000.",
+    visual: {
+      type: "cashbook",
+      title: "Venta de brownies",
+      rows: [
+        ["40 brownies x $3.000", "+$120.000"],
+        ["Ingredientes y empaques", "-$75.000"],
+        ["Ganancia", "?"],
+      ],
+    },
   },
   {
     id: 22,
@@ -413,6 +535,15 @@ export const QUESTIONS = [
     ],
     answer: 2,
     rationale: "$100.000 - $60.000 = $40.000 de ganancia.",
+    visual: {
+      type: "cashbook",
+      title: "Venta de manillas",
+      rows: [
+        ["Ingresos por ventas", "+$100.000"],
+        ["Materiales", "-$60.000"],
+        ["Ganancia", "?"],
+      ],
+    },
   },
   {
     id: 23,
@@ -425,6 +556,16 @@ export const QUESTIONS = [
     options: ["$85.000", "$135.000", "$155.000", "$205.000"],
     answer: 1,
     rationale: "$50.000 + $120.000 - $35.000 = $135.000.",
+    visual: {
+      type: "cashbook",
+      title: "Registro de caja",
+      rows: [
+        ["Caja inicial", "$50.000"],
+        ["Ventas", "+$120.000"],
+        ["Materiales", "-$35.000"],
+        ["Saldo final", "?"],
+      ],
+    },
   },
   {
     id: 24,
@@ -476,6 +617,16 @@ export const QUESTIONS = [
     ],
     answer: 1,
     rationale: "Alimentacion, transporte y servicios son necesidades basicas.",
+    visual: {
+      type: "budget",
+      title: "Gastos del hogar",
+      rows: [
+        ["Alimentacion", "Necesidad"],
+        ["Transporte", "Necesidad"],
+        ["Servicios publicos", "Necesidad"],
+        ["Compra opcional", "Deseo"],
+      ],
+    },
   },
   {
     id: 27,
@@ -510,6 +661,16 @@ export const QUESTIONS = [
     ],
     answer: 1,
     rationale: "Prioriza necesidades, continuidad del ingreso y obligaciones.",
+    visual: {
+      type: "budget",
+      title: "Mes con gasto inesperado",
+      rows: [
+        ["Energia", "Obligacion"],
+        ["Transporte al trabajo", "Necesidad"],
+        ["Deuda pendiente", "Compromiso"],
+        ["Televisor en promocion", "Opcional"],
+      ],
+    },
   },
   {
     id: 29,
@@ -544,6 +705,10 @@ export const QUESTIONS = [
     ],
     answer: 1,
     rationale: "Acordar prioridades ayuda a manejar recursos compartidos.",
+    visual: {
+      type: "decision",
+      title: "Decision familiar",
+      items: ["Gastos obligatorios", "Deuda pendiente", "Deseos personales", "Acuerdo de prioridades"],
+    },
   },
 ];
-

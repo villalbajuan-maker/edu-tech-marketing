@@ -53,7 +53,7 @@ Incluyo:
 
 Visuales pedagogicos + companion decisional + ruta a piloto mas explicita.
 
-Estado: siguiente version.
+Estado: implementada.
 
 Objetivo:
 
@@ -180,9 +180,6 @@ La V1.2 sera exitosa si:
 
 ## Pendientes antes de V1.2
 
-- Elegir que preguntas reciben visuales primero.
-- Definir estructura de visual por tipo de pregunta.
-- Ajustar companion con respuestas mas orientadas a decision.
-- Disenar bloque de ruta a piloto dentro del reporte.
+- Revisar visuales con Camilo y ajustar lenguaje si alguna situacion no representa bien el curso.
+- Validar con Leonardo si la ruta a piloto ayuda a explicar la oferta comercial.
 - Validar que el lenguaje siga siendo colombiano, claro y no infantil.
-

@@ -199,6 +199,62 @@ export function buildCompanionAnswers(report) {
   ];
 }
 
+export function buildDecisionCompanion(report) {
+  const mainGap = report.gaps[0];
+  const secondGap = report.gaps[1];
+  const gapText = mainGap
+    ? `${mainGap.name} aparece como brecha principal con ${mainGap.percent}% (${mainGap.status.name}).`
+    : "No aparece una brecha critica dominante; conviene usar el diagnostico para profundizar fortalezas y definir foco.";
+  const implication = mainGap
+    ? getGapImplication(mainGap.id)
+    : "El colegio puede avanzar hacia una ruta de profundizacion o piloto aplicado.";
+
+  return {
+    summary: `El grupo esta en nivel ${report.level.name}. ${report.level.description}`,
+    mainGap: gapText,
+    secondarySignal: secondGap ? `Tambien conviene revisar ${secondGap.name}, con ${secondGap.percent}%.` : "No hay una segunda brecha prioritaria clara.",
+    whyItMatters: implication,
+    pilot: `${report.pilotRecommendation.name}. ${report.pilotRecommendation.reason}`,
+    nextStep: "Agendar una reunion de lectura de 30 a 45 minutos para definir grupo piloto, alcance y medicion de avance.",
+    questions: [
+      "¿Que grado deberia iniciar el piloto?",
+      "¿Que brecha es mas sensible para familias y directivos?",
+      "¿Como se mediria avance despues del piloto?",
+      "¿Que mensaje se podria presentar a rectoria o padres?",
+    ],
+  };
+}
+
+export function buildPilotPath(report) {
+  const mainGap = report.gaps[0] || [...report.dimensions].sort((a, b) => a.percent - b.percent)[0];
+  return [
+    {
+      label: "Brecha detectada",
+      value: mainGap ? `${mainGap.name}: ${mainGap.percent}%` : "Resultados revisados",
+    },
+    {
+      label: "Implicacion educativa",
+      value: mainGap ? getGapImplication(mainGap.id) : "Hay oportunidad de profundizacion y medicion formativa.",
+    },
+    {
+      label: "Piloto recomendado",
+      value: report.pilotRecommendation.name,
+    },
+    {
+      label: "Que se trabajaria",
+      value: report.pilotRecommendation.focus,
+    },
+    {
+      label: "Como se mediria",
+      value: "Comparacion antes/despues con evaluacion corta y reporte de avance.",
+    },
+    {
+      label: "Siguiente paso",
+      value: "Reunion de implementacion para definir grupo, calendario y responsables.",
+    },
+  ];
+}
+
 function initializeDimensionScores() {
   return Object.fromEntries(
     DIMENSIONS.map((dimension) => [
@@ -246,3 +302,14 @@ function sum(values) {
   return values.reduce((total, value) => total + value, 0);
 }
 
+function getGapImplication(dimensionId) {
+  const implications = {
+    "dinero-transacciones": "Los estudiantes pueden tener dificultades para verificar pagos, costos totales y comprobantes en compras cotidianas.",
+    "presupuesto-planificacion": "El grupo necesita fortalecer priorizacion, ahorro y manejo de dinero limitado antes de decisiones de consumo.",
+    "credito-deuda": "Los estudiantes pueden fijarse en cuotas bajas sin calcular costo total o compromisos futuros.",
+    "riesgo-digital": "El grupo puede ser vulnerable a promesas de dinero rapido, presion social o solicitudes inseguras de datos.",
+    "trabajo-empresa": "Los estudiantes pueden confundir recibir dinero con ganar dinero, sin considerar costos, utilidad y caja.",
+    "hogar-ciudadania": "La oportunidad esta en conectar decisiones individuales con prioridades familiares, consumo responsable y bienestar compartido.",
+  };
+  return implications[dimensionId] || "La dimension requiere lectura pedagogica para definir intervencion.";
+}

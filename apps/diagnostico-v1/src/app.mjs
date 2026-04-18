@@ -1,5 +1,5 @@
 import { DIMENSIONS, QUESTIONS } from "./data.mjs";
-import { buildCompanionAnswers, scoreSubmission } from "./scoring.mjs";
+import { buildDecisionCompanion, buildPilotPath, scoreSubmission } from "./scoring.mjs";
 import { listScenarios, runQaSuite, simulateCohort } from "./simulation.mjs";
 
 const app = document.querySelector("#app");
@@ -189,6 +189,7 @@ function renderSingleQuestion(question, selected) {
           )
           .join("")}
       </div>
+      ${renderQuestionVisual(question.visual)}
     </article>
   `;
 }
@@ -284,7 +285,8 @@ function renderSessionDashboard() {
 
 function renderReport(report, mode) {
   if (!report) return `<div class="empty">Todavia no hay reporte. Aplica la prueba o ejecuta una simulacion.</div>`;
-  const companion = buildCompanionAnswers(report);
+  const companion = buildDecisionCompanion(report);
+  const pilotPath = buildPilotPath(report);
   return `
     <section class="report-grid">
       <div>
@@ -335,25 +337,82 @@ function renderReport(report, mode) {
             <button class="button secondary">Agendar reunion de lectura</button>
           </div>
         </article>
+
+        <article class="report-section">
+          <h3>Ruta recomendada hacia piloto</h3>
+          <div class="pilot-path">
+            ${pilotPath
+              .map(
+                (step, index) => `
+                  <div class="path-step">
+                    <span class="path-index">${index + 1}</span>
+                    <div>
+                      <strong>${step.label}</strong>
+                      <p>${step.value}</p>
+                    </div>
+                  </div>
+                `,
+              )
+              .join("")}
+          </div>
+        </article>
       </div>
       <aside class="companion">
-        <p class="kicker">Companion del reporte</p>
-        <h3>Preguntas sugeridas</h3>
+        <p class="kicker">Companion decisional</p>
+        <h3>Lectura para decidir</h3>
         <div class="companion-list">
-          ${companion
-            .map(
-              (item) => `
-                <div class="companion-item">
-                  <strong>${item.question}</strong>
-                  <span>${item.answer}</span>
-                </div>
-              `,
-            )
-            .join("")}
+          <div class="companion-item"><strong>Lectura rapida</strong><span>${companion.summary}</span></div>
+          <div class="companion-item"><strong>Brecha principal</strong><span>${companion.mainGap}</span></div>
+          <div class="companion-item"><strong>Por que importa</strong><span>${companion.whyItMatters}</span></div>
+          <div class="companion-item"><strong>Piloto recomendado</strong><span>${companion.pilot}</span></div>
+          <div class="companion-item"><strong>Siguiente paso</strong><span>${companion.nextStep}</span></div>
         </div>
+        <h3 class="companion-subtitle">Preguntas utiles</h3>
+        <ul class="list">${companion.questions.map((question) => `<li>${question}</li>`).join("")}</ul>
       </aside>
     </section>
   `;
+}
+
+function renderQuestionVisual(visual) {
+  if (!visual) return "";
+  if (visual.type === "chat") {
+    return `
+      <div class="question-visual chat-visual">
+        <strong>${visual.title}</strong>
+        ${visual.messages.map((message) => `<div class="chat-bubble">${escapeHtml(message)}</div>`).join("")}
+      </div>
+    `;
+  }
+  if (visual.type === "installments") {
+    return `
+      <div class="question-visual installment-visual">
+        <strong>${visual.title}</strong>
+        <div class="visual-grid">
+          ${visual.options.map((item) => `<div class="visual-tile"><span>${escapeHtml(item.label)}</span><b>${escapeHtml(item.value)}</b></div>`).join("")}
+        </div>
+      </div>
+    `;
+  }
+  if (visual.type === "cashbook" || visual.type === "receipt" || visual.type === "budget") {
+    return `
+      <div class="question-visual ${visual.type}-visual">
+        <strong>${visual.title}</strong>
+        <div class="visual-rows">
+          ${visual.rows.map(([label, value]) => `<div class="visual-row"><span>${escapeHtml(label)}</span><b>${escapeHtml(value)}</b></div>`).join("")}
+        </div>
+      </div>
+    `;
+  }
+  if (visual.type === "decision") {
+    return `
+      <div class="question-visual decision-visual">
+        <strong>${visual.title}</strong>
+        <div class="decision-items">${visual.items.map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>
+      </div>
+    `;
+  }
+  return "";
 }
 
 function renderDimensionBar(dimension) {

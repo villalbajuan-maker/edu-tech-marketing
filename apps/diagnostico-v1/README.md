@@ -1,4 +1,4 @@
-# App Diagnostico V1.1
+# App Diagnostico V1.2
 
 UI funcional del **Diagnostico Escolar de Competencias Financieras**.
 
@@ -9,11 +9,13 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 ## Que incluye
 
 - Flujo de aplicacion real: bienvenida, datos minimos, pregunta por pantalla, revision, envio y cierre.
+- Visuales pedagogicos en preguntas clave: recibos, cuotas, chat, caja, presupuesto y decision.
 - Aplicacion de la prueba de 30 preguntas.
 - Scoring sobre 28 preguntas calificables.
 - Lectura por dimension.
 - Reporte vivo interactivo.
-- Companion basico del reporte.
+- Companion decisional del reporte.
+- Ruta explicita hacia piloto.
 - Dashboard simulado de sesion para colegio.
 - Simulacion QA de 300 estudiantes.
 - Script de QA por consola.
@@ -33,6 +35,14 @@ La V1.1 acerca la prueba a una aplicacion real en colegio:
 - permite revisar preguntas pendientes antes de enviar;
 - muestra pantalla final de registro exitoso;
 - agrega una vista simulada para coordinador/colegio.
+
+## V1.2
+
+La V1.2 mejora claridad y valor percibido:
+
+- agrega visuales pedagogicos funcionales;
+- convierte el companion en panel decisional;
+- incorpora una ruta explicita de brecha a piloto dentro del reporte.
 
 ## Como probar localmente
 

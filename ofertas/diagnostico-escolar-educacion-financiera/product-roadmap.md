@@ -19,7 +19,7 @@ Implementacion = contrato institucional
 | --- | --- | --- |
 | V1.0 | Prueba funcional + scoring + reporte + QA | Implementada |
 | V1.1 | Experiencia end-to-end de aplicacion | Implementada |
-| V1.2 | Visuales pedagogicos + companion decisional + ruta a piloto | Siguiente |
+| V1.2 | Visuales pedagogicos + companion decisional + ruta a piloto | Implementada |
 | V1.3 | Reporte demo institucional + modo interno comercial | Futura |
 | V2.0 | IA contextual real + datos persistentes + integracion a plataforma | Futura |
 
@@ -68,7 +68,7 @@ Alcance:
 
 ### Visuales pedagogicos
 
-Se incorporaran visuales funcionales en preguntas seleccionadas:
+Se incorporaron visuales funcionales en preguntas seleccionadas:
 
 - recibo o comprobante;
 - comparacion contado/cuotas;
@@ -95,6 +95,8 @@ El reporte debe conectar:
 Brecha -> Implicacion -> Piloto -> Medicion -> Siguiente paso
 ```
 
+Estado: implementado como bloque de ruta recomendada dentro del reporte vivo.
+
 ## Que no entra en V1.2
 
 - IA contextual libre.
@@ -120,4 +122,3 @@ Brecha -> Implicacion -> Piloto -> Medicion -> Siguiente paso
 ## Criterio estrategico
 
 La V1.2 debe mejorar claridad y valor percibido, no aumentar complejidad innecesaria.
-

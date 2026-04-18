@@ -126,13 +126,19 @@ Tambien agrega una vista de sesion para colegio, pensada para que un coordinador
 
 ## Siguiente version: V1.2
 
-La V1.2 queda definida como:
+La V1.2 queda definida e implementada como:
 
 ```text
 Visuales pedagogicos + companion decisional + ruta a piloto mas explicita
 ```
 
 No cambia el corazon de scoring. Mejora experiencia, interpretacion y decision.
+
+Incluye:
+
+- visuales pedagogicos en preguntas seleccionadas;
+- companion decisional;
+- ruta explicita de brecha a piloto dentro del reporte.
 
 ## QA disponible
 

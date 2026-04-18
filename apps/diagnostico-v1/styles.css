@@ -462,6 +462,11 @@ button {
   box-shadow: 0 28px 90px rgba(23, 33, 28, 0.35);
 }
 
+.companion-modal.expanded {
+  width: min(1120px, calc(100vw - 42px));
+  max-height: min(860px, 92vh);
+}
+
 .companion-modal-header {
   display: grid;
   grid-template-columns: 1fr;
@@ -469,7 +474,7 @@ button {
   align-items: start;
   border-bottom: 1px solid var(--line);
   background: #f7faf8;
-  padding: 14px 54px 14px 16px;
+  padding: 14px 96px 14px 16px;
 }
 
 .companion-modal-header h2,
@@ -492,18 +497,40 @@ button {
   font-weight: 850;
 }
 
-.close-button {
+.companion-window-actions {
   position: absolute;
   top: 12px;
   right: 12px;
+  display: flex;
+  gap: 7px;
+}
+
+.companion-window-actions .icon-button {
   display: grid;
   place-items: center;
   width: 34px;
   height: 34px;
   padding: 0;
+}
+
+.close-button {
   color: var(--muted);
   font-size: 24px;
   line-height: 1;
+}
+
+.expand-button span {
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--muted);
+  border-radius: 3px;
+}
+
+.companion-modal.expanded .expand-button span {
+  width: 15px;
+  height: 11px;
+  border-radius: 3px;
+  box-shadow: -4px 4px 0 -2px white, -4px 4px 0 0 var(--muted);
 }
 
 .suggestion-pills {
@@ -2221,6 +2248,11 @@ button {
   }
 
   .companion-modal {
+    width: calc(100vw - 28px);
+    max-height: 86vh;
+  }
+
+  .companion-modal.expanded {
     width: calc(100vw - 28px);
     max-height: 86vh;
   }

@@ -30,6 +30,7 @@ const state = {
   institutionalDemo: buildInstitutionalDemo(),
   demoAudience: "school",
   companionOpen: false,
+  companionExpanded: false,
   companionLoading: false,
   companionRecording: false,
   companionTranscribing: false,
@@ -975,14 +976,19 @@ function renderCompanionModal() {
     : "Pregunta al Companion...";
   return `
     <div class="modal-backdrop" data-close-companion>
-      <section class="companion-modal" role="dialog" aria-modal="true" aria-label="Companion del diagnostico" data-modal-panel>
+      <section class="companion-modal ${state.companionExpanded ? "expanded" : ""}" role="dialog" aria-modal="true" aria-label="Companion del diagnostico" data-modal-panel>
         <header class="companion-modal-header">
           <div>
             <p class="kicker">Companion institucional</p>
             <h2>Interpreta resultados, brechas y ruta a piloto</h2>
             <p>Vista activa: ${state.demoAudience === "internal" ? "interna" : "colegio"}. Responde con contexto del diagnostico, OECD/PISA y evidencia del reporte.</p>
           </div>
-          <button class="icon-button close-button" data-close-companion aria-label="Cerrar Companion">×</button>
+          <div class="companion-window-actions">
+            <button class="icon-button expand-button" type="button" data-toggle-companion-size aria-label="${state.companionExpanded ? "Volver a ventana flotante" : "Abrir Companion en ventana grande"}" title="${state.companionExpanded ? "Ventana flotante" : "Ventana grande"}">
+              <span aria-hidden="true"></span>
+            </button>
+            <button class="icon-button close-button" data-close-companion aria-label="Cerrar Companion">×</button>
+          </div>
         </header>
 
         <div class="suggestion-pills" aria-label="Guia sugerida para la conversacion">
@@ -1410,6 +1416,14 @@ function bindEvents() {
   const modalPanel = document.querySelector("[data-modal-panel]");
   if (modalPanel) {
     modalPanel.addEventListener("click", (event) => event.stopPropagation());
+  }
+
+  const companionSizeToggle = document.querySelector("[data-toggle-companion-size]");
+  if (companionSizeToggle) {
+    companionSizeToggle.addEventListener("click", () => {
+      state.companionExpanded = !state.companionExpanded;
+      render();
+    });
   }
 
   document.querySelectorAll("[data-companion-question]").forEach((button) => {

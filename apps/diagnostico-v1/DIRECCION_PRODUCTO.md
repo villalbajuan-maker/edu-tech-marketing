@@ -141,6 +141,15 @@ Objetivo:
 
 > Presentar las preguntas como una secuencia conversacional guiada, mas cercana a la psicologia digital del estudiante, sin convertir la prueba en chat libre ni reducir su caracter diagnostico.
 
+Decision de implementacion:
+
+- la prueba usa un shell tipo conversacion institucional;
+- cada situacion entra como mensajes del diagnostico;
+- la respuesta seleccionada aparece como burbuja del estudiante;
+- las respuestas anteriores quedan en un historial compacto para reforzar la sensacion de avance conversacional;
+- al avanzar, aparece una senal de escritura antes de cargar la siguiente pregunta;
+- la conversacion no es libre, no usa emojis y no introduce IA durante la aplicacion del estudiante.
+
 Documento de alcance:
 
 [../../ofertas/diagnostico-escolar-educacion-financiera/modo-conversacional-guiado.md](../../ofertas/diagnostico-escolar-educacion-financiera/modo-conversacional-guiado.md)

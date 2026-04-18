@@ -204,6 +204,7 @@ La V1.5 implementa el modo conversacional guiado:
 
 - transforma la pantalla de pregunta en una secuencia conversacional estructurada;
 - presenta contexto, situacion, artefacto visual, pregunta y opciones;
+- incorpora shell visual tipo conversacion, historial compacto, burbuja de respuesta del estudiante y transicion con tres puntos entre preguntas;
 - mantiene scoring, progreso, navegacion, revision y QA;
 - no agrega IA durante la prueba del estudiante;
 - conserva el caracter institucional del diagnostico.

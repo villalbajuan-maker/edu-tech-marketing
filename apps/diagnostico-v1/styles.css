@@ -770,9 +770,37 @@ button {
 }
 
 .conversational-question {
-  background:
-    linear-gradient(180deg, rgba(36, 122, 90, 0.06), transparent 220px),
-    white;
+  padding: 0;
+  overflow: hidden;
+  background: white;
+}
+
+.student-chat-shell {
+  display: grid;
+  background: #f7faf7;
+}
+
+.chat-shell-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--line);
+  padding: 18px;
+  background: #fff;
+}
+
+.chat-shell-header h2 {
+  margin: 2px 0 0;
+  font-size: 20px;
+}
+
+.chat-shell-label {
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
 }
 
 .guided-thread {
@@ -781,12 +809,30 @@ button {
   margin-bottom: 18px;
 }
 
+.chat-thread {
+  align-content: end;
+  min-height: 420px;
+  max-height: 62vh;
+  overflow-y: auto;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0;
+  padding: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(247, 250, 247, 0.96)),
+    #f7faf7;
+}
+
 .diagnostic-message {
   max-width: 850px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fbfdf9;
   padding: 13px 14px;
+}
+
+.chat-message {
+  width: fit-content;
+  max-width: min(850px, 86%);
 }
 
 .diagnostic-message span {
@@ -809,8 +855,51 @@ button {
   background: #f2faf5;
 }
 
+.student-answer-message {
+  justify-self: end;
+  max-width: min(760px, 82%);
+  border: 1px solid rgba(36, 122, 90, 0.32);
+  border-radius: 8px;
+  background: #eaf6ef;
+  padding: 13px 14px;
+}
+
+.student-answer-message span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.student-answer-message p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.chat-typing-message {
+  min-width: 190px;
+}
+
+.previous-question-message,
+.previous-answer-message {
+  opacity: 0.72;
+}
+
+.previous-question-message p,
+.previous-answer-message p {
+  font-size: 14px;
+}
+
 .artifact-message {
   max-width: 850px;
+}
+
+.artifact-bubble {
+  width: min(850px, 100%);
 }
 
 .artifact-message .question-visual {
@@ -818,9 +907,23 @@ button {
   box-shadow: none;
 }
 
+.student-response-panel {
+  display: grid;
+  gap: 12px;
+  padding: 16px 18px 18px;
+  background: #fff;
+}
+
+.student-response-panel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .conversational-options {
-  border-top: 1px solid var(--line);
-  padding-top: 14px;
+  border-top: 0;
+  padding-top: 0;
 }
 
 .options {
@@ -847,6 +950,11 @@ button {
 .option.selected {
   border-color: var(--green);
   background: #eff8f3;
+}
+
+.option.disabled {
+  cursor: default;
+  opacity: 0.72;
 }
 
 .question-visual {
@@ -1408,6 +1516,20 @@ button {
     gap: 10px;
   }
 
+  .chat-shell-header {
+    flex-direction: column;
+  }
+
+  .chat-thread {
+    min-height: 360px;
+    max-height: 58vh;
+  }
+
+  .chat-message,
+  .student-answer-message {
+    max-width: 94%;
+  }
+
   .metric-value {
     font-size: 26px;
   }
@@ -1490,6 +1612,24 @@ button {
 
   .button {
     width: 100%;
+  }
+
+  .conversational-question {
+    padding: 0;
+  }
+
+  .chat-shell-header,
+  .chat-thread,
+  .student-response-panel {
+    padding: 14px;
+  }
+
+  .diagnostic-message p {
+    font-size: 16px;
+  }
+
+  .student-answer-message p {
+    font-size: 16px;
   }
 
   .view-toggle {

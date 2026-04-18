@@ -15,6 +15,7 @@ const state = {
   internalSection: "qa",
   quizStage: "welcome",
   currentIndex: 0,
+  questionTransition: false,
   meta: { ...defaultMeta },
   answers: {},
   studentReport: null,
@@ -54,6 +55,7 @@ function render() {
     </div>
   `;
   bindEvents();
+  scrollConversationThread();
 }
 
 function renderView() {
@@ -161,12 +163,12 @@ function renderQuestionStep() {
       </div>
       ${renderSingleQuestion(question, selected)}
       <div class="question-nav">
-        <button class="button secondary" id="prevQuestion" ${state.currentIndex === 0 ? "disabled" : ""}>Anterior</button>
-        <button class="button secondary" id="saveDemoAnswers">Responder demo</button>
+        <button class="button secondary" id="prevQuestion" ${state.currentIndex === 0 || state.questionTransition ? "disabled" : ""}>Anterior</button>
+        <button class="button secondary" id="saveDemoAnswers" ${state.questionTransition ? "disabled" : ""}>Responder demo</button>
         ${
           state.currentIndex === QUESTIONS.length - 1
-            ? `<button class="button" id="goReview">Revisar y enviar</button>`
-            : `<button class="button" id="nextQuestion">Siguiente</button>`
+            ? `<button class="button" id="goReview" ${state.questionTransition ? "disabled" : ""}>Revisar y enviar</button>`
+            : `<button class="button" id="nextQuestion" ${state.questionTransition ? "disabled" : ""}>Continuar</button>`
         }
       </div>
     </section>
@@ -176,41 +178,99 @@ function renderQuestionStep() {
 function renderSingleQuestion(question, selected) {
   const dimension = DIMENSIONS.find((item) => item.id === question.dimension);
   const conversation = buildQuestionConversation(question, dimension);
+  const previousExchanges = QUESTIONS.slice(0, state.currentIndex).map(renderCompletedQuestionExchange).join("");
   return `
     <article class="question question-focus conversational-question">
-      <div class="question-header conversational-header">
-        <span class="badge">Situacion ${question.id}</span>
-        <span class="badge">${dimension?.shortName || question.dimension}</span>
-        <span class="badge">Modo conversacional guiado</span>
-      </div>
-      <div class="guided-thread">
-        <div class="diagnostic-message">
-          <span>Diagnostico</span>
-          <p>${escapeHtml(conversation.intro)}</p>
+      <div class="student-chat-shell">
+        <div class="chat-shell-header">
+          <div>
+            <span class="chat-shell-label">Sesion diagnostica</span>
+            <h2>Conversacion guiada ${question.id}</h2>
+          </div>
+          <div class="conversational-header">
+            <span class="badge">${dimension?.shortName || question.dimension}</span>
+            <span class="badge">Una pregunta activa</span>
+          </div>
         </div>
-        <div class="diagnostic-message">
-          <span>Situacion</span>
-          <p>${escapeHtml(conversation.caseText)}</p>
+        <div class="guided-thread chat-thread" aria-live="polite">
+          ${previousExchanges}
+          <div class="diagnostic-message chat-message">
+            <span>Diagnostico</span>
+            <p>${escapeHtml(conversation.intro)}</p>
+          </div>
+          <div class="diagnostic-message chat-message">
+            <span>Situacion</span>
+            <p>${escapeHtml(conversation.caseText)}</p>
+          </div>
+          ${question.visual ? `<div class="artifact-message chat-message artifact-bubble">${renderQuestionVisual(question.visual)}</div>` : ""}
+          <div class="diagnostic-message chat-message question-message">
+            <span>Pregunta</span>
+            <p>${escapeHtml(conversation.questionText)}</p>
+          </div>
+          ${renderStudentAnswerBubble(question, selected)}
+          ${state.questionTransition ? renderDiagnosticTypingIndicator() : ""}
         </div>
-        ${question.visual ? `<div class="artifact-message">${renderQuestionVisual(question.visual)}</div>` : ""}
-        <div class="diagnostic-message question-message">
-          <span>Pregunta</span>
-          <p>${escapeHtml(conversation.questionText)}</p>
+        <div class="student-response-panel">
+          <p>Selecciona la respuesta que mejor representa tu decision.</p>
+          <div class="options conversational-options" aria-label="Opciones de respuesta">
+            ${question.options
+              .map(
+                (option, index) => `
+                  <label class="option ${Number(selected) === index ? "selected" : ""} ${state.questionTransition ? "disabled" : ""}">
+                    <input type="radio" name="current-question" value="${index}" ${Number(selected) === index ? "checked" : ""} ${state.questionTransition ? "disabled" : ""} />
+                    <span>${String.fromCharCode(65 + index)}. ${escapeHtml(option)}</span>
+                  </label>
+                `,
+              )
+              .join("")}
+          </div>
         </div>
-      </div>
-      <div class="options conversational-options" aria-label="Opciones de respuesta">
-        ${question.options
-          .map(
-            (option, index) => `
-              <label class="option ${Number(selected) === index ? "selected" : ""}">
-                <input type="radio" name="current-question" value="${index}" ${Number(selected) === index ? "checked" : ""} />
-                <span>${String.fromCharCode(65 + index)}. ${escapeHtml(option)}</span>
-              </label>
-            `,
-          )
-          .join("")}
       </div>
     </article>
+  `;
+}
+
+function renderCompletedQuestionExchange(question) {
+  const conversation = buildQuestionConversation(question, DIMENSIONS.find((item) => item.id === question.dimension));
+  const selected = state.answers[question.id];
+  const answerText =
+    selected === undefined || selected === null
+      ? "Sin respuesta registrada"
+      : `${String.fromCharCode(65 + Number(selected))}. ${question.options[Number(selected)]}`;
+  return `
+    <div class="diagnostic-message chat-message previous-question-message">
+      <span>Situacion ${question.id} respondida</span>
+      <p>${escapeHtml(conversation.questionText)}</p>
+    </div>
+    <div class="student-answer-message chat-message previous-answer-message">
+      <span>Tu respuesta</span>
+      <p>${escapeHtml(answerText)}</p>
+    </div>
+  `;
+}
+
+function renderStudentAnswerBubble(question, selected) {
+  if (selected === undefined || selected === null) return "";
+  const option = question.options[Number(selected)];
+  if (!option) return "";
+  return `
+    <div class="student-answer-message chat-message">
+      <span>Tu respuesta</span>
+      <p>${String.fromCharCode(65 + Number(selected))}. ${escapeHtml(option)}</p>
+    </div>
+  `;
+}
+
+function renderDiagnosticTypingIndicator() {
+  return `
+    <div class="diagnostic-message chat-message chat-typing-message">
+      <span>Preparando siguiente situacion</span>
+      <div class="typing-dots" aria-label="El diagnostico esta preparando la siguiente pregunta">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
   `;
 }
 
@@ -877,6 +937,7 @@ function bindEvents() {
   document.querySelectorAll("[data-quiz-stage]").forEach((button) => {
     button.addEventListener("click", () => {
       state.quizStage = button.dataset.quizStage;
+      state.questionTransition = false;
       render();
     });
   });
@@ -935,6 +996,7 @@ function bindEvents() {
       const index = QUESTIONS.findIndex((question) => question.id === questionId);
       if (index >= 0) {
         state.currentIndex = index;
+        state.questionTransition = false;
         state.quizStage = "question";
         render();
       }
@@ -943,6 +1005,7 @@ function bindEvents() {
 
   document.querySelectorAll('input[name="current-question"]').forEach((input) => {
     input.addEventListener("change", () => {
+      if (state.questionTransition) return;
       const question = QUESTIONS[state.currentIndex];
       state.answers[question.id] = Number(input.value);
       render();
@@ -954,6 +1017,7 @@ function bindEvents() {
     saveMeta.addEventListener("click", () => {
       state.meta = readMeta();
       state.quizStage = "question";
+      state.questionTransition = false;
       render();
     });
   }
@@ -961,7 +1025,9 @@ function bindEvents() {
   const prevQuestion = document.querySelector("#prevQuestion");
   if (prevQuestion) {
     prevQuestion.addEventListener("click", () => {
+      if (state.questionTransition) return;
       state.currentIndex = Math.max(0, state.currentIndex - 1);
+      state.questionTransition = false;
       render();
     });
   }
@@ -969,14 +1035,22 @@ function bindEvents() {
   const nextQuestion = document.querySelector("#nextQuestion");
   if (nextQuestion) {
     nextQuestion.addEventListener("click", () => {
-      state.currentIndex = Math.min(QUESTIONS.length - 1, state.currentIndex + 1);
+      if (state.questionTransition) return;
+      state.questionTransition = true;
       render();
+      window.setTimeout(() => {
+        state.currentIndex = Math.min(QUESTIONS.length - 1, state.currentIndex + 1);
+        state.questionTransition = false;
+        render();
+      }, 720);
     });
   }
 
   const goReview = document.querySelector("#goReview");
   if (goReview) {
     goReview.addEventListener("click", () => {
+      if (state.questionTransition) return;
+      state.questionTransition = false;
       state.quizStage = "review";
       render();
     });
@@ -997,6 +1071,7 @@ function bindEvents() {
       state.answers = {};
       state.studentReport = null;
       state.currentIndex = 0;
+      state.questionTransition = false;
       state.quizStage = "welcome";
       state.view = "prueba";
       render();
@@ -1009,6 +1084,7 @@ function bindEvents() {
       QUESTIONS.forEach((question) => {
         state.answers[question.id] = question.attitude ? question.positive : question.answer;
       });
+      state.questionTransition = false;
       state.quizStage = "review";
       render();
     });
@@ -1021,6 +1097,14 @@ function bindEvents() {
       button.textContent = "Copiado";
       window.setTimeout(() => render(), 900);
     });
+  });
+}
+
+function scrollConversationThread() {
+  const thread = document.querySelector(".chat-thread");
+  if (!thread) return;
+  window.requestAnimationFrame(() => {
+    thread.scrollTop = thread.scrollHeight;
   });
 }
 

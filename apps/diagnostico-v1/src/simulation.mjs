@@ -113,7 +113,35 @@ export function validateSimulation(result) {
   checks.push(check("Todas las dimensiones tienen porcentaje valido", result.report.dimensions.every((dimension) => between(dimension.percent, 0, 100))));
   checks.push(check("Existe piloto recomendado", Boolean(result.report.pilotRecommendation?.name)));
   checks.push(check("Cada estudiante tiene maximo 28 puntos", result.students.every((student) => student.correct <= 28 && student.maxScore === 28)));
+  checks.push(check("Clave de respuestas sin opcion dominante", hasBalancedAnswerKey()));
+  checks.push(check("Clave de respuestas sin rachas evidentes", getLongestAnswerKeyRun() <= 2));
   return checks;
+}
+
+function getAnswerKeyIndexes() {
+  return QUESTIONS.map((question) => question.answer ?? question.positive);
+}
+
+function hasBalancedAnswerKey() {
+  const counts = [0, 0, 0, 0];
+  getAnswerKeyIndexes().forEach((index) => {
+    counts[index] += 1;
+  });
+  return Math.max(...counts) - Math.min(...counts) <= 1;
+}
+
+function getLongestAnswerKeyRun() {
+  return getAnswerKeyIndexes().reduce(
+    (state, index) => {
+      const current = index === state.last ? state.current + 1 : 1;
+      return {
+        last: index,
+        current,
+        longest: Math.max(state.longest, current),
+      };
+    },
+    { last: null, current: 0, longest: 0 },
+  ).longest;
 }
 
 function pickGrade(index) {
@@ -157,4 +185,3 @@ function mulberry32(seed) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-

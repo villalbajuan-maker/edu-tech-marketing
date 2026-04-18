@@ -172,11 +172,11 @@ export const QUESTIONS = [
       "Al pagar en una tienda, a Miguel le dicen que puede recibir el recibo en papel o revisar el comprobante digital. ¿Por que es importante conservar o revisar el comprobante?",
     options: [
       "Porque sirve para decorar el cuaderno.",
-      "Porque permite verificar lo que pago y hacer reclamos si hay errores.",
       "Porque siempre permite comprar mas barato.",
+      "Porque permite verificar lo que pago y hacer reclamos si hay errores.",
       "Porque evita que tenga que pagar impuestos.",
     ],
-    answer: 1,
+    answer: 2,
     rationale: "El comprobante permite verificar valores y respaldar reclamos.",
   },
   {
@@ -214,8 +214,8 @@ export const QUESTIONS = [
     difficulty: "Media",
     prompt:
       "Mariana quiere ahorrar $120.000 en 6 semanas para una actividad del colegio. ¿Cuanto debe ahorrar cada semana para alcanzar la meta?",
-    options: ["$10.000", "$15.000", "$20.000", "$30.000"],
-    answer: 2,
+    options: ["$20.000", "$10.000", "$15.000", "$30.000"],
+    answer: 0,
     rationale: "$120.000 / 6 = $20.000.",
   },
   {
@@ -228,11 +228,11 @@ export const QUESTIONS = [
       "Camila tiene $50.000. Debe pagar $18.000 de transporte y $12.000 de materiales para una clase. Tambien quiere comprar una gorra de $35.000. ¿Que deberia hacer primero?",
     options: [
       "Comprar la gorra porque es lo que mas quiere.",
-      "Separar transporte y materiales antes de decidir si compra la gorra.",
       "Gastar todo y pedir prestado para los materiales.",
       "No pagar transporte ni materiales para ahorrar.",
+      "Separar transporte y materiales antes de decidir si compra la gorra.",
     ],
-    answer: 1,
+    answer: 3,
     rationale: "Primero cubre compromisos necesarios y luego revisa gastos opcionales.",
     visual: {
       type: "budget",
@@ -272,12 +272,12 @@ export const QUESTIONS = [
     prompt: "Cuando quiero comprar algo y no me alcanza el dinero, normalmente:",
     options: [
       "Lo compro igual si puedo pedir prestado.",
-      "Reviso si puedo esperar, ahorrar o buscar una opcion mas economica.",
       "Le pido dinero a alguien sin pensar mucho.",
+      "Reviso si puedo esperar, ahorrar o buscar una opcion mas economica.",
       "Uso el dinero que tenia separado para algo importante.",
     ],
-    positive: 1,
-    rationale: "La opcion B indica mayor tendencia a planificacion.",
+    positive: 2,
+    rationale: "La respuesta positiva indica mayor tendencia a planificacion.",
   },
   {
     id: 11,
@@ -307,12 +307,12 @@ export const QUESTIONS = [
     difficulty: "Media",
     prompt: "En el caso anterior, ¿que deberia comparar Laura antes de decidir?",
     options: [
-      "Solo si la cuota mensual parece baja.",
       "El costo total que pagaria en cada opcion.",
+      "Solo si la cuota mensual parece baja.",
       "Si sus amigos tienen el mismo celular.",
       "Si puede comprarlo sin leer las condiciones.",
     ],
-    answer: 1,
+    answer: 0,
     rationale: "La decision debe mirar costo total, no solo cuota mensual.",
     visual: {
       type: "installments",
@@ -377,11 +377,11 @@ export const QUESTIONS = [
       "Samuel se suscribe a una aplicacion que cuesta $18.000 mensuales. Al principio piensa que es poco dinero. ¿Que deberia considerar antes de aceptar?",
     options: [
       "Solo el valor del primer mes.",
-      "El costo acumulado durante varios meses y si podra pagarlo.",
       "Si la aplicacion tiene un logo llamativo.",
       "Si puede dejar de revisar sus gastos.",
+      "El costo acumulado durante varios meses y si podra pagarlo.",
     ],
-    answer: 1,
+    answer: 3,
     rationale: "Los pagos recurrentes comprometen dinero futuro.",
     visual: {
       type: "decision",
@@ -424,12 +424,12 @@ export const QUESTIONS = [
     prompt:
       'A Natalia le llega un mensaje que dice: "Ganaste un premio. Envianos tu clave o codigo de seguridad para reclamarlo". ¿Que deberia hacer?',
     options: [
+      "No compartir claves ni codigos y verificar por canales oficiales.",
       "Enviar la clave si el mensaje parece urgente.",
       "Enviar el codigo solo si el premio es grande.",
-      "No compartir claves ni codigos y verificar por canales oficiales.",
       "Pedirle a un amigo que envie la clave por ella.",
     ],
-    answer: 2,
+    answer: 0,
     rationale: "Las claves y codigos de seguridad no deben compartirse.",
     visual: {
       type: "chat",
@@ -446,12 +446,12 @@ export const QUESTIONS = [
     prompt:
       "En un grupo de WhatsApp ofrecen una inversion que garantiza ganancias altas todas las semanas, pero no explican claramente como funciona. ¿Cual es una senal de alerta?",
     options: [
-      "Que prometan ganancias garantizadas sin explicar el negocio.",
       "Que el mensaje tenga emojis.",
       "Que muchas personas esten en el grupo.",
       "Que se pueda pagar por transferencia.",
+      "Que prometan ganancias garantizadas sin explicar el negocio.",
     ],
-    answer: 0,
+    answer: 3,
     rationale: "Una promesa garantizada sin explicacion clara debe verificarse.",
     visual: {
       type: "chat",
@@ -469,11 +469,11 @@ export const QUESTIONS = [
       'Un companero insiste en que todos compren una rifa digital para "no quedar mal con el grupo", aunque nadie sabe quien organiza la rifa ni como se entrega el premio. ¿Que decision es mas responsable?',
     options: [
       "Comprar para evitar problemas con los amigos.",
-      "Comprar varias para aumentar la posibilidad de ganar.",
       "Preguntar quien organiza, como se entrega el premio y decidir solo si la informacion es clara.",
+      "Comprar varias para aumentar la posibilidad de ganar.",
       "Enviar dinero sin preguntar para terminar rapido.",
     ],
-    answer: 2,
+    answer: 1,
     rationale: "Una decision responsable verifica informacion antes de transferir dinero.",
     visual: {
       type: "chat",
@@ -491,12 +491,12 @@ export const QUESTIONS = [
     prompt: "Cuando veo en redes una forma rapida de ganar dinero, normalmente:",
     options: [
       "Me interesa y trato de entrar rapido antes de que se acabe.",
-      "Reviso quien lo ofrece, que riesgos tiene y si la informacion es confiable.",
       "Lo comparto con amigos antes de entenderlo.",
       "Invierto poco dinero para probar suerte.",
+      "Reviso quien lo ofrece, que riesgos tiene y si la informacion es confiable.",
     ],
-    positive: 1,
-    rationale: "La opcion B indica mayor criterio de verificacion.",
+    positive: 3,
+    rationale: "La respuesta positiva indica mayor criterio de verificacion.",
   },
   {
     id: 21,
@@ -577,11 +577,11 @@ export const QUESTIONS = [
       "Un grupo vendio muchos productos en una feria, pero al final descubrio que gasto casi lo mismo que recibio. ¿Que aprendizaje financiero deja esta situacion?",
     options: [
       "Vender mucho siempre significa ganar mucho.",
-      "Lo importante es mirar ingresos, costos y ganancia, no solo ventas.",
       "Los costos no importan si hay muchas ventas.",
       "Siempre se gana cuando se vende algo.",
+      "Lo importante es mirar ingresos, costos y ganancia, no solo ventas.",
     ],
-    answer: 1,
+    answer: 3,
     rationale: "La rentabilidad depende de ingresos menos costos.",
   },
   {
@@ -593,12 +593,12 @@ export const QUESTIONS = [
     prompt:
       "Sara recibe $200.000 por ayudar en un negocio familiar durante vacaciones. Quiere gastar todo en ropa, pero tambien necesita guardar dinero para transporte del mes siguiente. ¿Cual decision muestra mejor manejo del ingreso?",
     options: [
-      "Gastar todo en ropa porque el dinero es suyo.",
       "Separar primero transporte y una parte de ahorro, y luego decidir cuanto puede gastar.",
+      "Gastar todo en ropa porque el dinero es suyo.",
       "Prestar todo el dinero a una amiga sin acordar cuando se lo devuelve.",
       "Guardar el dinero sin revisar que obligaciones tiene.",
     ],
-    answer: 1,
+    answer: 0,
     rationale: "Primero cubre necesidad futura y ahorro antes del gasto opcional.",
   },
   {
@@ -638,11 +638,11 @@ export const QUESTIONS = [
       "En una casa llego un recibo de energia mas alto que el mes anterior. ¿Cual seria una primera accion responsable?",
     options: [
       "Ignorar el recibo porque siempre llega igual.",
-      "Revisar el consumo, la fecha de pago y posibles cambios en el uso de energia.",
       "No pagar nunca mas el servicio.",
+      "Revisar el consumo, la fecha de pago y posibles cambios en el uso de energia.",
       "Comprar mas electrodomesticos para aprovechar el pago.",
     ],
-    answer: 1,
+    answer: 2,
     rationale: "La primera accion es revisar consumo, fecha y cambios de uso.",
   },
   {
@@ -655,11 +655,11 @@ export const QUESTIONS = [
       "En una familia hubo un gasto inesperado en salud. Ese mes el dinero no alcanza para pagar todo al mismo tiempo: energia, televisor en promocion, transporte al trabajo y parte de una deuda. ¿Cual opcion muestra mejor manejo de prioridades?",
     options: [
       "Comprar el televisor porque esta en promocion y despues resolver lo demas.",
-      "Priorizar energia, transporte y deuda, y dejar la compra del televisor para otro momento.",
       "No pagar nada hasta tener todo el dinero completo.",
       "Usar el dinero de transporte para comprar el televisor y pedir ayuda despues.",
+      "Priorizar energia, transporte y deuda, y dejar la compra del televisor para otro momento.",
     ],
-    answer: 1,
+    answer: 3,
     rationale: "Prioriza necesidades, continuidad del ingreso y obligaciones.",
     visual: {
       type: "budget",
@@ -681,12 +681,12 @@ export const QUESTIONS = [
     prompt:
       "Un estudiante quiere ayudar a su familia a reducir gastos en casa. ¿Cual accion tiene mas relacion con consumo responsable?",
     options: [
-      "Dejar luces y aparatos encendidos porque otros pagan.",
       "Revisar habitos de consumo de agua y energia, y evitar desperdicios.",
+      "Dejar luces y aparatos encendidos porque otros pagan.",
       "Comprar mas cosas en promocion aunque no se necesiten.",
       "No hablar nunca de dinero en familia.",
     ],
-    answer: 1,
+    answer: 0,
     rationale: "Reducir desperdicios ayuda al consumo responsable.",
   },
   {
@@ -699,11 +699,11 @@ export const QUESTIONS = [
       "En un grupo familiar todos quieren usar el dinero para cosas diferentes. Hay gastos obligatorios, una deuda pendiente y algunos deseos personales. ¿Que decision ayuda mas a manejar el dinero de forma responsable?",
     options: [
       "Que cada persona gaste sin contarle a los demas.",
-      "Hacer una lista de prioridades y acordar que se paga primero.",
       "Usar todo en deseos personales para evitar discusiones.",
+      "Hacer una lista de prioridades y acordar que se paga primero.",
       "Pedir un prestamo sin revisar si podran pagarlo.",
     ],
-    answer: 1,
+    answer: 2,
     rationale: "Acordar prioridades ayuda a manejar recursos compartidos.",
     visual: {
       type: "decision",

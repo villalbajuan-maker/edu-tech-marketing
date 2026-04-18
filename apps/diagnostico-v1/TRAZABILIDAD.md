@@ -212,6 +212,23 @@ La V1.5 implementa el modo conversacional guiado:
 - no agrega IA durante la prueba del estudiante;
 - conserva el caracter institucional del diagnostico.
 
+## Version congelada actual
+
+La version actual queda congelada como base de revision pedagogica, comercial y tecnica del equipo.
+
+Decisiones congeladas:
+
+- la prueba funciona como hilo conversacional continuo;
+- las respuestas anteriores quedan visibles en historial;
+- las opciones son botones de respuesta: clic o tap guarda y avanza;
+- al avanzar aparecen tres puntos antes de cargar la siguiente situacion;
+- el boton `Continuar` no existe en el flujo normal de preguntas;
+- si se edita una pregunta anterior, la prueba muestra `Volver al final`;
+- los thumbnails contextuales son pequenos, inline y sin enlaces;
+- el Companion IA no participa en la aplicacion del estudiante; queda para lectura institucional del reporte.
+
+Esta base debe revisarse con criterio pedagogico de Camilo y Leonardo, criterio comercial de Leonardo y estrategia/implementacion tecnica de Juan Carlos.
+
 ## QA disponible
 
 La app incluye cuatro escenarios de simulacion:
@@ -250,6 +267,18 @@ Camilo debe validar:
 - si las recomendaciones de piloto son coherentes con lo que la plataforma puede entregar;
 - si el reporte y companion prometen solo lo que el producto puede sostener.
 
+## Que debe revisar Leonardo
+
+Leonardo debe validar:
+
+- si la experiencia conversacional se siente adecuada para estudiantes de bachillerato;
+- si las preguntas, thumbnails y flujo tienen sentido pedagogico;
+- si el demo se entiende para un colegio privado;
+- si el reporte ayuda a vender el piloto;
+- si la URL publicada sirve como activo comercial;
+- que objeciones pedagogicas o comerciales podria generar;
+- que mensaje comercial debe usarse para presentar la prueba.
+
 ## Que debe revisar Juan Carlos
 
 Juan Carlos debe revisar:
@@ -259,17 +288,8 @@ Juan Carlos debe revisar:
 - claridad del reporte;
 - reglas de decision;
 - trazabilidad entre estrategia, prueba y codigo;
+- coherencia de la implementacion con la estrategia de marketing;
 - preparacion para futura integracion con plataforma PHP/CodeIgniter.
-
-## Que debe revisar Leonardo
-
-Leonardo debe revisar:
-
-- si el demo se entiende para un colegio privado;
-- si el reporte ayuda a vender el piloto;
-- si la URL publicada sirve como activo comercial;
-- que objeciones podria generar;
-- que mensaje comercial debe usarse para presentar la prueba.
 
 ## Pendientes conocidos
 

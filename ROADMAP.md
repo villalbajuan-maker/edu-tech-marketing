@@ -17,8 +17,8 @@
 **Criterio de salida:**
 
 - Camilo valida que la historia y capacidades sean reales;
-- Juan Carlos deja lista la estructura de trabajo;
-- Leonardo tiene una ruta clara de activacion comercial.
+- Leonardo valida lectura pedagogica/comercial y tiene una ruta clara de activacion;
+- Juan Carlos deja lista la estructura de trabajo y la implementacion tecnica inicial.
 
 ## Fase 1: Validacion con colegios privados
 
@@ -96,4 +96,3 @@
 - tableros para colegios;
 - repositorio tecnico separado;
 - nuevas lineas de cursos.
-

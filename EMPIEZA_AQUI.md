@@ -45,19 +45,18 @@ Antes de construir mas tecnologia, necesitamos aclarar:
 
 Validar que la historia, capacidades, promesas, pedagogia y descripcion de la plataforma correspondan con la realidad del proyecto.
 
-### Juan Carlos
-
-Mantener el workbench, convertir conocimiento en estructura accionable y preparar los documentos, issues y decisiones que permitan avanzar.
-
 ### Leonardo
 
-Identificar colegios privados, contactos de decision y oportunidades reales de conversacion comercial.
+Revisar la pertinencia pedagogica del diagnostico y activar conversaciones reales con colegios privados, contactos de decision y oportunidades de piloto.
+
+### Juan Carlos
+
+Implementar los activos tecnicos, mantener el workbench, convertir conocimiento en estructura accionable y liderar la estrategia de marketing alrededor de la oferta.
 
 ## Regla central
 
-Nada se convierte en promesa comercial sin validacion de Camilo.
+Nada se convierte en promesa comercial sin validacion de Camilo y lectura pedagogica/comercial de Leonardo cuando afecte colegios.
 
 Nada se convierte en prioridad de negocio sin evidencia o criterio de mercado.
 
 Nada se construye tecnicamente sin conexion con una necesidad validada.
-

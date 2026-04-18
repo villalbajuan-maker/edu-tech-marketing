@@ -22,6 +22,7 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 - Modo interno comercial con oportunidad, objeciones, mensaje sugerido y siguiente accion.
 - Companion Institucional en modal con preguntas sugeridas y conexion LLM via `/api/companion`.
 - Pills sugeridos del Companion con guia progresiva: lectura inicial, evidencia, ruta a piloto y decision.
+- Referencias inline del Companion con tarjetas externas a fuentes OECD/PISA, MEN y estrategia nacional EEF.
 - Boton flotante de IA para abrir el Companion durante la revision institucional.
 - Microfono en el Companion para dictar preguntas y transcribirlas con OpenAI via `/api/transcribe`.
 - Navegacion principal reorganizada por audiencia: aplicacion, demo institucional e interno.

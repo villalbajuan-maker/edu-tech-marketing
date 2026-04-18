@@ -603,6 +603,71 @@ button {
   color: var(--ink);
 }
 
+.companion-reference-strip {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgba(36, 122, 90, 0.14);
+}
+
+.companion-reference-card {
+  display: grid;
+  grid-template-columns: 34px minmax(138px, 1fr);
+  gap: 8px;
+  min-width: 210px;
+  max-width: 260px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f7faf8;
+  color: var(--ink);
+  padding: 8px;
+  text-decoration: none;
+}
+
+.companion-reference-card:hover {
+  border-color: rgba(36, 122, 90, 0.42);
+}
+
+.reference-thumb {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--green);
+  color: white;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.companion-reference-card b,
+.companion-reference-card small,
+.companion-reference-card em {
+  display: block;
+}
+
+.companion-reference-card b {
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.companion-reference-card small {
+  margin-top: 2px;
+  color: var(--green-dark);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.companion-reference-card em {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+  font-style: normal;
+  line-height: 1.25;
+}
+
 .typing-message {
   min-width: 128px;
 }

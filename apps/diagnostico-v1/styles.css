@@ -748,6 +748,103 @@ button {
   padding: 14px 18px;
 }
 
+.companion-tool-shell {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: -2px;
+}
+
+.tool-button,
+.tool-pill,
+.model-select-label,
+.attachment-chip {
+  min-height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfa;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.tool-button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.tool-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 9px;
+}
+
+.tool-pill span {
+  color: var(--green);
+  font-size: 12px;
+}
+
+.tool-pill.active {
+  border-color: rgba(36, 122, 90, 0.45);
+  background: #edf7f1;
+  color: var(--green-dark);
+}
+
+.model-select-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 4px 0 9px;
+  color: var(--muted);
+}
+
+.model-select-label select {
+  height: 24px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  outline: 0;
+}
+
+.attachment-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 230px;
+  padding: 0 7px;
+  color: var(--green-dark);
+}
+
+.attachment-chip button {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(36, 122, 90, 0.12);
+  color: var(--green-dark);
+  padding: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
 .companion-input-wrap {
   position: relative;
 }
@@ -2138,6 +2235,15 @@ button {
   .companion-modal-header,
   .companion-form {
     grid-template-columns: 1fr;
+  }
+
+  .companion-tool-shell {
+    gap: 6px;
+  }
+
+  .model-select-label,
+  .attachment-chip {
+    max-width: 100%;
   }
 
   .companion-form .button {

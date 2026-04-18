@@ -24,6 +24,7 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 - Pills sugeridos del Companion con guia progresiva: lectura inicial, evidencia, ruta a piloto y decision.
 - Referencias inline variables del Companion con tarjetas externas a fuentes OECD/PISA, MEN y estrategia nacional EEF.
 - Thumbnails contextuales opcionales via Unsplash API cuando existe `UNSPLASH_ACCESS_KEY`.
+- Shell de herramientas del Companion: adjunto, Web, Agente y selector de modelo.
 - Boton flotante de IA para abrir el Companion durante la revision institucional.
 - Microfono en el Companion para dictar preguntas y transcribirlas con OpenAI via `/api/transcribe`.
 - Navegacion principal reorganizada por audiencia: aplicacion, demo institucional e interno.
@@ -113,6 +114,17 @@ Decision actual: mantener `gpt-4o-mini-transcribe` por estabilidad, costo y sufi
 Documento rector:
 
 [../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md](../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md)
+
+## Shell de herramientas del Companion
+
+La interfaz del Companion ya incluye una barra de herramientas para preparar capacidades avanzadas:
+
+- `+`: selecciona archivo o imagen y lo deja visible como adjunto de sesion.
+- `Web`: marca que la consulta deberia usar busqueda web cuando el backend lo active.
+- `Agente`: cambia la intencion del Companion de pregunta simple a tarea estructurada.
+- `Modelo`: permite escoger entre `Rapido`, `Profundo` y `Experto`.
+
+Estado actual: la UI y los estados ya existen. La busqueda web real, el analisis multimodal de adjuntos y el cambio efectivo de modelo quedan para la siguiente fase de backend.
 
 ## V1.4.1
 

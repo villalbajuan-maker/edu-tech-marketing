@@ -36,6 +36,10 @@ const state = {
   companionVoiceError: "",
   companionDraft: "",
   companionMessages: [],
+  companionWebEnabled: false,
+  companionAgentMode: false,
+  companionModelMode: "fast",
+  companionAttachmentName: "",
   qaResults: runQaSuite(),
 };
 
@@ -966,6 +970,9 @@ function renderCompanionModal() {
       ? "Transcribiendo y enviando pregunta..."
       : state.companionVoiceError;
   const sendLabel = state.companionRecording ? "Enviar audio" : "Enviar";
+  const companionPlaceholder = state.companionAgentMode
+    ? "Encargale una tarea al Companion..."
+    : "Pregunta al Companion...";
   return `
     <div class="modal-backdrop" data-close-companion>
       <section class="companion-modal" role="dialog" aria-modal="true" aria-label="Companion del diagnostico" data-modal-panel>
@@ -993,8 +1000,27 @@ function renderCompanionModal() {
         </div>
 
         <form class="companion-form" id="companionForm">
+          <div class="companion-tool-shell" aria-label="Herramientas del Companion">
+            <button class="tool-button" type="button" id="companionAttachButton" aria-label="Adjuntar archivo o imagen">+</button>
+            <input class="visually-hidden" type="file" id="companionAttachmentInput" accept=".pdf,image/*" />
+            <button class="tool-pill ${state.companionWebEnabled ? "active" : ""}" type="button" data-companion-toggle="web" aria-pressed="${state.companionWebEnabled}">
+              <span aria-hidden="true">○</span> Web
+            </button>
+            <button class="tool-pill ${state.companionAgentMode ? "active" : ""}" type="button" data-companion-toggle="agent" aria-pressed="${state.companionAgentMode}">
+              <span aria-hidden="true">◇</span> Agente
+            </button>
+            <label class="model-select-label" for="companionModelMode">
+              Modelo
+              <select id="companionModelMode">
+                <option value="fast" ${state.companionModelMode === "fast" ? "selected" : ""}>Rapido</option>
+                <option value="deep" ${state.companionModelMode === "deep" ? "selected" : ""}>Profundo</option>
+                <option value="expert" ${state.companionModelMode === "expert" ? "selected" : ""}>Experto</option>
+              </select>
+            </label>
+            ${state.companionAttachmentName ? `<span class="attachment-chip">${escapeHtml(state.companionAttachmentName)} <button type="button" data-clear-attachment aria-label="Quitar adjunto">×</button></span>` : ""}
+          </div>
           <div class="companion-input-wrap">
-            <textarea id="companionInput" rows="3" placeholder="Pregunta al Companion...">${escapeHtml(state.companionDraft)}</textarea>
+            <textarea id="companionInput" rows="3" placeholder="${companionPlaceholder}">${escapeHtml(state.companionDraft)}</textarea>
             <button class="voice-button ${state.companionRecording ? "recording" : ""}" type="button" id="companionVoiceButton" ${state.companionLoading || state.companionTranscribing || state.companionRecording ? "disabled" : ""} aria-label="${state.companionRecording ? "Grabacion en curso" : "Dictar pregunta por microfono"}">
               <span aria-hidden="true"></span>
             </button>
@@ -1412,6 +1438,43 @@ function bindEvents() {
     });
   }
 
+  document.querySelectorAll("[data-companion-toggle]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const toggle = button.dataset.companionToggle;
+      if (toggle === "web") state.companionWebEnabled = !state.companionWebEnabled;
+      if (toggle === "agent") state.companionAgentMode = !state.companionAgentMode;
+      render();
+    });
+  });
+
+  const companionModelMode = document.querySelector("#companionModelMode");
+  if (companionModelMode) {
+    companionModelMode.addEventListener("change", () => {
+      state.companionModelMode = companionModelMode.value;
+      render();
+    });
+  }
+
+  const companionAttachButton = document.querySelector("#companionAttachButton");
+  const companionAttachmentInput = document.querySelector("#companionAttachmentInput");
+  if (companionAttachButton && companionAttachmentInput) {
+    companionAttachButton.addEventListener("click", () => {
+      companionAttachmentInput.click();
+    });
+    companionAttachmentInput.addEventListener("change", () => {
+      state.companionAttachmentName = companionAttachmentInput.files?.[0]?.name || "";
+      render();
+    });
+  }
+
+  const clearAttachmentButton = document.querySelector("[data-clear-attachment]");
+  if (clearAttachmentButton) {
+    clearAttachmentButton.addEventListener("click", () => {
+      state.companionAttachmentName = "";
+      render();
+    });
+  }
+
   const companionVoiceButton = document.querySelector("#companionVoiceButton");
   if (companionVoiceButton) {
     companionVoiceButton.addEventListener("click", () => {
@@ -1638,6 +1701,12 @@ async function askCompanion(rawQuestion) {
         question,
         messages: state.companionMessages.slice(-6),
         reportContext: buildCompanionContext(),
+        tools: {
+          webEnabled: state.companionWebEnabled,
+          agentMode: state.companionAgentMode,
+          modelMode: state.companionModelMode,
+          attachmentName: state.companionAttachmentName,
+        },
       }),
     });
     const data = await response.json();

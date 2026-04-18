@@ -401,8 +401,8 @@ button {
   border: 1px solid rgba(36, 122, 90, 0.28);
   border-radius: 8px;
   padding: 0;
-  background: #fff;
-  color: var(--ink);
+  background: var(--green);
+  color: #fff;
   box-shadow: 0 16px 46px rgba(23, 33, 28, 0.22);
   cursor: pointer;
 }
@@ -411,7 +411,7 @@ button {
   position: relative;
   width: 28px;
   height: 28px;
-  color: var(--green);
+  color: #fff;
 }
 
 .floating-ai-mark::before,
@@ -450,6 +450,7 @@ button {
 }
 
 .companion-modal {
+  position: relative;
   display: grid;
   grid-template-rows: auto auto minmax(180px, 1fr) auto auto;
   width: min(860px, calc(100vw - 36px));
@@ -463,12 +464,12 @@ button {
 
 .companion-modal-header {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 8px;
   align-items: start;
   border-bottom: 1px solid var(--line);
   background: #f7faf8;
-  padding: 14px 16px;
+  padding: 14px 54px 14px 16px;
 }
 
 .companion-modal-header h2,
@@ -492,6 +493,9 @@ button {
 }
 
 .close-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
   display: grid;
   place-items: center;
   width: 34px;

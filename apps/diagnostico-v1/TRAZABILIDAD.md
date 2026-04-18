@@ -236,7 +236,7 @@ El Companion queda reforzado como herramienta visible de lectura institucional:
 - se abre desde un boton flotante de IA durante el scroll de la demo institucional, vista interna y reporte;
 - deja de depender de botones secundarios de texto como `Abrir Companion`;
 - mantiene sugerencias de preguntas y contexto de vista colegio/vista interna;
-- incorpora dictado por microfono: el usuario graba, OpenAI transcribe y el texto queda listo para enviar;
+- incorpora dictado por microfono: el usuario inicia grabacion, presiona `Enviar`, OpenAI transcribe y la pregunta se envia automaticamente al Companion;
 - la transcripcion usa el endpoint `/api/transcribe` con `gpt-4o-mini-transcribe`;
 - se mantiene `gpt-4o-mini-transcribe` como modelo recomendado actual; `gpt-4o-transcribe` queda como opcion si se requiere mayor calidad;
 - el Companion sigue sin reemplazar criterio pedagogico ni inventar resultados.

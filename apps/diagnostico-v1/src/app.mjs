@@ -834,10 +834,11 @@ function renderCompanionModal() {
   if (!state.companionOpen) return "";
   const suggestions = getCompanionSuggestions(state.demoAudience);
   const voiceStatus = state.companionRecording
-    ? "Grabando pregunta..."
+    ? "Grabando pregunta. Cuando termines, presiona Enviar."
     : state.companionTranscribing
-      ? "Transcribiendo audio..."
+      ? "Transcribiendo y enviando pregunta..."
       : state.companionVoiceError;
+  const sendLabel = state.companionRecording ? "Enviar audio" : "Enviar";
   return `
     <div class="modal-backdrop" data-close-companion>
       <section class="companion-modal" role="dialog" aria-modal="true" aria-label="Companion del diagnostico" data-modal-panel>
@@ -866,11 +867,11 @@ function renderCompanionModal() {
         <form class="companion-form" id="companionForm">
           <div class="companion-input-wrap">
             <textarea id="companionInput" rows="3" placeholder="Pregunta al Companion...">${escapeHtml(state.companionDraft)}</textarea>
-            <button class="voice-button ${state.companionRecording ? "recording" : ""}" type="button" id="companionVoiceButton" ${state.companionLoading || state.companionTranscribing ? "disabled" : ""} aria-label="${state.companionRecording ? "Detener grabacion" : "Dictar pregunta por microfono"}">
+            <button class="voice-button ${state.companionRecording ? "recording" : ""}" type="button" id="companionVoiceButton" ${state.companionLoading || state.companionTranscribing || state.companionRecording ? "disabled" : ""} aria-label="${state.companionRecording ? "Grabacion en curso" : "Dictar pregunta por microfono"}">
               <span aria-hidden="true"></span>
             </button>
           </div>
-          <button class="button" ${state.companionLoading || state.companionTranscribing ? "disabled" : ""}>Enviar</button>
+          <button class="button" ${state.companionLoading || state.companionTranscribing ? "disabled" : ""}>${sendLabel}</button>
         </form>
         ${voiceStatus ? `<p class="voice-status ${state.companionVoiceError ? "error" : ""}">${escapeHtml(voiceStatus)}</p>` : ""}
         <p class="companion-scope">El Companion no reemplaza criterio pedagogico ni inventa resultados. Orienta decisiones con base en el diagnostico.</p>
@@ -1173,6 +1174,10 @@ function bindEvents() {
   if (companionForm) {
     companionForm.addEventListener("submit", (event) => {
       event.preventDefault();
+      if (state.companionRecording) {
+        stopCompanionVoiceRecording();
+        return;
+      }
       const input = document.querySelector("#companionInput");
       askCompanion(input?.value || "");
     });
@@ -1189,10 +1194,9 @@ function bindEvents() {
   if (companionVoiceButton) {
     companionVoiceButton.addEventListener("click", () => {
       if (state.companionRecording) {
-        stopCompanionVoiceRecording();
-      } else {
-        startCompanionVoiceRecording();
+        return;
       }
+      startCompanionVoiceRecording();
     });
   }
 
@@ -1481,14 +1485,15 @@ async function transcribeCompanionAudio(audioBlob) {
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || data.detail || "No fue posible transcribir el audio.");
 
+    const transcript = String(data.text || "").trim();
     state.companionTranscribing = false;
     state.companionVoiceError = "";
-    state.companionDraft = data.text || "";
-    render();
-    const input = document.querySelector("#companionInput");
-    if (input) {
-      input.focus();
+    if (!transcript) {
+      state.companionVoiceError = "No se detecto una pregunta clara para enviar.";
+      render();
+      return;
     }
+    askCompanion(transcript);
   } catch (error) {
     state.companionTranscribing = false;
     state.companionVoiceError = error.message || "No fue posible transcribir el audio.";

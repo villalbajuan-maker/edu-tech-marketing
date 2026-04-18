@@ -87,9 +87,11 @@ Microfono del navegador
 -> MediaRecorder graba audio
 -> /api/transcribe
 -> OpenAI audio/transcriptions
--> texto editable en el input del Companion
--> envio manual al Companion
+-> texto transcrito
+-> envio automatico al Companion
 ```
+
+Decision de UX: el microfono inicia la grabacion y el boton `Enviar` la cierra, transcribe y envia la pregunta al Companion. No hay doble confirmacion despues de transcribir.
 
 Configuracion esperada en Vercel:
 

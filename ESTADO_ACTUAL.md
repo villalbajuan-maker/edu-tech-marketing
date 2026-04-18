@@ -38,7 +38,7 @@ La app incluye:
 - QA con simulacion de 300 estudiantes;
 - Companion institucional con LLM;
 - boton flotante de IA para abrir el Companion;
-- microfono en el Companion para dictar preguntas y transcribirlas con OpenAI.
+- microfono en el Companion para dictar preguntas, transcribirlas con OpenAI y enviarlas sin doble confirmacion.
 
 ## Version congelada
 
@@ -54,7 +54,7 @@ Decisiones congeladas:
 - los thumbnails contextuales son pequenos, inline y sin enlaces;
 - el Companion no entra en la prueba del estudiante;
 - el Companion sirve para lectura institucional del reporte, brechas, pilotos y objeciones;
-- el dictado por voz usa grabacion del navegador y transcripcion OpenAI mediante `/api/transcribe`.
+- el dictado por voz usa grabacion del navegador y transcripcion OpenAI mediante `/api/transcribe`; el boton `Enviar` cierra la grabacion y manda la pregunta al Companion.
 
 La trazabilidad detallada esta en:
 
@@ -114,7 +114,7 @@ Debe cuidar:
 - Revisar la vista interna.
 - Abrir el Companion desde el boton flotante.
 - Probar preguntas escritas al Companion.
-- Probar dictado por microfono y transcripcion.
+- Probar dictado por microfono, cierre con `Enviar`, transcripcion y respuesta del Companion.
 
 ### En el mercado
 

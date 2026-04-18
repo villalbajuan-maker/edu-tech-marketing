@@ -87,6 +87,12 @@ Relacion entre documentos y codigo:
 
 La app permite:
 
+- aplicar el diagnostico como flujo de estudiante V1.1;
+- mostrar bienvenida;
+- capturar datos minimos;
+- presentar una pregunta por pantalla;
+- revisar preguntas pendientes antes de enviar;
+- cerrar la aplicacion con confirmacion;
 - aplicar la prueba de 30 preguntas;
 - capturar respuestas;
 - calcular puntaje sobre 28 preguntas calificables;
@@ -98,7 +104,18 @@ La app permite:
 - recomendar piloto;
 - mostrar reporte vivo;
 - mostrar companion basico;
+- mostrar dashboard simulado de sesion para colegio;
 - simular cohortes de 300 estudiantes para QA.
+
+## Evolucion V1.1
+
+La V1 original permitia probar el instrumento como formulario funcional. La V1.1 ajusta la experiencia hacia una aplicacion real end to end:
+
+```text
+Bienvenida -> Datos minimos -> Pregunta por pantalla -> Revision -> Envio -> Cierre -> Reporte
+```
+
+Tambien agrega una vista de sesion para colegio, pensada para que un coordinador pueda ver estado de aplicacion sin acceder a respuestas individuales.
 
 ## QA disponible
 
@@ -164,7 +181,7 @@ Leonardo debe revisar:
 - Redistribuir respuestas correctas para evitar patron de opcion B.
 - Revisar si el escenario `foundations` debe recomendar bases antes que credito/riesgo.
 - Crear reporte demo con colegio ficticio para presentacion comercial.
+- Definir si la aplicacion real permite resultados individuales o solo agregados.
 - Definir precio o modalidad del diagnostico.
 - Definir si la primera aplicacion real sera dentro de la plataforma o como piloto independiente.
 - Definir politica de datos antes de aplicar con estudiantes reales.
-

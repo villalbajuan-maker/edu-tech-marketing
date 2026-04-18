@@ -1,4 +1,4 @@
-# App Diagnostico V1
+# App Diagnostico V1.1
 
 UI funcional del **Diagnostico Escolar de Competencias Financieras**.
 
@@ -8,17 +8,31 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 
 ## Que incluye
 
+- Flujo de aplicacion real: bienvenida, datos minimos, pregunta por pantalla, revision, envio y cierre.
 - Aplicacion de la prueba de 30 preguntas.
 - Scoring sobre 28 preguntas calificables.
 - Lectura por dimension.
 - Reporte vivo interactivo.
 - Companion basico del reporte.
+- Dashboard simulado de sesion para colegio.
 - Simulacion QA de 300 estudiantes.
 - Script de QA por consola.
 
 ## Trazabilidad
 
 Ver [TRAZABILIDAD.md](TRAZABILIDAD.md) para entender de donde surgieron las preguntas, que documentos soportan la V1 y que debe revisar el equipo.
+
+## V1.1
+
+La V1.1 acerca la prueba a una aplicacion real en colegio:
+
+- no muestra las 30 preguntas como formulario largo;
+- presenta una pregunta por pantalla;
+- muestra progreso;
+- permite volver a preguntas anteriores;
+- permite revisar preguntas pendientes antes de enviar;
+- muestra pantalla final de registro exitoso;
+- agrega una vista simulada para coordinador/colegio.
 
 ## Como probar localmente
 

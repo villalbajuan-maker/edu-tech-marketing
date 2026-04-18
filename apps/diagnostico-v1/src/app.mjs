@@ -3,8 +3,18 @@ import { buildCompanionAnswers, scoreSubmission } from "./scoring.mjs";
 import { listScenarios, runQaSuite, simulateCohort } from "./simulation.mjs";
 
 const app = document.querySelector("#app");
+const defaultMeta = {
+  school: "Colegio Demo",
+  student: "Estudiante prueba",
+  grade: "9",
+  group: "9A",
+};
+
 const state = {
   view: "inicio",
+  quizStage: "welcome",
+  currentIndex: 0,
+  meta: { ...defaultMeta },
   answers: {},
   studentReport: null,
   cohortResult: simulateCohort(300, "baseline"),
@@ -22,12 +32,13 @@ function render() {
             <div class="brand-mark">FDE</div>
             <div>
               <h1 class="brand-title">Diagnostico Escolar de Competencias Financieras</h1>
-              <p class="brand-subtitle">V1 funcional · prueba, reporte vivo y QA</p>
+              <p class="brand-subtitle">V1.1 · aplicacion real, reporte vivo y QA</p>
             </div>
           </div>
           <nav class="tabs">
             ${tab("inicio", "Inicio")}
             ${tab("prueba", "Aplicar prueba")}
+            ${tab("sesion", "Sesion colegio")}
             ${tab("reporte", "Reporte vivo")}
             ${tab("qa", "QA 300 estudiantes")}
           </nav>
@@ -40,7 +51,8 @@ function render() {
 }
 
 function renderView() {
-  if (state.view === "prueba") return renderQuiz();
+  if (state.view === "prueba") return renderQuizExperience();
+  if (state.view === "sesion") return renderSessionDashboard();
   if (state.view === "reporte") return renderReport(state.studentReport || state.cohortResult.report, state.studentReport ? "individual" : "cohort");
   if (state.view === "qa") return renderQa();
   return renderHome();
@@ -50,11 +62,12 @@ function renderHome() {
   return `
     <section class="intro-grid">
       <div class="panel soft">
-        <p class="kicker">Producto V1</p>
-        <h2 class="headline">Medimos necesidad, generamos reporte vivo y recomendamos piloto.</h2>
-        <p class="lead">Esta UI permite aplicar la prueba de 30 preguntas, calcular resultados, generar un reporte interactivo y simular cohortes de 300 estudiantes para validar scoring, brechas y recomendacion de piloto.</p>
+        <p class="kicker">Producto V1.1</p>
+        <h2 class="headline">Una experiencia diagnostica lista para probar con estudiantes.</h2>
+        <p class="lead">La V1.1 transforma la prueba en un flujo real: bienvenida, datos minimos, una pregunta por pantalla, revision antes de enviar, cierre, reporte vivo, companion y QA de 300 estudiantes.</p>
         <div class="actions">
-          <button class="button" data-view="prueba">Aplicar prueba</button>
+          <button class="button" data-view="prueba">Iniciar diagnostico</button>
+          <button class="button secondary" data-view="sesion">Ver sesion colegio</button>
           <button class="button secondary" data-view="qa">Ejecutar QA</button>
         </div>
       </div>
@@ -71,44 +84,105 @@ function renderHome() {
   `;
 }
 
-function renderQuiz() {
+function renderQuizExperience() {
+  if (state.quizStage === "meta") return renderMetaStep();
+  if (state.quizStage === "question") return renderQuestionStep();
+  if (state.quizStage === "review") return renderReviewStep();
+  if (state.quizStage === "done") return renderDoneStep();
+  return renderWelcomeStep();
+}
+
+function renderWelcomeStep() {
   return `
-    <section class="panel">
-      <p class="kicker">Aplicacion estudiante</p>
-      <h2>Prueba funcional V1</h2>
-      <p class="lead">Completa la prueba como estudiante. Al enviar, se calcula puntaje sobre 28, niveles, brechas y piloto recomendado.</p>
-      <div class="form-grid">
-        <label class="field"><span>Colegio</span><input id="school" value="Colegio Demo" /></label>
-        <label class="field"><span>Estudiante</span><input id="student" value="Estudiante prueba" /></label>
-        <label class="field"><span>Grado</span><select id="grade">${[8, 9, 10, 11].map((grade) => `<option>${grade}</option>`).join("")}</select></label>
-        <label class="field"><span>Grupo</span><input id="group" value="9A" /></label>
-      </div>
+    <section class="wizard-layout">
+      <article class="panel soft">
+        <p class="kicker">Antes de comenzar</p>
+        <h2 class="headline">Este diagnostico no es una nota academica.</h2>
+        <p class="lead">Vas a ver situaciones de la vida diaria sobre compras, ahorro, riesgo digital, trabajo, hogar y decisiones con dinero. Responde con calma y elige la opcion que consideres mas adecuada.</p>
+        <div class="metrics compact">
+          <div class="metric"><p class="metric-value">30</p><p class="metric-label">Preguntas</p></div>
+          <div class="metric"><p class="metric-value">30</p><p class="metric-label">Minutos aprox.</p></div>
+          <div class="metric"><p class="metric-value">6</p><p class="metric-label">Dimensiones</p></div>
+        </div>
+        <div class="actions">
+          <button class="button" data-quiz-stage="meta">Comenzar</button>
+        </div>
+      </article>
+      <aside class="panel">
+        <p class="kicker">Para estudiantes</p>
+        <ul class="list">
+          <li>No necesitas conocimientos bancarios avanzados.</li>
+          <li>Lee cada situacion antes de responder.</li>
+          <li>Puedes volver a preguntas anteriores antes de enviar.</li>
+          <li>El colegio recibira una lectura agregada para orientar una ruta de formacion.</li>
+        </ul>
+      </aside>
     </section>
-    <form id="quizForm" class="quiz-grid">
-      ${QUESTIONS.map(renderQuestion).join("")}
-      <div class="actions">
-        <button class="button" type="submit">Generar reporte individual</button>
-        <button class="button secondary" type="button" id="fillDemo">Responder demo</button>
-      </div>
-    </form>
   `;
 }
 
-function renderQuestion(question) {
+function renderMetaStep() {
+  return `
+    <section class="panel">
+      <p class="kicker">Datos minimos</p>
+      <h2>Identificacion de aplicacion</h2>
+      <p class="lead">Estos datos ayudan a organizar la sesion. Para una aplicacion real, el colegio puede usar codigos internos en lugar de nombres completos.</p>
+      <div class="form-grid">
+        <label class="field"><span>Colegio</span><input id="school" value="${escapeHtml(state.meta.school)}" /></label>
+        <label class="field"><span>Codigo o nombre</span><input id="student" value="${escapeHtml(state.meta.student)}" /></label>
+        <label class="field"><span>Grado</span><select id="grade">${[8, 9, 10, 11].map((grade) => `<option ${String(grade) === state.meta.grade ? "selected" : ""}>${grade}</option>`).join("")}</select></label>
+        <label class="field"><span>Grupo</span><input id="group" value="${escapeHtml(state.meta.group)}" /></label>
+      </div>
+      <div class="actions">
+        <button class="button secondary" data-quiz-stage="welcome">Volver</button>
+        <button class="button" id="saveMeta">Continuar</button>
+      </div>
+    </section>
+  `;
+}
+
+function renderQuestionStep() {
+  const question = QUESTIONS[state.currentIndex];
+  const selected = state.answers[question.id];
+  const progress = Math.round(((state.currentIndex + 1) / QUESTIONS.length) * 100);
+  return `
+    <section class="quiz-shell">
+      <div class="progress-panel">
+        <div class="progress-meta">
+          <span>Pregunta ${state.currentIndex + 1} de ${QUESTIONS.length}</span>
+          <span>${progress}%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
+      </div>
+      ${renderSingleQuestion(question, selected)}
+      <div class="question-nav">
+        <button class="button secondary" id="prevQuestion" ${state.currentIndex === 0 ? "disabled" : ""}>Anterior</button>
+        <button class="button secondary" id="saveDemoAnswers">Responder demo</button>
+        ${
+          state.currentIndex === QUESTIONS.length - 1
+            ? `<button class="button" id="goReview">Revisar y enviar</button>`
+            : `<button class="button" id="nextQuestion">Siguiente</button>`
+        }
+      </div>
+    </section>
+  `;
+}
+
+function renderSingleQuestion(question, selected) {
   const dimension = DIMENSIONS.find((item) => item.id === question.dimension);
   return `
-    <article class="question">
+    <article class="question question-focus">
       <div class="question-header">
-        <span class="badge">Pregunta ${question.id}</span>
+        <span class="badge">Situacion ${question.id}</span>
         <span class="badge">${dimension?.shortName || question.dimension}</span>
       </div>
-      <p>${escapeHtml(question.prompt)}</p>
+      <p class="question-context">${escapeHtml(question.prompt)}</p>
       <div class="options">
         ${question.options
           .map(
             (option, index) => `
-              <label class="option">
-                <input type="radio" name="q-${question.id}" value="${index}" />
+              <label class="option ${Number(selected) === index ? "selected" : ""}">
+                <input type="radio" name="current-question" value="${index}" ${Number(selected) === index ? "checked" : ""} />
                 <span>${String.fromCharCode(65 + index)}. ${escapeHtml(option)}</span>
               </label>
             `,
@@ -119,6 +193,95 @@ function renderQuestion(question) {
   `;
 }
 
+function renderReviewStep() {
+  const answered = getAnsweredCount();
+  const missing = QUESTIONS.filter((question) => state.answers[question.id] === undefined || state.answers[question.id] === null);
+  return `
+    <section class="panel">
+      <p class="kicker">Revision final</p>
+      <h2>Has respondido ${answered} de ${QUESTIONS.length} preguntas</h2>
+      <p class="lead">${missing.length ? "Puedes enviar el diagnostico o volver a completar las preguntas pendientes." : "Todo esta respondido. Ya puedes enviar el diagnostico."}</p>
+      ${
+        missing.length
+          ? `<div class="review-grid">${missing.map((question) => `<button class="review-pill" data-jump="${question.id}">Pregunta ${question.id}</button>`).join("")}</div>`
+          : `<div class="empty">No hay preguntas pendientes.</div>`
+      }
+      <div class="actions">
+        <button class="button secondary" data-quiz-stage="question">Volver a la prueba</button>
+        <button class="button" id="submitDiagnostic">Enviar diagnostico</button>
+      </div>
+    </section>
+  `;
+}
+
+function renderDoneStep() {
+  return `
+    <section class="intro-grid">
+      <article class="panel soft">
+        <p class="kicker">Diagnostico enviado</p>
+        <h2 class="headline">Gracias. Tus respuestas fueron registradas.</h2>
+        <p class="lead">El colegio recibira una lectura agregada para orientar una ruta de educacion financiera. En esta version de prueba tambien puedes ver el reporte generado.</p>
+        <div class="actions">
+          <button class="button" data-view="reporte">Ver reporte</button>
+          <button class="button secondary" id="restartQuiz">Nueva aplicacion</button>
+        </div>
+      </article>
+      <aside class="panel">
+        <p class="kicker">Siguiente paso institucional</p>
+        <ul class="list">
+          <li>Procesar resultados.</li>
+          <li>Generar reporte vivo.</li>
+          <li>Agendar reunion de lectura.</li>
+          <li>Recomendar piloto.</li>
+        </ul>
+      </aside>
+    </section>
+  `;
+}
+
+function renderSessionDashboard() {
+  const students = state.cohortResult.students;
+  const completed = students.length;
+  const invited = 320;
+  const inProgress = 14;
+  const pending = invited - completed - inProgress;
+  return `
+    <section class="panel">
+      <p class="kicker">Vista coordinador</p>
+      <h2>Sesion diagnostica simulada</h2>
+      <p class="lead">Esta vista muestra como podria monitorear el colegio una aplicacion real sin ver respuestas individuales en vivo.</p>
+      <div class="metrics">
+        <div class="metric"><p class="metric-value">${invited}</p><p class="metric-label">Estudiantes esperados</p></div>
+        <div class="metric"><p class="metric-value">${completed}</p><p class="metric-label">Finalizaron</p></div>
+        <div class="metric"><p class="metric-value">${inProgress}</p><p class="metric-label">En progreso</p></div>
+      </div>
+    </section>
+    <section class="report-section">
+      <h3>Estado por grupo</h3>
+      <div class="session-table">
+        ${[8, 9, 10, 11]
+          .map((grade, index) => {
+            const expected = 80;
+            const done = [73, 76, 75, 76][index];
+            const active = [5, 3, 4, 2][index];
+            return `
+              <div class="session-row">
+                <strong>Grado ${grade}A</strong>
+                <span>${done}/${expected} finalizaron</span>
+                <span>${active} en progreso</span>
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+      <div class="actions">
+        <button class="button" data-view="reporte">Ver reporte institucional simulado</button>
+        <button class="button secondary" data-view="qa">Cambiar escenario QA</button>
+      </div>
+    </section>
+  `;
+}
+
 function renderReport(report, mode) {
   if (!report) return `<div class="empty">Todavia no hay reporte. Aplica la prueba o ejecuta una simulacion.</div>`;
   const companion = buildCompanionAnswers(report);
@@ -126,7 +289,7 @@ function renderReport(report, mode) {
     <section class="report-grid">
       <div>
         <article class="report-section">
-          <p class="kicker">${mode === "cohort" ? "Reporte institucional simulado" : "Reporte individual"}</p>
+          <p class="kicker">${mode === "cohort" ? "Reporte institucional simulado" : "Reporte individual de prueba"}</p>
           <h2>${report.meta?.school || "Colegio Demo"}</h2>
           <div class="metrics">
             <div class="metric"><p class="metric-value">${report.percent}%</p><p class="metric-label">Resultado general</p></div>
@@ -260,6 +423,13 @@ function bindEvents() {
     });
   });
 
+  document.querySelectorAll("[data-quiz-stage]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.quizStage = button.dataset.quizStage;
+      render();
+    });
+  });
+
   document.querySelectorAll("[data-scenario]").forEach((button) => {
     button.addEventListener("click", () => {
       state.cohortResult = simulateCohort(300, button.dataset.scenario);
@@ -267,44 +437,103 @@ function bindEvents() {
     });
   });
 
-  const quizForm = document.querySelector("#quizForm");
-  if (quizForm) {
-    quizForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      state.studentReport = scoreSubmission(readAnswers(), readMeta());
-      state.view = "reporte";
+  document.querySelectorAll("[data-jump]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const questionId = Number(button.dataset.jump);
+      const index = QUESTIONS.findIndex((question) => question.id === questionId);
+      if (index >= 0) {
+        state.currentIndex = index;
+        state.quizStage = "question";
+        render();
+      }
+    });
+  });
+
+  document.querySelectorAll('input[name="current-question"]').forEach((input) => {
+    input.addEventListener("change", () => {
+      const question = QUESTIONS[state.currentIndex];
+      state.answers[question.id] = Number(input.value);
+      render();
+    });
+  });
+
+  const saveMeta = document.querySelector("#saveMeta");
+  if (saveMeta) {
+    saveMeta.addEventListener("click", () => {
+      state.meta = readMeta();
+      state.quizStage = "question";
       render();
     });
   }
 
-  const fillDemo = document.querySelector("#fillDemo");
-  if (fillDemo) {
-    fillDemo.addEventListener("click", () => {
+  const prevQuestion = document.querySelector("#prevQuestion");
+  if (prevQuestion) {
+    prevQuestion.addEventListener("click", () => {
+      state.currentIndex = Math.max(0, state.currentIndex - 1);
+      render();
+    });
+  }
+
+  const nextQuestion = document.querySelector("#nextQuestion");
+  if (nextQuestion) {
+    nextQuestion.addEventListener("click", () => {
+      state.currentIndex = Math.min(QUESTIONS.length - 1, state.currentIndex + 1);
+      render();
+    });
+  }
+
+  const goReview = document.querySelector("#goReview");
+  if (goReview) {
+    goReview.addEventListener("click", () => {
+      state.quizStage = "review";
+      render();
+    });
+  }
+
+  const submitDiagnostic = document.querySelector("#submitDiagnostic");
+  if (submitDiagnostic) {
+    submitDiagnostic.addEventListener("click", () => {
+      state.studentReport = scoreSubmission(state.answers, state.meta);
+      state.quizStage = "done";
+      render();
+    });
+  }
+
+  const restartQuiz = document.querySelector("#restartQuiz");
+  if (restartQuiz) {
+    restartQuiz.addEventListener("click", () => {
+      state.answers = {};
+      state.studentReport = null;
+      state.currentIndex = 0;
+      state.quizStage = "welcome";
+      state.view = "prueba";
+      render();
+    });
+  }
+
+  const saveDemoAnswers = document.querySelector("#saveDemoAnswers");
+  if (saveDemoAnswers) {
+    saveDemoAnswers.addEventListener("click", () => {
       QUESTIONS.forEach((question) => {
-        const value = question.attitude ? question.positive : question.answer;
-        const input = document.querySelector(`input[name="q-${question.id}"][value="${value}"]`);
-        if (input) input.checked = true;
+        state.answers[question.id] = question.attitude ? question.positive : question.answer;
       });
+      state.quizStage = "review";
+      render();
     });
   }
 }
 
 function readMeta() {
   return {
-    school: document.querySelector("#school")?.value || "Colegio Demo",
-    student: document.querySelector("#student")?.value || "Estudiante prueba",
-    grade: document.querySelector("#grade")?.value || "9",
-    group: document.querySelector("#group")?.value || "9A",
+    school: document.querySelector("#school")?.value || defaultMeta.school,
+    student: document.querySelector("#student")?.value || defaultMeta.student,
+    grade: document.querySelector("#grade")?.value || defaultMeta.grade,
+    group: document.querySelector("#group")?.value || defaultMeta.group,
   };
 }
 
-function readAnswers() {
-  return Object.fromEntries(
-    QUESTIONS.map((question) => {
-      const checked = document.querySelector(`input[name="q-${question.id}"]:checked`);
-      return [question.id, checked ? Number(checked.value) : null];
-    }),
-  );
+function getAnsweredCount() {
+  return QUESTIONS.filter((question) => state.answers[question.id] !== undefined && state.answers[question.id] !== null).length;
 }
 
 function tab(view, label) {
@@ -319,4 +548,3 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
-

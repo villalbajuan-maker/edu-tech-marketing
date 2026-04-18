@@ -880,10 +880,11 @@ function renderCompanionModal() {
 }
 
 function renderCompanionMessage(message) {
+  const content = message.role === "assistant" ? renderCompanionMarkdown(message.content) : `<p>${escapeHtml(message.content)}</p>`;
   return `
     <div class="companion-message ${message.role}">
       <strong>${message.role === "assistant" ? "Companion" : "Usuario"}</strong>
-      <p>${escapeHtml(message.content)}</p>
+      <div class="companion-message-content">${content}</div>
     </div>
   `;
 }
@@ -1733,6 +1734,53 @@ function copyText(text) {
   textarea.select();
   document.execCommand("copy");
   textarea.remove();
+}
+
+function renderCompanionMarkdown(value) {
+  const lines = String(value || "").split(/\r?\n/);
+  const blocks = [];
+  let paragraph = [];
+  let list = [];
+
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    blocks.push(`<p>${formatInlineMarkdown(paragraph.join(" "))}</p>`);
+    paragraph = [];
+  };
+
+  const flushList = () => {
+    if (!list.length) return;
+    blocks.push(`<ul>${list.map((item) => `<li>${formatInlineMarkdown(item)}</li>`).join("")}</ul>`);
+    list = [];
+  };
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      flushParagraph();
+      flushList();
+      return;
+    }
+
+    const bullet = trimmed.match(/^[-*]\s+(.+)$/);
+    if (bullet) {
+      flushParagraph();
+      list.push(bullet[1]);
+      return;
+    }
+
+    flushList();
+    paragraph.push(trimmed);
+  });
+
+  flushParagraph();
+  flushList();
+
+  return blocks.join("") || "<p></p>";
+}
+
+function formatInlineMarkdown(value) {
+  return escapeHtml(value).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
 }
 
 function escapeHtml(value) {

@@ -566,11 +566,30 @@ button {
   margin-bottom: 6px;
 }
 
-.companion-message p {
+.companion-message-content {
+  display: grid;
+  gap: 9px;
+}
+
+.companion-message-content p,
+.companion-message-content ul {
   margin: 0;
   color: var(--muted);
   line-height: 1.5;
-  white-space: pre-wrap;
+}
+
+.companion-message-content ul {
+  padding-left: 18px;
+}
+
+.companion-message-content li + li {
+  margin-top: 5px;
+}
+
+.companion-message-content strong {
+  display: inline;
+  margin: 0;
+  color: var(--ink);
 }
 
 .typing-message {

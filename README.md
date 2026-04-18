@@ -7,12 +7,13 @@ Este repositorio organiza la historia, tesis, producto, plataforma, validación 
 ## Lectura inicial
 
 1. [EMPIEZA_AQUI.md](EMPIEZA_AQUI.md): ruta de entrada para cualquier colaborador.
-2. [HISTORIA_DEL_PROYECTO.md](HISTORIA_DEL_PROYECTO.md): origen, evolución y estado actual.
-3. [COLABORACION.md](COLABORACION.md): roles de Camilo, Juan Carlos y Leonardo.
-4. [ROADMAP.md](ROADMAP.md): fases, metas y criterios de salida.
-5. [tesis/00-tesis-maestra.md](tesis/00-tesis-maestra.md): tesis central del proyecto.
-6. [validacion/plan-de-validacion-comercial.md](validacion/plan-de-validacion-comercial.md): primera ruta de validación con colegios privados.
-7. [ofertas/diagnostico-escolar-educacion-financiera/README.md](ofertas/diagnostico-escolar-educacion-financiera/README.md): primera oferta de entrada al mercado.
+2. [ESTADO_ACTUAL.md](ESTADO_ACTUAL.md): foto actual del proyecto, version congelada, roles, pruebas y proximo hito.
+3. [HISTORIA_DEL_PROYECTO.md](HISTORIA_DEL_PROYECTO.md): origen, evolución y estado actual.
+4. [COLABORACION.md](COLABORACION.md): roles de Camilo, Juan Carlos y Leonardo.
+5. [ROADMAP.md](ROADMAP.md): fases, metas y criterios de salida.
+6. [tesis/00-tesis-maestra.md](tesis/00-tesis-maestra.md): tesis central del proyecto.
+7. [validacion/plan-de-validacion-comercial.md](validacion/plan-de-validacion-comercial.md): primera ruta de validación con colegios privados.
+8. [ofertas/diagnostico-escolar-educacion-financiera/README.md](ofertas/diagnostico-escolar-educacion-financiera/README.md): primera oferta de entrada al mercado.
 
 ## Qué es el proyecto
 
@@ -45,7 +46,7 @@ Codigo:
 
 [apps/diagnostico-v1](apps/diagnostico-v1)
 
-Incluye aplicacion de la prueba, scoring, reporte vivo, companion basico y simulacion QA de 300 estudiantes.
+Incluye aplicacion conversacional de la prueba, scoring, reporte vivo, demo institucional, Companion IA con boton flotante, dictado por microfono y simulacion QA de 300 estudiantes.
 
 La trazabilidad entre origen conceptual, documentos V1 y codigo esta en:
 

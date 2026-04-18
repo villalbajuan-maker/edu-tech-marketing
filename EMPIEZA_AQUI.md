@@ -32,12 +32,13 @@ Antes de construir mas tecnologia, necesitamos aclarar:
 
 ## Ruta de lectura recomendada
 
-1. Lee [HISTORIA_DEL_PROYECTO.md](HISTORIA_DEL_PROYECTO.md).
-2. Lee [COLABORACION.md](COLABORACION.md).
-3. Lee [tesis/00-tesis-maestra.md](tesis/00-tesis-maestra.md).
-4. Lee [producto/finanzas-desde-la-escuela.md](producto/finanzas-desde-la-escuela.md).
-5. Lee [validacion/plan-de-validacion-comercial.md](validacion/plan-de-validacion-comercial.md).
-6. Si vas a apoyar ventas o contactos, lee [comercial/plan-de-activacion-leonardo.md](comercial/plan-de-activacion-leonardo.md).
+1. Lee [ESTADO_ACTUAL.md](ESTADO_ACTUAL.md).
+2. Lee [HISTORIA_DEL_PROYECTO.md](HISTORIA_DEL_PROYECTO.md).
+3. Lee [COLABORACION.md](COLABORACION.md).
+4. Lee [tesis/00-tesis-maestra.md](tesis/00-tesis-maestra.md).
+5. Lee [producto/finanzas-desde-la-escuela.md](producto/finanzas-desde-la-escuela.md).
+6. Lee [validacion/plan-de-validacion-comercial.md](validacion/plan-de-validacion-comercial.md).
+7. Si vas a apoyar ventas o contactos, lee [comercial/plan-de-activacion-leonardo.md](comercial/plan-de-activacion-leonardo.md).
 
 ## Que debe hacer cada persona primero
 

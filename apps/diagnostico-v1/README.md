@@ -76,6 +76,32 @@ OPENAI_MODEL
 
 `OPENAI_MODEL` es opcional. Por defecto se usa `gpt-4.1-mini`.
 
+## Companion con voz
+
+El Companion tambien permite dictar preguntas por microfono.
+
+Flujo:
+
+```text
+Microfono del navegador
+-> MediaRecorder graba audio
+-> /api/transcribe
+-> OpenAI audio/transcriptions
+-> texto editable en el input del Companion
+-> envio manual al Companion
+```
+
+Configuracion esperada en Vercel:
+
+```text
+OPENAI_API_KEY
+OPENAI_TRANSCRIPTION_MODEL
+```
+
+`OPENAI_TRANSCRIPTION_MODEL` es opcional. Por defecto se usa `gpt-4o-mini-transcribe`.
+
+Decision actual: mantener `gpt-4o-mini-transcribe` por estabilidad, costo y suficiencia para preguntas cortas. Si las pruebas reales muestran baja calidad en espanol colombiano o ambientes con ruido, evaluar `gpt-4o-transcribe`.
+
 Documento rector:
 
 [../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md](../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md)

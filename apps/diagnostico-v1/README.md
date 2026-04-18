@@ -22,7 +22,8 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 - Modo interno comercial con oportunidad, objeciones, mensaje sugerido y siguiente accion.
 - Companion Institucional en modal con preguntas sugeridas y conexion LLM via `/api/companion`.
 - Pills sugeridos del Companion con guia progresiva: lectura inicial, evidencia, ruta a piloto y decision.
-- Referencias inline del Companion con tarjetas externas a fuentes OECD/PISA, MEN y estrategia nacional EEF.
+- Referencias inline variables del Companion con tarjetas externas a fuentes OECD/PISA, MEN y estrategia nacional EEF.
+- Thumbnails contextuales opcionales via Unsplash API cuando existe `UNSPLASH_ACCESS_KEY`.
 - Boton flotante de IA para abrir el Companion durante la revision institucional.
 - Microfono en el Companion para dictar preguntas y transcribirlas con OpenAI via `/api/transcribe`.
 - Navegacion principal reorganizada por audiencia: aplicacion, demo institucional e interno.
@@ -100,9 +101,12 @@ Configuracion esperada en Vercel:
 ```text
 OPENAI_API_KEY
 OPENAI_TRANSCRIPTION_MODEL
+UNSPLASH_ACCESS_KEY
 ```
 
 `OPENAI_TRANSCRIPTION_MODEL` es opcional. Por defecto se usa `gpt-4o-mini-transcribe`.
+
+`UNSPLASH_ACCESS_KEY` es opcional. Si existe, las tarjetas de referencia del Companion pueden hidratar thumbnails contextuales desde Unsplash con atribucion visible. Si no existe, las tarjetas quedan como referencias sobrias sin imagen externa.
 
 Decision actual: mantener `gpt-4o-mini-transcribe` por estabilidad, costo y suficiencia para preguntas cortas. Si las pruebas reales muestran baja calidad en espanol colombiano o ambientes con ruido, evaluar `gpt-4o-transcribe`.
 

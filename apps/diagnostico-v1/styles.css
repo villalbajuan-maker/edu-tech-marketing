@@ -614,16 +614,15 @@ button {
 
 .companion-reference-card {
   display: grid;
-  grid-template-columns: 34px minmax(138px, 1fr);
+  grid-template-columns: 34px minmax(128px, 1fr);
   gap: 8px;
-  min-width: 210px;
-  max-width: 260px;
+  min-width: 184px;
+  max-width: 238px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #f7faf8;
   color: var(--ink);
   padding: 8px;
-  text-decoration: none;
 }
 
 .companion-reference-card:hover {
@@ -640,17 +639,38 @@ button {
   color: white;
   font-size: 10px;
   font-weight: 900;
+  background-size: cover;
+  background-position: center;
 }
 
-.companion-reference-card b,
+.reference-thumb.has-image {
+  align-items: end;
+  justify-items: start;
+  padding: 4px;
+}
+
+.reference-thumb.has-image span {
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.58);
+  padding: 2px 3px;
+}
+
+.reference-main-link,
 .companion-reference-card small,
 .companion-reference-card em {
   display: block;
 }
 
-.companion-reference-card b {
+.reference-main-link {
+  color: var(--ink);
   font-size: 11px;
+  font-weight: 900;
   line-height: 1.2;
+  text-decoration: none;
+}
+
+.reference-main-link:hover {
+  text-decoration: underline;
 }
 
 .companion-reference-card small {
@@ -666,6 +686,18 @@ button {
   font-size: 10px;
   font-style: normal;
   line-height: 1.25;
+}
+
+.reference-credit {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.reference-credit:hover {
+  text-decoration: underline;
 }
 
 .typing-message {

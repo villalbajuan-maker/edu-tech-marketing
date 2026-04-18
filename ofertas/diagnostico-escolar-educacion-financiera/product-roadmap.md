@@ -26,7 +26,7 @@ Implementacion = contrato institucional
 | V1.0 | Prueba funcional + scoring + reporte + QA | Implementada |
 | V1.1 | Experiencia end-to-end de aplicacion | Implementada |
 | V1.2 | Visuales pedagogicos + companion decisional + ruta a piloto | Implementada |
-| V1.3 | Reporte demo institucional + modo interno comercial | Definida |
+| V1.3 | Reporte demo institucional + modo interno comercial | Implementada |
 | V2.0 | IA contextual real + datos persistentes + integracion a plataforma | Futura |
 
 ## V1.0
@@ -161,3 +161,7 @@ No incluye:
 Criterio estrategico:
 
 > La V1.3 debe permitir vender y validar mejor sin simular capacidades tecnicas que todavia no existen.
+
+Estado:
+
+> Implementada en la app como vista "Demo institucional".

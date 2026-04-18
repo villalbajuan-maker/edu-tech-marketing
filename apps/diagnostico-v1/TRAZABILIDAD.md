@@ -112,6 +112,8 @@ La app permite:
 - mostrar reporte vivo;
 - mostrar companion basico;
 - mostrar dashboard simulado de sesion para colegio;
+- mostrar demo institucional V1.3;
+- mostrar modo interno comercial;
 - simular cohortes de 300 estudiantes para QA.
 
 ## Evolucion V1.1
@@ -139,6 +141,26 @@ Incluye:
 - visuales pedagogicos en preguntas seleccionadas;
 - companion decisional;
 - ruta explicita de brecha a piloto dentro del reporte.
+
+## Evolucion V1.3
+
+La V1.3 queda implementada como:
+
+```text
+Reporte demo institucional + modo interno comercial
+```
+
+Incluye:
+
+- vista demo institucional con colegio ficticio;
+- resumen ejecutivo para rectoria;
+- comparacion por grupos;
+- lectura pedagogica;
+- modo interno comercial;
+- guion de reunion de resultados;
+- copiado de resumen ejecutivo y mensaje comercial.
+
+No agrega login, base de datos, IA contextual real ni integracion con la plataforma CodeIgniter.
 
 ## QA disponible
 

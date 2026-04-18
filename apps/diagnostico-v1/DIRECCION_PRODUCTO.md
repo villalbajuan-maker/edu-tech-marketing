@@ -69,7 +69,7 @@ Objetivo:
 
 Reporte demo institucional + modo interno comercial.
 
-Estado: definida para implementacion.
+Estado: implementada.
 
 Objetivo:
 
@@ -78,6 +78,16 @@ Objetivo:
 Documento de alcance:
 
 [../../ofertas/diagnostico-escolar-educacion-financiera/v1-3-reporte-demo-institucional.md](../../ofertas/diagnostico-escolar-educacion-financiera/v1-3-reporte-demo-institucional.md)
+
+Incluye:
+
+- vista demo institucional con colegio ficticio;
+- resumen ejecutivo para rectoria;
+- comparacion por grupos;
+- lectura pedagogica institucional;
+- modo interno comercial;
+- guion de reunion de resultados;
+- copiado de resumen ejecutivo y mensaje comercial.
 
 ### V2.0
 

@@ -2,7 +2,7 @@
 
 ## Estado
 
-Definida para implementacion.
+Implementada en la app del diagnostico.
 
 ## Objetivo
 

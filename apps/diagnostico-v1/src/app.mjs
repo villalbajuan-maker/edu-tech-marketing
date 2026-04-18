@@ -1,5 +1,5 @@
 import { DIMENSIONS, QUESTIONS } from "./data.mjs";
-import { buildDecisionCompanion, buildPilotPath, scoreSubmission } from "./scoring.mjs";
+import { buildDecisionCompanion, buildPilotPath, scoreSubmission, summarizeCohort } from "./scoring.mjs";
 import { listScenarios, runQaSuite, simulateCohort } from "./simulation.mjs";
 
 const app = document.querySelector("#app");
@@ -18,6 +18,7 @@ const state = {
   answers: {},
   studentReport: null,
   cohortResult: simulateCohort(300, "baseline"),
+  institutionalDemo: buildInstitutionalDemo(),
   qaResults: runQaSuite(),
 };
 
@@ -32,7 +33,7 @@ function render() {
             <div class="brand-mark">FDE</div>
             <div>
               <h1 class="brand-title">Diagnostico Escolar de Competencias Financieras</h1>
-              <p class="brand-subtitle">V1.1 · aplicacion real, reporte vivo y QA</p>
+              <p class="brand-subtitle">V1.3 · instrumento diagnostico institucional</p>
             </div>
           </div>
           <nav class="tabs">
@@ -40,6 +41,7 @@ function render() {
             ${tab("prueba", "Aplicar prueba")}
             ${tab("sesion", "Sesion colegio")}
             ${tab("reporte", "Reporte vivo")}
+            ${tab("demo", "Demo institucional")}
             ${tab("qa", "QA 300 estudiantes")}
           </nav>
         </div>
@@ -54,6 +56,7 @@ function renderView() {
   if (state.view === "prueba") return renderQuizExperience();
   if (state.view === "sesion") return renderSessionDashboard();
   if (state.view === "reporte") return renderReport(state.studentReport || state.cohortResult.report, state.studentReport ? "individual" : "cohort");
+  if (state.view === "demo") return renderInstitutionalDemo();
   if (state.view === "qa") return renderQa();
   return renderHome();
 }
@@ -62,11 +65,12 @@ function renderHome() {
   return `
     <section class="intro-grid">
       <div class="panel soft">
-        <p class="kicker">Producto V1.1</p>
-        <h2 class="headline">Una experiencia diagnostica lista para probar con estudiantes.</h2>
-        <p class="lead">La V1.1 transforma la prueba en un flujo real: bienvenida, datos minimos, una pregunta por pantalla, revision antes de enviar, cierre, reporte vivo, companion y QA de 300 estudiantes.</p>
+        <p class="kicker">Producto V1.3</p>
+        <h2 class="headline">Un instrumento diagnostico institucional para medir, interpretar y decidir.</h2>
+        <p class="lead">La V1.3 conecta prueba, reporte vivo, visuales pedagogicos, companion decisional y demo institucional para mostrar como un colegio podria avanzar hacia un piloto basado en evidencia.</p>
         <div class="actions">
           <button class="button" data-view="prueba">Iniciar diagnostico</button>
+          <button class="button secondary" data-view="demo">Ver demo institucional</button>
           <button class="button secondary" data-view="sesion">Ver sesion colegio</button>
           <button class="button secondary" data-view="qa">Ejecutar QA</button>
         </div>
@@ -374,6 +378,147 @@ function renderReport(report, mode) {
   `;
 }
 
+function renderInstitutionalDemo() {
+  const demo = state.institutionalDemo;
+  const report = demo.report;
+  const companion = buildDecisionCompanion(report);
+  const pilotPath = buildPilotPath(report);
+  return `
+    <section class="institutional-hero">
+      <div>
+        <p class="kicker">Demo institucional V1.3</p>
+        <h2 class="headline">${demo.school}</h2>
+        <p class="lead">${demo.summary}</p>
+        <div class="demo-meta">
+          <span>${demo.city}</span>
+          <span>${demo.grades}</span>
+          <span>${demo.completed}/${demo.expected} estudiantes finalizaron</span>
+        </div>
+      </div>
+      <aside class="decision-card">
+        <p class="kicker">Decision sugerida</p>
+        <h3>${report.pilotRecommendation.name}</h3>
+        <p>${report.pilotRecommendation.reason}</p>
+        <button class="button" data-copy-id="executive">Copiar resumen para rectoria</button>
+      </aside>
+    </section>
+
+    <section class="demo-grid">
+      <article class="report-section">
+        <p class="kicker">Resultado institucional</p>
+        <div class="metrics">
+          <div class="metric"><p class="metric-value">${report.percent}%</p><p class="metric-label">Resultado general</p></div>
+          <div class="metric"><p class="metric-value">${report.level.name}</p><p class="metric-label">Nivel</p></div>
+          <div class="metric"><p class="metric-value">${report.count}</p><p class="metric-label">Respuestas validas</p></div>
+        </div>
+        <p class="lead">${report.level.description}</p>
+      </article>
+
+      <article class="report-section">
+        <p class="kicker">Resumen para rectoria</p>
+        <h3>${demo.executive.title}</h3>
+        <p>${demo.executive.body}</p>
+        <div class="decision-strip">
+          <span>Riesgo educativo: ${demo.executive.risk}</span>
+          <span>Decision: ${demo.executive.decision}</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="report-section">
+      <div class="section-heading">
+        <div>
+          <p class="kicker">Comparacion por grupos</p>
+          <h3>Lectura institucional simulada</h3>
+        </div>
+        <button class="button secondary" data-copy-id="commercial">Copiar mensaje comercial</button>
+      </div>
+      <div class="group-grid">
+        ${demo.groups.map(renderGroupCard).join("")}
+      </div>
+    </section>
+
+    <section class="report-grid">
+      <div>
+        <article class="report-section">
+          <p class="kicker">Lectura pedagogica</p>
+          <h3>${demo.pedagogical.title}</h3>
+          <div class="bar-list">${report.dimensions.map(renderDimensionBar).join("")}</div>
+          <div class="insight-grid">
+            ${demo.pedagogical.insights.map((insight) => `<div class="insight-card"><strong>${insight.title}</strong><p>${insight.body}</p></div>`).join("")}
+          </div>
+        </article>
+
+        <article class="report-section">
+          <p class="kicker">Ruta de decision</p>
+          <h3>De evidencia a piloto</h3>
+          <div class="pilot-path">
+            ${pilotPath
+              .map(
+                (step, index) => `
+                  <div class="path-step">
+                    <span class="path-index">${index + 1}</span>
+                    <div>
+                      <strong>${step.label}</strong>
+                      <p>${step.value}</p>
+                    </div>
+                  </div>
+                `,
+              )
+              .join("")}
+          </div>
+        </article>
+
+        <article class="report-section">
+          <p class="kicker">Guion de reunion</p>
+          <h3>Lectura de resultados en 30 a 45 minutos</h3>
+          <div class="meeting-flow">
+            ${demo.meetingScript.map((item, index) => `<div><span>${index + 1}</span><strong>${item}</strong></div>`).join("")}
+          </div>
+        </article>
+      </div>
+
+      <aside class="internal-panel">
+        <p class="kicker">Modo interno comercial</p>
+        <h3>${demo.internal.title}</h3>
+        <div class="commercial-score">
+          <span>Nivel de urgencia</span>
+          <strong>${demo.internal.urgency}</strong>
+        </div>
+        <div class="companion-list">
+          <div class="companion-item"><strong>Oportunidad</strong><span>${demo.internal.opportunity}</span></div>
+          <div class="companion-item"><strong>Objeciones probables</strong><span>${demo.internal.objections}</span></div>
+          <div class="companion-item"><strong>Mensaje para Leonardo</strong><span>${demo.internal.message}</span></div>
+          <div class="companion-item"><strong>Validacion de Camilo</strong><span>${demo.internal.camilo}</span></div>
+          <div class="companion-item"><strong>Preparacion de Juan Carlos</strong><span>${demo.internal.juan}</span></div>
+          <div class="companion-item"><strong>Siguiente accion</strong><span>${demo.internal.nextAction}</span></div>
+        </div>
+        <h3 class="companion-subtitle">Companion decisional</h3>
+        <ul class="list">
+          <li>${companion.mainGap}</li>
+          <li>${companion.whyItMatters}</li>
+          <li>${companion.nextStep}</li>
+        </ul>
+      </aside>
+    </section>
+  `;
+}
+
+function renderGroupCard(group) {
+  const tone = group.report.percent <= 45 ? "risk" : group.report.percent <= 60 ? "watch" : "strong";
+  return `
+    <div class="group-card ${tone}">
+      <div class="group-card-top">
+        <strong>${group.name}</strong>
+        <span>${group.completed}/${group.expected}</span>
+      </div>
+      <p class="group-score">${group.report.percent}%</p>
+      <p>${group.reading}</p>
+      <div class="mini-bar"><span style="width:${group.report.percent}%"></span></div>
+    </div>
+  `;
+}
+
 function renderQuestionVisual(visual) {
   if (!visual) return "";
   const meta = getVisualMeta(visual.type);
@@ -631,6 +776,15 @@ function bindEvents() {
       render();
     });
   }
+
+  document.querySelectorAll("[data-copy-id]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const text = getDemoCopyText(button.dataset.copyId);
+      copyText(text);
+      button.textContent = "Copiado";
+      window.setTimeout(() => render(), 900);
+    });
+  });
 }
 
 function readMeta() {
@@ -648,6 +802,119 @@ function getAnsweredCount() {
 
 function tab(view, label) {
   return `<button class="tab ${state.view === view ? "active" : ""}" data-view="${view}">${label}</button>`;
+}
+
+function buildInstitutionalDemo() {
+  const simulated = simulateCohort(300, "baseline", 20260418);
+  const school = "Colegio San Gabriel de la Sabana";
+  const city = "Bogota";
+  const report = summarizeCohort(simulated.students, {
+    school,
+    city,
+    grades: "8 a 11",
+    mode: "Demo institucional V1.3",
+  });
+  const groupConfig = [
+    { grade: 8, expected: 80, reading: "Necesita fortalecer fundamentos, presupuesto y lectura de comprobantes." },
+    { grade: 9, expected: 80, reading: "Comprende situaciones basicas, pero requiere trabajo en riesgo digital." },
+    { grade: 10, expected: 80, reading: "Tiene bases para piloto focalizado en credito, deuda y decisiones." },
+    { grade: 11, expected: 80, reading: "Puede avanzar hacia profundizacion aplicada y proyecto de vida financiera." },
+  ];
+  const groups = groupConfig.map((item) => {
+    const students = simulated.students.filter((student) => Number(student.meta.grade) === item.grade);
+    return {
+      name: `${item.grade}A`,
+      expected: item.expected,
+      completed: students.length,
+      reading: item.reading,
+      report: summarizeCohort(students, {
+        school,
+        group: `${item.grade}A`,
+      }),
+    };
+  });
+
+  const mainGap = report.gaps[0] || report.dimensions[0];
+  return {
+    school,
+    city,
+    grades: "Grados 8, 9, 10 y 11",
+    expected: 320,
+    completed: simulated.students.length,
+    report,
+    groups,
+    summary:
+      "Escenario ficticio para mostrar como el diagnostico convierte respuestas de estudiantes en una lectura institucional accionable.",
+    executive: {
+      title: "El colegio tiene una base inicial, pero la evidencia justifica un piloto focalizado.",
+      body: `El resultado general ubica al grupo en nivel ${report.level.name}. La principal brecha aparece en ${mainGap.name}, lo que sugiere iniciar una intervencion corta, medible y orientada a decisiones financieras reales.`,
+      risk: "Los estudiantes pueden comprender situaciones simples, pero fallar al comparar alternativas, anticipar consecuencias o detectar riesgos.",
+      decision: "Avanzar a piloto con medicion antes/despues.",
+    },
+    pedagogical: {
+      title: "La necesidad no es solo conceptual: es de criterio aplicado.",
+      insights: [
+        {
+          title: "Brecha prioritaria",
+          body: `${mainGap.name} aparece como el foco que mas puede afectar decisiones cotidianas de los estudiantes.`,
+        },
+        {
+          title: "Intervencion sugerida",
+          body: "Trabajar con casos situacionales, visuales de decision y ejercicios cortos de comparacion antes/despues.",
+        },
+        {
+          title: "Medicion de avance",
+          body: "Aplicar una medicion corta posterior al piloto para comparar brecha inicial y avance por grupo.",
+        },
+      ],
+    },
+    internal: {
+      title: "Lectura para preparar conversacion",
+      urgency: "Media alta",
+      opportunity:
+        "El colegio puede reconocer la necesidad sin sentirse obligado a comprar todo el curso desde la primera reunion.",
+      objections:
+        "Tiempo de aplicacion, carga para docentes, privacidad de datos y claridad sobre beneficios para padres.",
+      message:
+        "La propuesta no es empezar por una implementacion grande, sino validar una ruta corta con evidencia: diagnostico, piloto y medicion de avance.",
+      camilo:
+        "Validar que la lectura pedagogica y el piloto recomendado representan correctamente la historia y capacidad actual del curso.",
+      juan:
+        "Preparar demo, resumen ejecutivo, guion de resultados y version visual del reporte para reunion institucional.",
+      nextAction:
+        "Agendar reunion de lectura y proponer piloto focalizado con un grado o muestra controlada.",
+    },
+    meetingScript: [
+      "Contexto del diagnostico y alcance de la muestra.",
+      "Resultado general y nivel institucional.",
+      "Brechas principales por dimension.",
+      "Comparacion por grupos.",
+      "Implicacion pedagogica.",
+      "Piloto recomendado y medicion de avance.",
+      "Decision de siguiente paso.",
+    ],
+  };
+}
+
+function getDemoCopyText(id) {
+  const demo = state.institutionalDemo;
+  if (id === "commercial") {
+    return `Mensaje comercial sugerido: ${demo.internal.message} Siguiente accion: ${demo.internal.nextAction}`;
+  }
+  return `${demo.school}. ${demo.executive.title} ${demo.executive.body} Decision sugerida: ${demo.executive.decision}`;
+}
+
+function copyText(text) {
+  if (navigator.clipboard?.writeText) {
+    navigator.clipboard.writeText(text);
+    return;
+  }
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
 }
 
 function escapeHtml(value) {

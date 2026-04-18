@@ -51,6 +51,10 @@ La trazabilidad entre origen conceptual, documentos V1 y codigo esta en:
 
 [apps/diagnostico-v1/TRAZABILIDAD.md](apps/diagnostico-v1/TRAZABILIDAD.md)
 
+La direccion congelada del producto y secuencia de versiones esta en:
+
+[apps/diagnostico-v1/DIRECCION_PRODUCTO.md](apps/diagnostico-v1/DIRECCION_PRODUCTO.md)
+
 ## Primera oferta de validación
 
 La primera oferta propuesta es el **Diagnóstico Escolar de Educación Financiera**.

@@ -1,0 +1,123 @@
+# Roadmap de producto del diagnostico
+
+## North Star
+
+El Diagnostico Escolar de Competencias Financieras sera una experiencia digital visual e inteligente que mide competencias financieras mediante situaciones reales, acompana la aplicacion institucional, genera un reporte vivo con interpretacion asistida y guia al colegio hacia un piloto formativo basado en evidencia.
+
+## Escalera de valor
+
+```text
+Diagnostico = evidencia de necesidad
+Reporte vivo = evidencia convertida en decision
+Piloto = evidencia de solucion
+Implementacion = contrato institucional
+```
+
+## Versiones
+
+| Version | Foco | Estado |
+| --- | --- | --- |
+| V1.0 | Prueba funcional + scoring + reporte + QA | Implementada |
+| V1.1 | Experiencia end-to-end de aplicacion | Implementada |
+| V1.2 | Visuales pedagogicos + companion decisional + ruta a piloto | Siguiente |
+| V1.3 | Reporte demo institucional + modo interno comercial | Futura |
+| V2.0 | IA contextual real + datos persistentes + integracion a plataforma | Futura |
+
+## V1.0
+
+Objetivo:
+
+> Probar que la prueba puede aplicarse, calcular resultados, generar reporte y simular cohortes.
+
+Incluye:
+
+- 30 preguntas;
+- scoring;
+- reporte vivo basico;
+- companion basico;
+- QA de 300 estudiantes.
+
+## V1.1
+
+Objetivo:
+
+> Hacer que la prueba se sienta como una experiencia real de aplicacion para estudiantes.
+
+Incluye:
+
+- bienvenida;
+- datos minimos;
+- una pregunta por pantalla;
+- progreso;
+- navegacion;
+- revision antes de envio;
+- cierre;
+- vista sesion colegio.
+
+## V1.2
+
+Objetivo:
+
+> Hacer que el diagnostico se sienta menos como prototipo y mas como instrumento educativo-comercial serio.
+
+Alcance:
+
+- visuales pedagogicos;
+- companion orientado a decision;
+- ruta a piloto mas explicita.
+
+### Visuales pedagogicos
+
+Se incorporaran visuales funcionales en preguntas seleccionadas:
+
+- recibo o comprobante;
+- comparacion contado/cuotas;
+- chat de riesgo digital;
+- registro de caja;
+- presupuesto familiar;
+- tarjeta de decision.
+
+### Companion decisional
+
+El companion debe ayudar a interpretar resultados y avanzar a decision:
+
+- explicar nivel;
+- explicar brecha;
+- justificar piloto;
+- sugerir siguiente paso;
+- preparar conversacion institucional.
+
+### Ruta a piloto
+
+El reporte debe conectar:
+
+```text
+Brecha -> Implicacion -> Piloto -> Medicion -> Siguiente paso
+```
+
+## Que no entra en V1.2
+
+- IA contextual libre.
+- Login.
+- Base de datos.
+- Persistencia real.
+- Reportes reales por colegio.
+- Modo interno comercial completo.
+- Integracion con CodeIgniter.
+- Precios.
+- Prueba adaptativa.
+
+## Criterios de exito de V1.2
+
+- La prueba es mas visual sin infantilizar.
+- Los estudiantes entienden mejor las situaciones.
+- El reporte comunica brechas con mas claridad.
+- El companion ayuda a interpretar y decidir.
+- La recomendacion de piloto se siente natural y basada en evidencia.
+- Desktop, iPad y mobile siguen funcionando.
+- El QA sigue pasando.
+
+## Criterio estrategico
+
+La V1.2 debe mejorar claridad y valor percibido, no aumentar complejidad innecesaria.
+

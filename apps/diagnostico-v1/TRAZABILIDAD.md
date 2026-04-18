@@ -8,6 +8,13 @@ La version funcional esta publicada en Vercel:
 
 https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 
+## Direccion congelada
+
+La direccion de producto congelada esta documentada en:
+
+- `apps/diagnostico-v1/DIRECCION_PRODUCTO.md`
+- `ofertas/diagnostico-escolar-educacion-financiera/product-roadmap.md`
+
 ## Origen conceptual
 
 El diagnostico surge de la escalera comercial definida para Finanzas Desde La Escuela:
@@ -116,6 +123,16 @@ Bienvenida -> Datos minimos -> Pregunta por pantalla -> Revision -> Envio -> Cie
 ```
 
 Tambien agrega una vista de sesion para colegio, pensada para que un coordinador pueda ver estado de aplicacion sin acceder a respuestas individuales.
+
+## Siguiente version: V1.2
+
+La V1.2 queda definida como:
+
+```text
+Visuales pedagogicos + companion decisional + ruta a piloto mas explicita
+```
+
+No cambia el corazon de scoring. Mejora experiencia, interpretacion y decision.
 
 ## QA disponible
 

@@ -23,6 +23,8 @@ const state = {
   currentIndex: 0,
   revealedIndex: 0,
   questionTransition: false,
+  quizStartedAt: null,
+  quizEndedAt: null,
   meta: { ...defaultMeta },
   answers: {},
   studentReport: null,
@@ -115,6 +117,7 @@ const INTERNAL_COMPANION_GUIDE = [
 ];
 
 render();
+window.setInterval(updateElapsedTimer, 1000);
 
 function render() {
   app.innerHTML = `
@@ -240,16 +243,24 @@ function renderQuestionStep() {
   const question = QUESTIONS[state.currentIndex];
   const answered = getAnsweredCount();
   const progress = Math.round(((state.revealedIndex + 1) / QUESTIONS.length) * 100);
+  const elapsed = formatElapsedTime(getQuizElapsedMs());
   const isLatestQuestion = state.currentIndex === state.revealedIndex;
   return `
     <section class="quiz-shell">
       <div class="progress-panel">
         <div class="progress-meta">
-          <span>Situacion ${state.revealedIndex + 1} de ${QUESTIONS.length}</span>
+          <span class="progress-step">Pregunta ${state.revealedIndex + 1} de ${QUESTIONS.length}</span>
           <span>${answered} respuestas registradas</span>
-          <span>${progress}%</span>
+          <span class="progress-time" data-elapsed-time>Tiempo ${elapsed}</span>
         </div>
-        <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
+        <div class="progress-track" aria-label="Avance del diagnostico">
+          <div class="progress-fill" style="width:${progress}%"></div>
+        </div>
+        <div class="progress-foot">
+          <span>Inicio</span>
+          <strong>${progress}% completado</strong>
+          <span>Cierre</span>
+        </div>
       </div>
       ${renderConversationDiagnostic()}
       <div class="question-nav">
@@ -1317,6 +1328,8 @@ function bindEvents() {
       state.currentIndex = 0;
       state.revealedIndex = 0;
       state.questionTransition = false;
+      state.quizStartedAt = Date.now();
+      state.quizEndedAt = null;
       render();
     });
   }
@@ -1346,6 +1359,7 @@ function bindEvents() {
   if (submitDiagnostic) {
     submitDiagnostic.addEventListener("click", () => {
       state.studentReport = scoreSubmission(state.answers, state.meta);
+      state.quizEndedAt = Date.now();
       state.quizStage = "done";
       render();
     });
@@ -1359,6 +1373,8 @@ function bindEvents() {
       state.currentIndex = 0;
       state.revealedIndex = 0;
       state.questionTransition = false;
+      state.quizStartedAt = null;
+      state.quizEndedAt = null;
       state.quizStage = "welcome";
       state.view = "prueba";
       render();
@@ -1371,6 +1387,8 @@ function bindEvents() {
       QUESTIONS.forEach((question) => {
         state.answers[question.id] = question.attitude ? question.positive : question.answer;
       });
+      state.quizStartedAt ||= Date.now();
+      state.quizEndedAt = Date.now();
       state.currentIndex = QUESTIONS.length - 1;
       state.revealedIndex = QUESTIONS.length - 1;
       state.questionTransition = false;
@@ -1475,6 +1493,24 @@ function readMeta() {
 
 function getAnsweredCount() {
   return QUESTIONS.filter((question) => state.answers[question.id] !== undefined && state.answers[question.id] !== null).length;
+}
+
+function getQuizElapsedMs() {
+  if (!state.quizStartedAt) return 0;
+  return Math.max(0, (state.quizEndedAt || Date.now()) - state.quizStartedAt);
+}
+
+function formatElapsedTime(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+}
+
+function updateElapsedTimer() {
+  const timer = document.querySelector("[data-elapsed-time]");
+  if (!timer || !state.quizStartedAt || state.quizEndedAt) return;
+  timer.textContent = `Tiempo ${formatElapsedTime(getQuizElapsedMs())}`;
 }
 
 function tab(view, label) {

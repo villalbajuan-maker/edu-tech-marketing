@@ -216,6 +216,7 @@ function renderActiveQuestionExchange(question, selected) {
   const conversation = buildQuestionConversation(question, dimension);
   return `
     <div class="active-exchange-marker" data-active-exchange></div>
+    ${renderInlineContextSplash(question, dimension, "active")}
     <div class="diagnostic-message chat-message">
       <span>Diagnostico</span>
       <p>${escapeHtml(conversation.intro)}</p>
@@ -249,13 +250,15 @@ function renderActiveQuestionExchange(question, selected) {
 }
 
 function renderCompletedQuestionExchange(question) {
-  const conversation = buildQuestionConversation(question, DIMENSIONS.find((item) => item.id === question.dimension));
+  const dimension = DIMENSIONS.find((item) => item.id === question.dimension);
+  const conversation = buildQuestionConversation(question, dimension);
   const selected = state.answers[question.id];
   const answerText =
     selected === undefined || selected === null
       ? "Sin respuesta registrada"
       : `${String.fromCharCode(65 + Number(selected))}. ${question.options[Number(selected)]}`;
   return `
+    ${renderInlineContextSplash(question, dimension, "compact")}
     <div class="diagnostic-message chat-message previous-question-message">
       <span>Situacion ${question.id} respondida</span>
       <p>${escapeHtml(conversation.questionText)}</p>
@@ -265,6 +268,101 @@ function renderCompletedQuestionExchange(question) {
       <p>${escapeHtml(answerText)}</p>
       <button class="inline-edit-button" data-edit-question="${question.id}" ${state.questionTransition ? "disabled" : ""}>Editar respuesta</button>
     </div>
+  `;
+}
+
+function renderInlineContextSplash(question, dimension, mode = "active") {
+  const context = getInlineContext(question, dimension);
+  const visualType = question.visual?.type || "decision";
+  const compactClass = mode === "compact" ? "compact-context" : "";
+  return `
+    <div class="inline-context-splash chat-message ${compactClass}">
+      <div class="inline-context-thumbnail ${visualType}-thumbnail" aria-hidden="true">
+        ${renderContextThumbnail(visualType)}
+      </div>
+      <div class="inline-context-copy">
+        <span>Marco de situacion</span>
+        <strong>${escapeHtml(context.title)}</strong>
+        <p>${escapeHtml(context.copy)}</p>
+        <div class="context-tags">
+          ${context.tags.map((tag) => `<b>${escapeHtml(tag)}</b>`).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function getInlineContext(question, dimension) {
+  const contexts = {
+    "dinero-transacciones": {
+      title: "Compra cotidiana con informacion verificable",
+      copy: "Observa valores, pagos, descuentos o comprobantes antes de decidir.",
+      tags: ["precio", "total", "comprobante"],
+    },
+    "presupuesto-planificacion": {
+      title: "Decision con dinero limitado",
+      copy: "Identifica prioridades, compromisos y metas antes de elegir.",
+      tags: ["prioridad", "ahorro", "plan"],
+    },
+    "credito-deuda": {
+      title: "Compromiso financiero hacia adelante",
+      copy: "Compara cuotas, costo total y consecuencias futuras.",
+      tags: ["cuotas", "costo total", "deuda"],
+    },
+    "riesgo-digital": {
+      title: "Entorno digital con senales de riesgo",
+      copy: "Verifica fuente, seguridad y datos antes de actuar.",
+      tags: ["verificacion", "datos", "seguridad"],
+    },
+    "trabajo-empresa": {
+      title: "Ingreso, costo y resultado",
+      copy: "Relaciona ventas, gastos, utilidad y manejo de caja.",
+      tags: ["ingresos", "costos", "utilidad"],
+    },
+    "hogar-ciudadania": {
+      title: "Decision economica compartida",
+      copy: "Piensa en necesidades, responsabilidades y efectos para otros.",
+      tags: ["hogar", "prioridades", "responsabilidad"],
+    },
+  };
+  return (
+    contexts[dimension?.id] || {
+      title: question.type || "Situacion financiera",
+      copy: "Lee el contexto y reconoce la informacion clave para decidir.",
+      tags: [question.competence || "criterio", question.difficulty || "lectura"],
+    }
+  );
+}
+
+function renderContextThumbnail(type) {
+  if (type === "chat") {
+    return `
+      <i class="thumb-bubble wide"></i>
+      <i class="thumb-bubble short"></i>
+      <i class="thumb-shield"></i>
+    `;
+  }
+  if (type === "installments") {
+    return `
+      <i class="thumb-column tall"></i>
+      <i class="thumb-column"></i>
+      <i class="thumb-column low"></i>
+    `;
+  }
+  if (type === "decision") {
+    return `
+      <i class="thumb-node"></i>
+      <i class="thumb-line"></i>
+      <i class="thumb-node muted"></i>
+      <i class="thumb-line short"></i>
+      <i class="thumb-node strong"></i>
+    `;
+  }
+  return `
+    <i class="thumb-row"></i>
+    <i class="thumb-row medium"></i>
+    <i class="thumb-row short"></i>
+    <i class="thumb-total"></i>
   `;
 }
 

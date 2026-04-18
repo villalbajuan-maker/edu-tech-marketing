@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const appRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const output = resolve(appRoot, "dist");
-const entries = ["index.html", "styles.css", "src"];
+const entries = ["index.html", "styles.css", "src", "assets"];
 
 rmSync(output, { force: true, recursive: true });
 mkdirSync(output, { recursive: true });
@@ -32,4 +32,3 @@ writeFileSync(
 );
 
 console.log(`Diagnostico V1 listo en ${output}`);
-

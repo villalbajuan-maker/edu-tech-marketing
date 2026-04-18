@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title desc">
+  <title id="title">Comprobante de compra</title>
+  <desc id="desc">Ilustracion sobria de un recibo con lineas de valores y total.</desc>
+  <rect width="240" height="160" fill="#f7faf7"/>
+  <rect x="42" y="18" width="118" height="124" rx="8" fill="#ffffff" stroke="#d6dfd8" stroke-width="3"/>
+  <path d="M54 42h68M54 62h88M54 82h76" stroke="#247a5a" stroke-width="8" stroke-linecap="round" opacity=".45"/>
+  <path d="M54 111h78" stroke="#247a5a" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="181" cy="46" r="18" fill="#eaf6ef" stroke="#247a5a" stroke-width="4"/>
+  <path d="M172 47l7 7 13-17" fill="none" stroke="#247a5a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M42 142l12-9 12 9 12-9 12 9 12-9 12 9 12-9 12 9 12-9 10 9" fill="none" stroke="#d6dfd8" stroke-width="3"/>
+</svg>

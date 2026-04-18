@@ -277,8 +277,8 @@ function renderInlineContextSplash(question, dimension, mode = "active") {
   const compactClass = mode === "compact" ? "compact-context" : "";
   return `
     <div class="inline-context-splash chat-message ${compactClass}">
-      <div class="inline-context-thumbnail ${visualType}-thumbnail" aria-hidden="true">
-        ${renderContextThumbnail(visualType)}
+      <div class="inline-context-thumbnail ${visualType}-thumbnail">
+        <img src="${getContextImageSrc(visualType)}" alt="${escapeHtml(context.imageAlt)}" />
       </div>
       <div class="inline-context-copy">
         <span>Marco de situacion</span>
@@ -298,31 +298,37 @@ function getInlineContext(question, dimension) {
       title: "Compra cotidiana con informacion verificable",
       copy: "Observa valores, pagos, descuentos o comprobantes antes de decidir.",
       tags: ["precio", "total", "comprobante"],
+      imageAlt: "Ilustracion de un comprobante de compra con valores por revisar.",
     },
     "presupuesto-planificacion": {
       title: "Decision con dinero limitado",
       copy: "Identifica prioridades, compromisos y metas antes de elegir.",
       tags: ["prioridad", "ahorro", "plan"],
+      imageAlt: "Ilustracion de presupuesto dividido entre prioridades y ahorro.",
     },
     "credito-deuda": {
       title: "Compromiso financiero hacia adelante",
       copy: "Compara cuotas, costo total y consecuencias futuras.",
       tags: ["cuotas", "costo total", "deuda"],
+      imageAlt: "Ilustracion de barras comparando cuotas y costo total.",
     },
     "riesgo-digital": {
       title: "Entorno digital con senales de riesgo",
       copy: "Verifica fuente, seguridad y datos antes de actuar.",
       tags: ["verificacion", "datos", "seguridad"],
+      imageAlt: "Ilustracion de mensajes digitales con un escudo de verificacion.",
     },
     "trabajo-empresa": {
       title: "Ingreso, costo y resultado",
       copy: "Relaciona ventas, gastos, utilidad y manejo de caja.",
       tags: ["ingresos", "costos", "utilidad"],
+      imageAlt: "Ilustracion de barras para comparar ingresos, costos y utilidad.",
     },
     "hogar-ciudadania": {
       title: "Decision economica compartida",
       copy: "Piensa en necesidades, responsabilidades y efectos para otros.",
       tags: ["hogar", "prioridades", "responsabilidad"],
+      imageAlt: "Ilustracion de una ruta de decision economica compartida.",
     },
   };
   return (
@@ -330,40 +336,25 @@ function getInlineContext(question, dimension) {
       title: question.type || "Situacion financiera",
       copy: "Lee el contexto y reconoce la informacion clave para decidir.",
       tags: [question.competence || "criterio", question.difficulty || "lectura"],
+      imageAlt: "Ilustracion de una decision financiera con alternativas.",
     }
   );
 }
 
-function renderContextThumbnail(type) {
+function getContextImageSrc(type) {
   if (type === "chat") {
-    return `
-      <i class="thumb-bubble wide"></i>
-      <i class="thumb-bubble short"></i>
-      <i class="thumb-shield"></i>
-    `;
+    return "assets/context/chat-risk.svg";
   }
   if (type === "installments") {
-    return `
-      <i class="thumb-column tall"></i>
-      <i class="thumb-column"></i>
-      <i class="thumb-column low"></i>
-    `;
+    return "assets/context/installments.svg";
   }
   if (type === "decision") {
-    return `
-      <i class="thumb-node"></i>
-      <i class="thumb-line"></i>
-      <i class="thumb-node muted"></i>
-      <i class="thumb-line short"></i>
-      <i class="thumb-node strong"></i>
-    `;
+    return "assets/context/decision.svg";
   }
-  return `
-    <i class="thumb-row"></i>
-    <i class="thumb-row medium"></i>
-    <i class="thumb-row short"></i>
-    <i class="thumb-total"></i>
-  `;
+  if (type === "budget" || type === "cashbook") {
+    return "assets/context/budget.svg";
+  }
+  return "assets/context/receipt.svg";
 }
 
 function renderStudentAnswerBubble(question, selected) {
@@ -1248,8 +1239,8 @@ function scrollConversationThread() {
   if (!thread) return;
   window.requestAnimationFrame(() => {
     const activeExchange = thread.querySelector("[data-active-exchange]");
-    if (activeExchange && state.currentIndex < state.revealedIndex) {
-      thread.scrollTop = activeExchange.offsetTop - thread.offsetTop;
+    if (activeExchange) {
+      thread.scrollTop = Math.max(0, activeExchange.offsetTop - thread.offsetTop - 8);
       return;
     }
     thread.scrollTop = thread.scrollHeight;

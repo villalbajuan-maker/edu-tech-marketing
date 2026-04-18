@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" role="img" aria-labelledby="title desc">
+  <title id="title">Presupuesto y prioridades</title>
+  <desc id="desc">Ilustracion de distribucion de dinero entre necesidades, ahorro y opcion de compra.</desc>
+  <rect width="240" height="160" fill="#f7faf7"/>
+  <rect x="26" y="28" width="188" height="104" rx="10" fill="#ffffff" stroke="#d6dfd8" stroke-width="3"/>
+  <circle cx="72" cy="80" r="34" fill="#eaf6ef" stroke="#247a5a" stroke-width="4"/>
+  <path d="M72 52v56M44 80h56" stroke="#247a5a" stroke-width="7" stroke-linecap="round" opacity=".45"/>
+  <path d="M137 53h48M137 77h34M137 101h58" stroke="#247a5a" stroke-width="9" stroke-linecap="round"/>
+  <path d="M137 118h34" stroke="#98b7a5" stroke-width="7" stroke-linecap="round"/>
+</svg>

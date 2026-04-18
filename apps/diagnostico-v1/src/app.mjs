@@ -15,6 +15,8 @@ let companionAudioChunks = [];
 let companionAudioStream = null;
 let companionDiscardRecording = false;
 let companionScrollTarget = "";
+const diagnosticImageCache = new Map();
+const diagnosticImageRequests = new Map();
 
 const state = {
   view: "inicio",
@@ -144,6 +146,7 @@ function render() {
   bindEvents();
   scrollConversationThread();
   scrollCompanionThread();
+  hydrateDiagnosticContextImages();
 }
 
 function renderView() {
@@ -449,12 +452,74 @@ function getInlineContext(question, dimension) {
 
 function renderInlineThumbnail(thumbnail, fallbackType) {
   const type = thumbnail.type || fallbackType || "decision";
+  const query = getDiagnosticImageQuery(type, thumbnail.label);
   return `
-    <span class="inline-thumbnail ${type}-thumbnail">
-      ${renderThumbnailGlyph(type)}
+    <span class="inline-thumbnail ${type}-thumbnail" data-diagnostic-image data-image-type="${escapeHtml(type)}" data-image-query="${escapeHtml(query)}">
+      <span class="inline-thumbnail-image">
+        ${renderThumbnailGlyph(type)}
+      </span>
       <b>${escapeHtml(thumbnail.label)}</b>
     </span>
   `;
+}
+
+function getDiagnosticImageQuery(type, label) {
+  const queryByType = {
+    receipt: "receipt payment shopping",
+    budget: "budget planning notebook",
+    installments: "calculator payment plan",
+    chat: "student phone online security",
+    cashbook: "small business cash register",
+    decision: "student decision planning",
+  };
+  return queryByType[type] || `${label || "financial"} education context`;
+}
+
+async function hydrateDiagnosticContextImages() {
+  const targets = [...document.querySelectorAll("[data-diagnostic-image]")].filter((target) => !target.dataset.imageLoaded);
+  if (!targets.length) return;
+
+  await Promise.all(
+    targets.map(async (target) => {
+      target.dataset.imageLoaded = "true";
+      const imageType = target.dataset.imageType || "decision";
+      const query = target.dataset.imageQuery || "";
+      const cacheKey = `${imageType}:${query}`;
+
+      try {
+        const cached = diagnosticImageCache.get(cacheKey);
+        const media = cached || (await fetchDiagnosticImage(imageType, query));
+        if (!media?.imageUrl) return;
+        diagnosticImageCache.set(cacheKey, media);
+
+        const imageSlot = target.querySelector(".inline-thumbnail-image");
+        if (!imageSlot) return;
+        imageSlot.style.backgroundImage = `url("${media.imageUrl}")`;
+        imageSlot.classList.add("has-image");
+        imageSlot.innerHTML = "";
+
+        if (media.credit && !target.querySelector(".inline-image-credit")) {
+          target.insertAdjacentHTML(
+            "beforeend",
+            `<a class="inline-image-credit" href="${escapeHtml(media.sourceUrl || "https://unsplash.com/")}" target="_blank" rel="noopener noreferrer">${escapeHtml(media.credit)}</a>`,
+          );
+        }
+      } catch (error) {
+        target.dataset.imageLoaded = "error";
+      }
+    }),
+  );
+}
+
+async function fetchDiagnosticImage(type, query) {
+  const cacheKey = `${type}:${query}`;
+  if (diagnosticImageRequests.has(cacheKey)) return diagnosticImageRequests.get(cacheKey);
+
+  const request = fetch(`/api/diagnostic-media?type=${encodeURIComponent(type)}&query=${encodeURIComponent(query)}`).then((response) =>
+    response.ok && response.status !== 204 ? response.json() : null,
+  );
+  diagnosticImageRequests.set(cacheKey, request);
+  return request;
 }
 
 function renderThumbnailGlyph(type) {

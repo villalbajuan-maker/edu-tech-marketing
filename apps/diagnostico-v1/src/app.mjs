@@ -1043,10 +1043,10 @@ function renderCompanionReferences(content) {
         .map(
           (reference) => `
             <article class="companion-reference-card">
-              <span class="reference-thumb" data-reference-image data-image-query="${escapeHtml(reference.imageQuery || reference.title)}">${escapeHtml(reference.label)}</span>
-              <span>
-                <a class="reference-main-link" href="${escapeHtml(reference.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(reference.title)}</a>
+              <span class="reference-thumb" data-reference-image data-image-query="${escapeHtml(reference.imageQuery || reference.title)}" aria-hidden="true"></span>
+              <span class="reference-body">
                 <small>${escapeHtml(reference.source)}</small>
+                <a class="reference-main-link" href="${escapeHtml(reference.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(reference.title)}</a>
                 <em>${escapeHtml(reference.summary)}</em>
               </span>
             </article>
@@ -1108,9 +1108,8 @@ async function hydrateCompanionReferenceImages() {
         if (response.status === 204) return;
         const media = await response.json();
         if (!media?.imageUrl) return;
-        target.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.12), rgba(0,0,0,0.34)), url("${media.imageUrl}")`;
+        target.style.backgroundImage = `url("${media.imageUrl}")`;
         target.classList.add("has-image");
-        target.innerHTML = `<span>${escapeHtml(target.textContent || "")}</span>`;
         const card = target.closest(".companion-reference-card");
         if (card && media.credit) {
           card.setAttribute("title", media.credit);

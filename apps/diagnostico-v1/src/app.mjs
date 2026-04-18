@@ -577,7 +577,7 @@ function renderCompanionModal() {
               ? state.companionMessages.map(renderCompanionMessage).join("")
               : `<div class="companion-empty">Haz una pregunta sobre el reporte, la prueba, las brechas, el marco OECD/PISA o la ruta hacia piloto.</div>`
           }
-          ${state.companionLoading ? `<div class="companion-message assistant"><strong>Companion</strong><p>Analizando el reporte y el contexto...</p></div>` : ""}
+          ${state.companionLoading ? renderTypingIndicator() : ""}
         </div>
 
         <form class="companion-form" id="companionForm">
@@ -595,6 +595,19 @@ function renderCompanionMessage(message) {
     <div class="companion-message ${message.role}">
       <strong>${message.role === "assistant" ? "Companion" : "Usuario"}</strong>
       <p>${escapeHtml(message.content)}</p>
+    </div>
+  `;
+}
+
+function renderTypingIndicator() {
+  return `
+    <div class="companion-message assistant typing-message" aria-live="polite">
+      <strong>Companion</strong>
+      <div class="typing-dots" aria-label="El Companion esta escribiendo">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
   `;
 }

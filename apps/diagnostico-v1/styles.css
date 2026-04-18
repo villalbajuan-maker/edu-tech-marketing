@@ -889,92 +889,148 @@ button {
 
 .inline-context-splash {
   display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
-  gap: 14px;
-  width: min(760px, 92%);
-  border: 1px solid rgba(36, 122, 90, 0.24);
+  gap: 7px;
+  width: fit-content;
+  max-width: min(680px, 92%);
   border-radius: 8px;
-  padding: 12px;
-  background: #fff;
-  box-shadow: 0 10px 24px rgba(23, 33, 28, 0.06);
+  padding: 8px 9px;
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .inline-context-splash.compact-context {
-  width: min(620px, 88%);
-  opacity: 0.76;
+  opacity: 0.7;
 }
 
-.inline-context-thumbnail {
-  position: relative;
-  display: grid;
-  align-content: center;
-  justify-items: center;
-  min-height: 88px;
-  border: 1px solid #d9e5dc;
-  border-radius: 8px;
-  background:
-    linear-gradient(145deg, rgba(36, 122, 90, 0.08), rgba(255, 255, 255, 0.9)),
-    #f7faf7;
-  overflow: hidden;
-}
-
-.inline-context-thumbnail img {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.inline-context-thumbnail::before {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  inset: 10px;
-  border: 1px solid rgba(36, 122, 90, 0.12);
-  border-radius: 8px;
-}
-
-.inline-context-copy {
-  display: grid;
-  align-content: center;
-  gap: 5px;
-}
-
-.inline-context-copy span {
+.inline-context-label {
   color: var(--green-dark);
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-.inline-context-copy strong {
-  color: var(--ink);
-  font-size: 17px;
-}
-
-.inline-context-copy p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.context-tags {
+.inline-thumbnail-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 2px;
+  gap: 8px;
 }
 
-.context-tags b {
-  border-radius: 999px;
-  padding: 4px 7px;
-  background: #edf5ef;
+.inline-thumbnail {
+  display: grid;
+  grid-template-rows: 42px auto;
+  justify-items: center;
+  gap: 5px;
+  width: 82px;
+  border: 1px solid rgba(36, 122, 90, 0.2);
+  border-radius: 8px;
+  padding: 7px;
+  background: #fff;
+}
+
+.inline-thumbnail b {
   color: var(--green-dark);
   font-size: 11px;
   font-weight: 900;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.mini-row,
+.mini-total,
+.mini-line,
+.mini-path {
+  display: block;
+  border-radius: 999px;
+  background: rgba(36, 122, 90, 0.32);
+}
+
+.mini-row {
+  width: 44px;
+  height: 6px;
+  margin-top: 6px;
+}
+
+.mini-row.short {
+  width: 30px;
+  margin-top: 5px;
+}
+
+.mini-total {
+  width: 48px;
+  height: 8px;
+  margin-top: 6px;
+  background: var(--green);
+}
+
+.mini-bubble {
+  display: block;
+  width: 48px;
+  height: 14px;
+  border-radius: 8px;
+  background: rgba(36, 122, 90, 0.22);
+  margin-top: 5px;
+}
+
+.mini-bubble.short {
+  width: 34px;
+  margin-left: 16px;
+  background: rgba(36, 122, 90, 0.42);
+}
+
+.mini-bar {
+  display: inline-block;
+  width: 12px;
+  height: 28px;
+  margin: 7px 2px 0;
+  border-radius: 5px 5px 2px 2px;
+  background: rgba(36, 122, 90, 0.35);
+  vertical-align: bottom;
+}
+
+.mini-bar.tall {
+  height: 36px;
+  margin-top: 0;
+  background: var(--green);
+}
+
+.mini-bar.low {
+  height: 20px;
+  margin-top: 15px;
+}
+
+.mini-pie {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin-top: 3px;
+  border: 7px solid rgba(36, 122, 90, 0.25);
+  border-top-color: var(--green);
+  border-radius: 999px;
+}
+
+.mini-line {
+  width: 44px;
+  height: 5px;
+  margin-top: 4px;
+}
+
+.mini-node {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  margin-top: 13px;
+  border-radius: 999px;
+  background: rgba(36, 122, 90, 0.28);
+}
+
+.mini-node.strong {
+  background: var(--green);
+}
+
+.mini-path {
+  display: inline-block;
+  width: 18px;
+  height: 3px;
+  margin: 0 2px 5px;
 }
 
 .previous-question-message,
@@ -1648,12 +1704,7 @@ button {
   }
 
   .inline-context-splash {
-    grid-template-columns: 92px minmax(0, 1fr);
     width: 94%;
-  }
-
-  .inline-context-thumbnail {
-    min-height: 78px;
   }
 
   .metric-value {
@@ -1760,12 +1811,7 @@ button {
 
   .inline-context-splash,
   .inline-context-splash.compact-context {
-    grid-template-columns: 1fr;
     width: 100%;
-  }
-
-  .inline-context-thumbnail {
-    min-height: 70px;
   }
 
   .view-toggle {

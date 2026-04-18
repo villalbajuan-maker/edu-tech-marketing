@@ -145,7 +145,7 @@ Decision de implementacion:
 
 - la prueba usa un shell tipo conversacion institucional;
 - cada situacion entra como mensajes del diagnostico;
-- antes de cada situacion aparece una tarjeta contextual inline con imagen pedagogica;
+- antes de cada situacion aparece una tira breve de thumbnails contextuales inline, sin enlaces;
 - la respuesta seleccionada aparece como burbuja del estudiante;
 - las respuestas anteriores quedan en un historial acumulado para reforzar la sensacion de avance conversacional;
 - al avanzar, aparece una senal de escritura antes de cargar la siguiente pregunta;

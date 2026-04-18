@@ -277,16 +277,9 @@ function renderInlineContextSplash(question, dimension, mode = "active") {
   const compactClass = mode === "compact" ? "compact-context" : "";
   return `
     <div class="inline-context-splash chat-message ${compactClass}">
-      <div class="inline-context-thumbnail ${visualType}-thumbnail">
-        <img src="${getContextImageSrc(visualType)}" alt="${escapeHtml(context.imageAlt)}" />
-      </div>
-      <div class="inline-context-copy">
-        <span>Marco de situacion</span>
-        <strong>${escapeHtml(context.title)}</strong>
-        <p>${escapeHtml(context.copy)}</p>
-        <div class="context-tags">
-          ${context.tags.map((tag) => `<b>${escapeHtml(tag)}</b>`).join("")}
-        </div>
+      <span class="inline-context-label">Contexto de la situacion</span>
+      <div class="inline-thumbnail-row" aria-label="${escapeHtml(context.copy)}">
+        ${context.thumbnails.map((thumbnail) => renderInlineThumbnail(thumbnail, visualType)).join("")}
       </div>
     </div>
   `;
@@ -298,37 +291,61 @@ function getInlineContext(question, dimension) {
       title: "Compra cotidiana con informacion verificable",
       copy: "Observa valores, pagos, descuentos o comprobantes antes de decidir.",
       tags: ["precio", "total", "comprobante"],
-      imageAlt: "Ilustracion de un comprobante de compra con valores por revisar.",
+      thumbnails: [
+        { label: "Precio", type: "receipt" },
+        { label: "Total", type: "receipt" },
+        { label: "Cambio", type: "decision" },
+      ],
     },
     "presupuesto-planificacion": {
       title: "Decision con dinero limitado",
       copy: "Identifica prioridades, compromisos y metas antes de elegir.",
       tags: ["prioridad", "ahorro", "plan"],
-      imageAlt: "Ilustracion de presupuesto dividido entre prioridades y ahorro.",
+      thumbnails: [
+        { label: "Prioridad", type: "budget" },
+        { label: "Ahorro", type: "budget" },
+        { label: "Opcion", type: "decision" },
+      ],
     },
     "credito-deuda": {
       title: "Compromiso financiero hacia adelante",
       copy: "Compara cuotas, costo total y consecuencias futuras.",
       tags: ["cuotas", "costo total", "deuda"],
-      imageAlt: "Ilustracion de barras comparando cuotas y costo total.",
+      thumbnails: [
+        { label: "Cuotas", type: "installments" },
+        { label: "Total", type: "receipt" },
+        { label: "Futuro", type: "decision" },
+      ],
     },
     "riesgo-digital": {
       title: "Entorno digital con senales de riesgo",
       copy: "Verifica fuente, seguridad y datos antes de actuar.",
       tags: ["verificacion", "datos", "seguridad"],
-      imageAlt: "Ilustracion de mensajes digitales con un escudo de verificacion.",
+      thumbnails: [
+        { label: "Mensaje", type: "chat" },
+        { label: "Datos", type: "receipt" },
+        { label: "Verificar", type: "decision" },
+      ],
     },
     "trabajo-empresa": {
       title: "Ingreso, costo y resultado",
       copy: "Relaciona ventas, gastos, utilidad y manejo de caja.",
       tags: ["ingresos", "costos", "utilidad"],
-      imageAlt: "Ilustracion de barras para comparar ingresos, costos y utilidad.",
+      thumbnails: [
+        { label: "Ingreso", type: "budget" },
+        { label: "Costo", type: "receipt" },
+        { label: "Utilidad", type: "installments" },
+      ],
     },
     "hogar-ciudadania": {
       title: "Decision economica compartida",
       copy: "Piensa en necesidades, responsabilidades y efectos para otros.",
       tags: ["hogar", "prioridades", "responsabilidad"],
-      imageAlt: "Ilustracion de una ruta de decision economica compartida.",
+      thumbnails: [
+        { label: "Hogar", type: "decision" },
+        { label: "Necesidad", type: "budget" },
+        { label: "Acuerdo", type: "chat" },
+      ],
     },
   };
   return (
@@ -336,25 +353,56 @@ function getInlineContext(question, dimension) {
       title: question.type || "Situacion financiera",
       copy: "Lee el contexto y reconoce la informacion clave para decidir.",
       tags: [question.competence || "criterio", question.difficulty || "lectura"],
-      imageAlt: "Ilustracion de una decision financiera con alternativas.",
+      thumbnails: [
+        { label: "Contexto", type: question.visual?.type || "decision" },
+        { label: "Decision", type: "decision" },
+      ],
     }
   );
 }
 
-function getContextImageSrc(type) {
+function renderInlineThumbnail(thumbnail, fallbackType) {
+  const type = thumbnail.type || fallbackType || "decision";
+  return `
+    <span class="inline-thumbnail ${type}-thumbnail">
+      ${renderThumbnailGlyph(type)}
+      <b>${escapeHtml(thumbnail.label)}</b>
+    </span>
+  `;
+}
+
+function renderThumbnailGlyph(type) {
   if (type === "chat") {
-    return "assets/context/chat-risk.svg";
+    return `
+      <i class="mini-bubble wide"></i>
+      <i class="mini-bubble short"></i>
+    `;
   }
   if (type === "installments") {
-    return "assets/context/installments.svg";
-  }
-  if (type === "decision") {
-    return "assets/context/decision.svg";
+    return `
+      <i class="mini-bar tall"></i>
+      <i class="mini-bar"></i>
+      <i class="mini-bar low"></i>
+    `;
   }
   if (type === "budget" || type === "cashbook") {
-    return "assets/context/budget.svg";
+    return `
+      <i class="mini-pie"></i>
+      <i class="mini-line"></i>
+    `;
   }
-  return "assets/context/receipt.svg";
+  if (type === "receipt") {
+    return `
+      <i class="mini-row"></i>
+      <i class="mini-row short"></i>
+      <i class="mini-total"></i>
+    `;
+  }
+  return `
+    <i class="mini-node"></i>
+    <i class="mini-path"></i>
+    <i class="mini-node strong"></i>
+  `;
 }
 
 function renderStudentAnswerBubble(question, selected) {
@@ -1239,6 +1287,10 @@ function scrollConversationThread() {
   if (!thread) return;
   window.requestAnimationFrame(() => {
     const activeExchange = thread.querySelector("[data-active-exchange]");
+    if (state.questionTransition) {
+      thread.scrollTop = thread.scrollHeight;
+      return;
+    }
     if (activeExchange) {
       thread.scrollTop = Math.max(0, activeExchange.offsetTop - thread.offsetTop - 8);
       return;

@@ -187,6 +187,17 @@ Incluye:
 
 No agrega persistencia real, historial por colegio, cuentas, auditoria ni integracion con plataforma.
 
+## Evolucion V1.4.1
+
+La V1.4.1 reorganiza la arquitectura de UI:
+
+- reduce la navegacion principal;
+- separa Aplicar diagnostico, Demo institucional e Interno;
+- mueve QA, sesion colegio y reporte tecnico a Interno;
+- conserva Demo institucional como vista para colegios;
+- reserva Companion para el modal IA;
+- renombra el panel fijo como Lectura decisional.
+
 ## QA disponible
 
 La app incluye cuatro escenarios de simulacion:

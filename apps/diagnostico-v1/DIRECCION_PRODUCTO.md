@@ -113,6 +113,24 @@ Incluye:
 - integracion con OpenAI Responses API;
 - fallback local si no hay llave configurada.
 
+### V1.4.1
+
+Arquitectura UI y jerarquia de vistas.
+
+Estado: implementada.
+
+Objetivo:
+
+> Reducir ruido de navegacion y separar claramente la aplicacion del estudiante, la demo institucional y las herramientas internas.
+
+Incluye:
+
+- navegacion principal reducida;
+- vista Interno para QA, sesion colegio y reporte tecnico;
+- Demo institucional como vista comercial principal;
+- Companion reservado para el modal con IA;
+- panel fijo renombrado como Lectura decisional.
+
 ### V1.5
 
 Modo conversacional guiado para estudiante.

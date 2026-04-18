@@ -117,6 +117,28 @@ button {
   color: white;
 }
 
+.subtabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.subtab {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  color: var(--ink);
+  padding: 10px 12px;
+  font-weight: 800;
+}
+
+.subtab.active {
+  border-color: var(--green);
+  background: var(--green);
+  color: white;
+}
+
 .main {
   max-width: 1240px;
   margin: 0 auto;

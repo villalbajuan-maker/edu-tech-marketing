@@ -1,4 +1,4 @@
-# App Diagnostico V1.3
+# App Diagnostico V1.4.1
 
 UI funcional del **Diagnostico Escolar de Competencias Financieras**.
 
@@ -21,6 +21,8 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 - Toggle de audiencia: vista colegio y vista interna.
 - Modo interno comercial con oportunidad, objeciones, mensaje sugerido y siguiente accion.
 - Companion Institucional en modal con preguntas sugeridas y conexion LLM via `/api/companion`.
+- Navegacion principal reorganizada por audiencia: aplicacion, demo institucional e interno.
+- Vista interna para QA, sesion colegio y reporte tecnico.
 - Simulacion QA de 300 estudiantes.
 - Script de QA por consola.
 
@@ -74,6 +76,16 @@ OPENAI_MODEL
 Documento rector:
 
 [../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md](../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md)
+
+## V1.4.1
+
+La V1.4.1 reorganiza la UI para reducir ruido:
+
+- la navegacion principal queda en Inicio, Aplicar diagnostico, Demo institucional e Interno;
+- QA, sesion colegio y reporte tecnico pasan a Interno;
+- Demo institucional queda como vista principal para colegios;
+- Companion queda reservado para el modal IA;
+- el panel fijo de reglas pasa a llamarse Lectura decisional.
 
 ## Como probar localmente
 

@@ -12,6 +12,7 @@ const defaultMeta = {
 
 const state = {
   view: "inicio",
+  internalSection: "qa",
   quizStage: "welcome",
   currentIndex: 0,
   meta: { ...defaultMeta },
@@ -37,16 +38,14 @@ function render() {
             <div class="brand-mark">FDE</div>
             <div>
               <h1 class="brand-title">Diagnostico Escolar de Competencias Financieras</h1>
-              <p class="brand-subtitle">V1.3 · instrumento diagnostico institucional</p>
+              <p class="brand-subtitle">V1.4.1 · arquitectura UI del diagnostico</p>
             </div>
           </div>
           <nav class="tabs">
             ${tab("inicio", "Inicio")}
-            ${tab("prueba", "Aplicar prueba")}
-            ${tab("sesion", "Sesion colegio")}
-            ${tab("reporte", "Reporte vivo")}
+            ${tab("prueba", "Aplicar diagnostico")}
             ${tab("demo", "Demo institucional")}
-            ${tab("qa", "QA 300 estudiantes")}
+            ${tab("interno", "Interno")}
           </nav>
         </div>
       </header>
@@ -59,10 +58,8 @@ function render() {
 
 function renderView() {
   if (state.view === "prueba") return renderQuizExperience();
-  if (state.view === "sesion") return renderSessionDashboard();
-  if (state.view === "reporte") return renderReport(state.studentReport || state.cohortResult.report, state.studentReport ? "individual" : "cohort");
   if (state.view === "demo") return renderInstitutionalDemo();
-  if (state.view === "qa") return renderQa();
+  if (state.view === "interno") return renderInternalWorkbench();
   return renderHome();
 }
 
@@ -70,14 +67,13 @@ function renderHome() {
   return `
     <section class="intro-grid">
       <div class="panel soft">
-        <p class="kicker">Producto V1.3</p>
-        <h2 class="headline">Un instrumento diagnostico institucional para medir, interpretar y decidir.</h2>
-        <p class="lead">La V1.3 conecta prueba, reporte vivo, visuales pedagogicos, companion decisional y demo institucional para mostrar como un colegio podria avanzar hacia un piloto basado en evidencia.</p>
+        <p class="kicker">Producto V1.4.1</p>
+        <h2 class="headline">Un instrumento diagnostico institucional con experiencia clara por audiencia.</h2>
+        <p class="lead">La navegacion separa aplicacion del estudiante, demo institucional y herramientas internas para que el diagnostico se pueda probar, presentar y revisar sin mezclar audiencias.</p>
         <div class="actions">
           <button class="button" data-view="prueba">Iniciar diagnostico</button>
           <button class="button secondary" data-view="demo">Ver demo institucional</button>
-          <button class="button secondary" data-view="sesion">Ver sesion colegio</button>
-          <button class="button secondary" data-view="qa">Ejecutar QA</button>
+          <button class="button secondary" data-view="interno">Abrir interno</button>
         </div>
       </div>
       <aside class="panel">
@@ -232,7 +228,7 @@ function renderDoneStep() {
         <h2 class="headline">Gracias. Tus respuestas fueron registradas.</h2>
         <p class="lead">El colegio recibira una lectura agregada para orientar una ruta de educacion financiera. En esta version de prueba tambien puedes ver el reporte generado.</p>
         <div class="actions">
-          <button class="button" data-view="reporte">Ver reporte</button>
+          <button class="button" data-internal-section="report">Ver reporte tecnico</button>
           <button class="button secondary" id="restartQuiz">Nueva aplicacion</button>
         </div>
       </article>
@@ -285,10 +281,40 @@ function renderSessionDashboard() {
           .join("")}
       </div>
       <div class="actions">
-        <button class="button" data-view="reporte">Ver reporte institucional simulado</button>
-        <button class="button secondary" data-view="qa">Cambiar escenario QA</button>
+        <button class="button" data-internal-section="report">Ver reporte tecnico</button>
+        <button class="button secondary" data-internal-section="qa">Cambiar escenario QA</button>
       </div>
     </section>
+  `;
+}
+
+function renderInternalWorkbench() {
+  const activeSection = state.internalSection || "qa";
+  return `
+    <section class="panel soft">
+      <p class="kicker">Workbench interno</p>
+      <h2 class="headline">Herramientas para revisar, simular y operar la demo.</h2>
+      <p class="lead">Esta zona no es la vista principal para colegios. Reune QA, sesion simulada y reporte tecnico para el equipo de producto, pedagogia y comercial.</p>
+      <div class="subtabs">
+        ${subtab("qa", "QA 300 estudiantes", activeSection)}
+        ${subtab("session", "Sesion colegio", activeSection)}
+        ${subtab("report", "Reporte tecnico", activeSection)}
+      </div>
+    </section>
+    ${activeSection === "session" ? renderSessionDashboard() : ""}
+    ${activeSection === "report" ? renderTechnicalReport() : ""}
+    ${activeSection === "qa" ? renderQa() : ""}
+  `;
+}
+
+function renderTechnicalReport() {
+  return `
+    <section class="report-section">
+      <p class="kicker">Reporte tecnico</p>
+      <h3>Lectura cruda para validacion interna</h3>
+      <p class="lead">Usa esta vista para revisar scoring, dimensiones, brechas, piloto recomendado y lectura decisional sin presentarla como demo comercial principal.</p>
+    </section>
+    ${renderReport(state.studentReport || state.cohortResult.report, state.studentReport ? "individual" : "cohort")}
   `;
 }
 
@@ -367,7 +393,7 @@ function renderReport(report, mode) {
         </article>
       </div>
       <aside class="companion">
-        <p class="kicker">Companion decisional</p>
+        <p class="kicker">Lectura decisional</p>
         <h3>Lectura para decidir</h3>
         <div class="companion-list">
           <div class="companion-item"><strong>Lectura rapida</strong><span>${companion.summary}</span></div>
@@ -378,6 +404,9 @@ function renderReport(report, mode) {
         </div>
         <h3 class="companion-subtitle">Preguntas utiles</h3>
         <ul class="list">${companion.questions.map((question) => `<li>${question}</li>`).join("")}</ul>
+        <div class="actions">
+          <button class="button secondary" data-open-companion>Abrir Companion</button>
+        </div>
       </aside>
     </section>
   `;
@@ -786,6 +815,14 @@ function bindEvents() {
     });
   });
 
+  document.querySelectorAll("[data-internal-section]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.internalSection = button.dataset.internalSection;
+      state.view = "interno";
+      render();
+    });
+  });
+
   document.querySelectorAll("[data-quiz-stage]").forEach((button) => {
     button.addEventListener("click", () => {
       state.quizStage = button.dataset.quizStage;
@@ -951,6 +988,10 @@ function getAnsweredCount() {
 
 function tab(view, label) {
   return `<button class="tab ${state.view === view ? "active" : ""}" data-view="${view}">${label}</button>`;
+}
+
+function subtab(section, label, activeSection) {
+  return `<button class="subtab ${activeSection === section ? "active" : ""}" data-internal-section="${section}">${label}</button>`;
 }
 
 async function askCompanion(rawQuestion) {

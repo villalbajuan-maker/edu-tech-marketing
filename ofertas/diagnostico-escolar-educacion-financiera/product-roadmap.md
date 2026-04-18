@@ -28,6 +28,7 @@ Implementacion = contrato institucional
 | V1.2 | Visuales pedagogicos + companion decisional + ruta a piloto | Implementada |
 | V1.3 | Reporte demo institucional + modo interno comercial | Implementada |
 | V1.4 | Companion Institucional con LLM contextual inicial | Implementada inicial |
+| V1.4.1 | Arquitectura UI y jerarquia de vistas | Implementada |
 | V1.5 | Modo conversacional guiado para estudiante | Definida |
 | V2.0 | IA contextual real + datos persistentes + integracion a plataforma | Futura |
 
@@ -181,6 +182,25 @@ Objetivo:
 Estado:
 
 > Implementacion inicial disponible con endpoint `/api/companion`, OpenAI Responses API y fallback local cuando no hay llave configurada.
+
+## V1.4.1
+
+Objetivo:
+
+> Reordenar la navegacion y la jerarquia de vistas para separar aplicacion del estudiante, demo institucional y herramientas internas.
+
+Incluye:
+
+- navegacion principal reducida: Inicio, Aplicar diagnostico, Demo institucional, Interno;
+- QA, sesion colegio y reporte tecnico dentro de Interno;
+- Demo institucional como vista principal para colegios;
+- toggle vista colegio / vista interna dentro de Demo institucional;
+- Companion reservado para el modal IA;
+- panel fijo renombrado como Lectura decisional.
+
+Estado:
+
+> Implementada.
 
 ## V1.5
 

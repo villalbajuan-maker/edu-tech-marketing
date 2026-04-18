@@ -15,6 +15,7 @@ const state = {
   internalSection: "qa",
   quizStage: "welcome",
   currentIndex: 0,
+  revealedIndex: 0,
   questionTransition: false,
   meta: { ...defaultMeta },
   answers: {},
@@ -150,83 +151,100 @@ function renderMetaStep() {
 
 function renderQuestionStep() {
   const question = QUESTIONS[state.currentIndex];
-  const selected = state.answers[question.id];
-  const progress = Math.round(((state.currentIndex + 1) / QUESTIONS.length) * 100);
+  const answered = getAnsweredCount();
+  const progress = Math.round(((state.revealedIndex + 1) / QUESTIONS.length) * 100);
+  const isLatestQuestion = state.currentIndex === state.revealedIndex;
+  const canReview = state.revealedIndex === QUESTIONS.length - 1;
   return `
     <section class="quiz-shell">
       <div class="progress-panel">
         <div class="progress-meta">
-          <span>Pregunta ${state.currentIndex + 1} de ${QUESTIONS.length}</span>
+          <span>Situacion ${state.revealedIndex + 1} de ${QUESTIONS.length}</span>
+          <span>${answered} respuestas registradas</span>
           <span>${progress}%</span>
         </div>
         <div class="progress-track"><div class="progress-fill" style="width:${progress}%"></div></div>
       </div>
-      ${renderSingleQuestion(question, selected)}
+      ${renderConversationDiagnostic()}
       <div class="question-nav">
-        <button class="button secondary" id="prevQuestion" ${state.currentIndex === 0 || state.questionTransition ? "disabled" : ""}>Anterior</button>
         <button class="button secondary" id="saveDemoAnswers" ${state.questionTransition ? "disabled" : ""}>Responder demo</button>
         ${
-          state.currentIndex === QUESTIONS.length - 1
+          canReview && isLatestQuestion
             ? `<button class="button" id="goReview" ${state.questionTransition ? "disabled" : ""}>Revisar y enviar</button>`
-            : `<button class="button" id="nextQuestion" ${state.questionTransition ? "disabled" : ""}>Continuar</button>`
+            : `<button class="button" id="nextQuestion" ${state.questionTransition ? "disabled" : ""}>${isLatestQuestion ? "Continuar" : "Volver al final"}</button>`
         }
       </div>
     </section>
   `;
 }
 
-function renderSingleQuestion(question, selected) {
-  const dimension = DIMENSIONS.find((item) => item.id === question.dimension);
-  const conversation = buildQuestionConversation(question, dimension);
-  const previousExchanges = QUESTIONS.slice(0, state.currentIndex).map(renderCompletedQuestionExchange).join("");
+function renderConversationDiagnostic() {
+  const activeQuestion = QUESTIONS[state.currentIndex];
+  const dimension = DIMENSIONS.find((item) => item.id === activeQuestion.dimension);
+  const exchanges = QUESTIONS.slice(0, state.revealedIndex + 1).map(renderConversationExchange).join("");
   return `
     <article class="question question-focus conversational-question">
       <div class="student-chat-shell">
         <div class="chat-shell-header">
           <div>
             <span class="chat-shell-label">Sesion diagnostica</span>
-            <h2>Conversacion guiada ${question.id}</h2>
+            <h2>Conversacion guiada</h2>
           </div>
           <div class="conversational-header">
-            <span class="badge">${dimension?.shortName || question.dimension}</span>
-            <span class="badge">Una pregunta activa</span>
+            <span class="badge">${dimension?.shortName || activeQuestion.dimension}</span>
+            <span class="badge">Hilo continuo</span>
           </div>
         </div>
         <div class="guided-thread chat-thread" aria-live="polite">
-          ${previousExchanges}
-          <div class="diagnostic-message chat-message">
-            <span>Diagnostico</span>
-            <p>${escapeHtml(conversation.intro)}</p>
-          </div>
-          <div class="diagnostic-message chat-message">
-            <span>Situacion</span>
-            <p>${escapeHtml(conversation.caseText)}</p>
-          </div>
-          ${question.visual ? `<div class="artifact-message chat-message artifact-bubble">${renderQuestionVisual(question.visual)}</div>` : ""}
-          <div class="diagnostic-message chat-message question-message">
-            <span>Pregunta</span>
-            <p>${escapeHtml(conversation.questionText)}</p>
-          </div>
-          ${renderStudentAnswerBubble(question, selected)}
+          ${exchanges}
           ${state.questionTransition ? renderDiagnosticTypingIndicator() : ""}
-        </div>
-        <div class="student-response-panel">
-          <p>Selecciona la respuesta que mejor representa tu decision.</p>
-          <div class="options conversational-options" aria-label="Opciones de respuesta">
-            ${question.options
-              .map(
-                (option, index) => `
-                  <label class="option ${Number(selected) === index ? "selected" : ""} ${state.questionTransition ? "disabled" : ""}">
-                    <input type="radio" name="current-question" value="${index}" ${Number(selected) === index ? "checked" : ""} ${state.questionTransition ? "disabled" : ""} />
-                    <span>${String.fromCharCode(65 + index)}. ${escapeHtml(option)}</span>
-                  </label>
-                `,
-              )
-              .join("")}
-          </div>
         </div>
       </div>
     </article>
+  `;
+}
+
+function renderConversationExchange(question, index) {
+  if (index === state.currentIndex) {
+    return renderActiveQuestionExchange(question, state.answers[question.id]);
+  }
+  return renderCompletedQuestionExchange(question);
+}
+
+function renderActiveQuestionExchange(question, selected) {
+  const dimension = DIMENSIONS.find((item) => item.id === question.dimension);
+  const conversation = buildQuestionConversation(question, dimension);
+  return `
+    <div class="active-exchange-marker" data-active-exchange></div>
+    <div class="diagnostic-message chat-message">
+      <span>Diagnostico</span>
+      <p>${escapeHtml(conversation.intro)}</p>
+    </div>
+    <div class="diagnostic-message chat-message">
+      <span>Situacion ${question.id}</span>
+      <p>${escapeHtml(conversation.caseText)}</p>
+    </div>
+    ${question.visual ? `<div class="artifact-message chat-message artifact-bubble">${renderQuestionVisual(question.visual)}</div>` : ""}
+    <div class="diagnostic-message chat-message question-message">
+      <span>Pregunta</span>
+      <p>${escapeHtml(conversation.questionText)}</p>
+    </div>
+    ${renderStudentAnswerBubble(question, selected)}
+    <div class="student-response-panel chat-response-panel">
+      <p>Selecciona la respuesta que mejor representa tu decision.</p>
+      <div class="options conversational-options" aria-label="Opciones de respuesta">
+        ${question.options
+          .map(
+            (option, index) => `
+              <label class="option ${Number(selected) === index ? "selected" : ""} ${state.questionTransition ? "disabled" : ""}">
+                <input type="radio" name="current-question" value="${index}" ${Number(selected) === index ? "checked" : ""} ${state.questionTransition ? "disabled" : ""} />
+                <span>${String.fromCharCode(65 + index)}. ${escapeHtml(option)}</span>
+              </label>
+            `,
+          )
+          .join("")}
+      </div>
+    </div>
   `;
 }
 
@@ -245,6 +263,7 @@ function renderCompletedQuestionExchange(question) {
     <div class="student-answer-message chat-message previous-answer-message">
       <span>Tu respuesta</span>
       <p>${escapeHtml(answerText)}</p>
+      <button class="inline-edit-button" data-edit-question="${question.id}" ${state.questionTransition ? "disabled" : ""}>Editar respuesta</button>
     </div>
   `;
 }
@@ -996,6 +1015,7 @@ function bindEvents() {
       const index = QUESTIONS.findIndex((question) => question.id === questionId);
       if (index >= 0) {
         state.currentIndex = index;
+        state.revealedIndex = Math.max(state.revealedIndex, index);
         state.questionTransition = false;
         state.quizStage = "question";
         render();
@@ -1017,6 +1037,8 @@ function bindEvents() {
     saveMeta.addEventListener("click", () => {
       state.meta = readMeta();
       state.quizStage = "question";
+      state.currentIndex = 0;
+      state.revealedIndex = 0;
       state.questionTransition = false;
       render();
     });
@@ -1036,10 +1058,17 @@ function bindEvents() {
   if (nextQuestion) {
     nextQuestion.addEventListener("click", () => {
       if (state.questionTransition) return;
+      if (state.currentIndex < state.revealedIndex) {
+        state.currentIndex = state.revealedIndex;
+        render();
+        return;
+      }
       state.questionTransition = true;
       render();
       window.setTimeout(() => {
-        state.currentIndex = Math.min(QUESTIONS.length - 1, state.currentIndex + 1);
+        const nextIndex = Math.min(QUESTIONS.length - 1, state.currentIndex + 1);
+        state.currentIndex = nextIndex;
+        state.revealedIndex = Math.max(state.revealedIndex, nextIndex);
         state.questionTransition = false;
         render();
       }, 720);
@@ -1071,6 +1100,7 @@ function bindEvents() {
       state.answers = {};
       state.studentReport = null;
       state.currentIndex = 0;
+      state.revealedIndex = 0;
       state.questionTransition = false;
       state.quizStage = "welcome";
       state.view = "prueba";
@@ -1084,11 +1114,26 @@ function bindEvents() {
       QUESTIONS.forEach((question) => {
         state.answers[question.id] = question.attitude ? question.positive : question.answer;
       });
+      state.currentIndex = QUESTIONS.length - 1;
+      state.revealedIndex = QUESTIONS.length - 1;
       state.questionTransition = false;
       state.quizStage = "review";
       render();
     });
   }
+
+  document.querySelectorAll("[data-edit-question]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (state.questionTransition) return;
+      const questionId = Number(button.dataset.editQuestion);
+      const index = QUESTIONS.findIndex((question) => question.id === questionId);
+      if (index >= 0) {
+        state.currentIndex = index;
+        state.quizStage = "question";
+        render();
+      }
+    });
+  });
 
   document.querySelectorAll("[data-copy-id]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -1104,6 +1149,11 @@ function scrollConversationThread() {
   const thread = document.querySelector(".chat-thread");
   if (!thread) return;
   window.requestAnimationFrame(() => {
+    const activeExchange = thread.querySelector("[data-active-exchange]");
+    if (activeExchange && state.currentIndex < state.revealedIndex) {
+      thread.scrollTop = activeExchange.offsetTop - thread.offsetTop;
+      return;
+    }
     thread.scrollTop = thread.scrollHeight;
   });
 }

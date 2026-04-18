@@ -810,7 +810,6 @@ button {
 }
 
 .chat-thread {
-  align-content: end;
   min-height: 420px;
   max-height: 62vh;
   overflow-y: auto;
@@ -884,6 +883,10 @@ button {
   min-width: 190px;
 }
 
+.active-exchange-marker {
+  height: 1px;
+}
+
 .previous-question-message,
 .previous-answer-message {
   opacity: 0.72;
@@ -912,6 +915,13 @@ button {
   gap: 12px;
   padding: 16px 18px 18px;
   background: #fff;
+}
+
+.chat-response-panel {
+  width: min(850px, 100%);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  justify-self: stretch;
 }
 
 .student-response-panel p {
@@ -955,6 +965,23 @@ button {
 .option.disabled {
   cursor: default;
   opacity: 0.72;
+}
+
+.inline-edit-button {
+  margin-top: 10px;
+  border: 1px solid rgba(36, 122, 90, 0.28);
+  border-radius: 8px;
+  padding: 7px 10px;
+  background: #fff;
+  color: var(--green-dark);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.inline-edit-button:disabled {
+  cursor: default;
+  opacity: 0.6;
 }
 
 .question-visual {

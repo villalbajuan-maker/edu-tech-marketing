@@ -146,8 +146,9 @@ Decision de implementacion:
 - la prueba usa un shell tipo conversacion institucional;
 - cada situacion entra como mensajes del diagnostico;
 - la respuesta seleccionada aparece como burbuja del estudiante;
-- las respuestas anteriores quedan en un historial compacto para reforzar la sensacion de avance conversacional;
+- las respuestas anteriores quedan en un historial acumulado para reforzar la sensacion de avance conversacional;
 - al avanzar, aparece una senal de escritura antes de cargar la siguiente pregunta;
+- no existe boton global de anterior; las correcciones se hacen desde el historial de la conversacion;
 - la conversacion no es libre, no usa emojis y no introduce IA durante la aplicacion del estudiante.
 
 Documento de alcance:

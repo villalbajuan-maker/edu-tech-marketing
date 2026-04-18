@@ -97,6 +97,7 @@ La V1.5 implementa el modo conversacional guiado para estudiantes:
 - usa un shell tipo conversacion institucional, con respuesta del estudiante como burbuja propia;
 - conserva las interacciones anteriores en el hilo para que la conversacion avance hacia arriba;
 - muestra una senal de tres puntos antes de cargar la siguiente situacion;
+- elimina la navegacion global de anterior y permite corregir desde el historial de la conversacion;
 - mantiene una pregunta por pantalla;
 - conserva progreso, navegacion, revision y envio;
 - no introduce IA durante la prueba;

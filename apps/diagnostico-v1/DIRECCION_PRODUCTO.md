@@ -69,11 +69,15 @@ Objetivo:
 
 Reporte demo institucional + modo interno comercial.
 
-Estado: futura.
+Estado: definida para implementacion.
 
 Objetivo:
 
 > Crear una experiencia de venta y revision con datos ficticios institucionales, y apoyar al equipo comercial con lectura interna de oportunidad, objeciones y siguiente accion.
+
+Documento de alcance:
+
+[../../ofertas/diagnostico-escolar-educacion-financiera/v1-3-reporte-demo-institucional.md](../../ofertas/diagnostico-escolar-educacion-financiera/v1-3-reporte-demo-institucional.md)
 
 ### V2.0
 

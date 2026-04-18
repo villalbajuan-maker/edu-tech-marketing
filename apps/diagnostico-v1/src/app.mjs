@@ -857,7 +857,8 @@ function shouldShowFloatingCompanion() {
 
 function renderCompanionModal() {
   if (!state.companionOpen) return "";
-  const suggestionStage = getCompanionSuggestionStage(state.demoAudience);
+  const activeAudience = getActiveCompanionAudience();
+  const suggestionStage = getCompanionSuggestionStage(activeAudience);
   const suggestions = suggestionStage.questions;
   const voiceStatus = state.companionRecording
     ? "Grabando pregunta. Cuando termines, presiona Enviar."
@@ -875,7 +876,7 @@ function renderCompanionModal() {
           <div>
             <p class="kicker">Companion institucional</p>
             <h2>Interpreta resultados, brechas y ruta a piloto</h2>
-            <p>Vista activa: ${state.demoAudience === "internal" ? "interna" : "colegio"}. Responde con contexto del diagnostico, OECD/PISA y evidencia del reporte.</p>
+            <p>Vista activa: ${activeAudience === "internal" ? "interna" : "colegio"}. Responde con contexto del diagnostico, OECD/PISA y evidencia del reporte.</p>
           </div>
           <div class="companion-window-actions">
             <button class="icon-button expand-button" type="button" data-toggle-companion-size aria-label="${state.companionExpanded ? "Volver a ventana flotante" : "Abrir Companion en ventana grande"}" title="${state.companionExpanded ? "Ventana flotante" : "Ventana grande"}">
@@ -1524,6 +1525,7 @@ function subtab(section, label, activeSection) {
 async function askCompanion(rawQuestion) {
   const question = String(rawQuestion || "").trim();
   if (!question || state.companionLoading) return;
+  const activeAudience = getActiveCompanionAudience();
 
   state.companionMessages = [...state.companionMessages, { role: "user", content: question }];
   state.companionLoading = true;
@@ -1536,7 +1538,7 @@ async function askCompanion(rawQuestion) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        audience: state.demoAudience,
+        audience: activeAudience,
         question,
         messages: state.companionMessages.slice(-6),
         reportContext: buildCompanionContext(),
@@ -1698,12 +1700,17 @@ function getCompanionSuggestionStage(audience) {
   return stages[Math.min(userTurns, stages.length - 1)];
 }
 
+function getActiveCompanionAudience() {
+  if (state.view === "interno") return "internal";
+  return state.demoAudience;
+}
+
 function buildCompanionContext() {
   const demo = state.institutionalDemo;
   const report = demo.report;
   return {
     product: "Diagnostico Escolar de Competencias Financieras",
-    audience: state.demoAudience,
+    audience: getActiveCompanionAudience(),
     school: demo.school,
     city: demo.city,
     grades: demo.grades,
@@ -1752,7 +1759,7 @@ function buildLocalCompanionReply(question) {
   const mainGap = report.gaps[0];
   const pilot = report.pilotRecommendation;
   const prefix =
-    state.demoAudience === "internal"
+    getActiveCompanionAudience() === "internal"
       ? "Lectura interna: "
       : "Lectura institucional: ";
 

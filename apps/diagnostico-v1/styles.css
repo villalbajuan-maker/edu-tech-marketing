@@ -135,6 +135,9 @@ label {
 }
 
 .tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: white;
@@ -157,6 +160,9 @@ label {
 }
 
 .subtab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: white;
@@ -229,6 +235,10 @@ label {
 }
 
 .view-toggle button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   border-radius: 6px;
   background: transparent;
   color: var(--muted);
@@ -1060,6 +1070,7 @@ label {
 .button {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   justify-content: center;
   border-radius: 8px;
   min-height: 42px;
@@ -1069,6 +1080,25 @@ label {
   font-weight: 700;
   line-height: 1.2;
   text-align: center;
+}
+
+.ui-icon {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+}
+
+.tab .ui-icon,
+.subtab .ui-icon,
+.button .ui-icon {
+  width: 17px;
+  height: 17px;
+}
+
+.secondary .ui-icon,
+.tab .ui-icon,
+.subtab .ui-icon {
+  opacity: 0.82;
 }
 
 .button:disabled {
@@ -1838,7 +1868,18 @@ label {
 }
 
 .metric {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 4px;
   padding: 16px;
+}
+
+.metric-icon {
+  width: 21px;
+  height: 21px;
+  margin-bottom: 4px;
+  color: var(--green);
 }
 
 .metric-value {

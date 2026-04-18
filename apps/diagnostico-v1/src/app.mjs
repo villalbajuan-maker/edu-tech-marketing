@@ -132,10 +132,10 @@ function render() {
             </div>
           </div>
           <nav class="tabs">
-            ${tab("inicio", "Inicio")}
-            ${tab("prueba", "Aplicar diagnostico")}
-            ${tab("demo", "Demo institucional")}
-            ${tab("interno", "Interno")}
+            ${tab("inicio", "Inicio", "home")}
+            ${tab("prueba", "Aplicar diagnostico", "clipboard")}
+            ${tab("demo", "Demo institucional", "presentation")}
+            ${tab("interno", "Interno", "settings")}
           </nav>
         </div>
       </header>
@@ -164,9 +164,9 @@ function renderHome() {
         <h2 class="headline">Un instrumento diagnostico institucional con experiencia clara por audiencia.</h2>
         <p class="lead">La navegacion separa aplicacion del estudiante, demo institucional y herramientas internas para que el diagnostico se pueda probar, presentar y revisar sin mezclar audiencias.</p>
         <div class="actions">
-          <button class="button" data-view="prueba">Iniciar diagnostico</button>
-          <button class="button secondary" data-view="demo">Ver demo institucional</button>
-          <button class="button secondary" data-view="interno">Abrir interno</button>
+          <button class="button" data-view="prueba">${icon("play")}Iniciar diagnostico</button>
+          <button class="button secondary" data-view="demo">${icon("presentation")}Ver demo institucional</button>
+          <button class="button secondary" data-view="interno">${icon("settings")}Abrir interno</button>
         </div>
       </div>
       <aside class="panel">
@@ -198,12 +198,12 @@ function renderWelcomeStep() {
         <h2 class="headline">Este diagnostico no es una nota academica.</h2>
         <p class="lead">Vas a ver situaciones de la vida diaria sobre compras, ahorro, riesgo digital, trabajo, hogar y decisiones con dinero. La prueba se presenta en modo conversacional guiado: lee cada situacion, revisa el artefacto visual y elige la opcion que consideres mas adecuada.</p>
         <div class="metrics compact">
-          <div class="metric"><p class="metric-value">30</p><p class="metric-label">Preguntas</p></div>
-          <div class="metric"><p class="metric-value">30</p><p class="metric-label">Minutos aprox.</p></div>
-          <div class="metric"><p class="metric-value">6</p><p class="metric-label">Dimensiones</p></div>
+          ${renderMetric("30", "Preguntas", "clipboard")}
+          ${renderMetric("30", "Minutos aprox.", "clock")}
+          ${renderMetric("6", "Dimensiones", "layers")}
         </div>
         <div class="actions">
-          <button class="button" data-quiz-stage="meta">Comenzar</button>
+          <button class="button" data-quiz-stage="meta">${icon("play")}Comenzar</button>
         </div>
       </article>
       <aside class="panel">
@@ -232,8 +232,8 @@ function renderMetaStep() {
         <label class="field"><span>Grupo</span><input id="group" value="${escapeHtml(state.meta.group)}" /></label>
       </div>
       <div class="actions">
-        <button class="button secondary" data-quiz-stage="welcome">Volver</button>
-        <button class="button" id="saveMeta">Continuar</button>
+        <button class="button secondary" data-quiz-stage="welcome">${icon("arrow-left")}Volver</button>
+        <button class="button" id="saveMeta">Continuar${icon("arrow-right")}</button>
       </div>
     </section>
   `;
@@ -478,8 +478,8 @@ function renderReviewStep() {
           : `<div class="empty">No hay preguntas pendientes.</div>`
       }
       <div class="actions">
-        <button class="button secondary" data-quiz-stage="question">Volver a la prueba</button>
-        <button class="button" id="submitDiagnostic">Enviar diagnostico</button>
+        <button class="button secondary" data-quiz-stage="question">${icon("arrow-left")}Volver a la prueba</button>
+        <button class="button" id="submitDiagnostic">${icon("send")}Enviar diagnostico</button>
       </div>
     </section>
   `;
@@ -493,8 +493,8 @@ function renderDoneStep() {
         <h2 class="headline">Gracias. Tus respuestas fueron registradas.</h2>
         <p class="lead">El colegio recibira una lectura agregada para orientar una ruta de educacion financiera. En esta version de prueba tambien puedes ver el reporte generado.</p>
         <div class="actions">
-          <button class="button" data-internal-section="report">Ver reporte tecnico</button>
-          <button class="button secondary" id="restartQuiz">Nueva aplicacion</button>
+          <button class="button" data-internal-section="report">${icon("chart")}Ver reporte tecnico</button>
+          <button class="button secondary" id="restartQuiz">${icon("refresh")}Nueva aplicacion</button>
         </div>
       </article>
       <aside class="panel">
@@ -522,9 +522,9 @@ function renderSessionDashboard() {
       <h2>Sesion diagnostica simulada</h2>
       <p class="lead">Esta vista muestra como podria monitorear el colegio una aplicacion real sin ver respuestas individuales en vivo.</p>
       <div class="metrics">
-        <div class="metric"><p class="metric-value">${invited}</p><p class="metric-label">Estudiantes esperados</p></div>
-        <div class="metric"><p class="metric-value">${completed}</p><p class="metric-label">Finalizaron</p></div>
-        <div class="metric"><p class="metric-value">${inProgress}</p><p class="metric-label">En progreso</p></div>
+        ${renderMetric(invited, "Estudiantes esperados", "users")}
+        ${renderMetric(completed, "Finalizaron", "check")}
+        ${renderMetric(inProgress, "En progreso", "activity")}
       </div>
     </section>
     <section class="report-section">
@@ -546,8 +546,8 @@ function renderSessionDashboard() {
           .join("")}
       </div>
       <div class="actions">
-        <button class="button" data-internal-section="report">Ver reporte tecnico</button>
-        <button class="button secondary" data-internal-section="qa">Cambiar escenario QA</button>
+        <button class="button" data-internal-section="report">${icon("chart")}Ver reporte tecnico</button>
+        <button class="button secondary" data-internal-section="qa">${icon("sliders")}Cambiar escenario QA</button>
       </div>
     </section>
   `;
@@ -561,9 +561,9 @@ function renderInternalWorkbench() {
       <h2 class="headline">Herramientas para revisar, simular y operar la demo.</h2>
       <p class="lead">Esta zona no es la vista principal para colegios. Reune QA, sesion simulada y reporte tecnico para el equipo de producto, pedagogia y comercial.</p>
       <div class="subtabs">
-        ${subtab("qa", "QA 300 estudiantes", activeSection)}
-        ${subtab("session", "Sesion colegio", activeSection)}
-        ${subtab("report", "Reporte tecnico", activeSection)}
+        ${subtab("qa", "QA 300 estudiantes", activeSection, "sliders")}
+        ${subtab("session", "Sesion colegio", activeSection, "users")}
+        ${subtab("report", "Reporte tecnico", activeSection, "chart")}
       </div>
     </section>
     ${activeSection === "session" ? renderSessionDashboard() : ""}
@@ -594,9 +594,9 @@ function renderReport(report, mode) {
           <p class="kicker">${mode === "cohort" ? "Reporte institucional simulado" : "Reporte individual de prueba"}</p>
           <h2>${report.meta?.school || "Colegio Demo"}</h2>
           <div class="metrics">
-            <div class="metric"><p class="metric-value">${report.percent}%</p><p class="metric-label">Resultado general</p></div>
-            <div class="metric"><p class="metric-value">${report.level.name}</p><p class="metric-label">Nivel</p></div>
-            <div class="metric"><p class="metric-value">${report.count || 1}</p><p class="metric-label">Estudiantes</p></div>
+            ${renderMetric(`${report.percent}%`, "Resultado general", "chart")}
+            ${renderMetric(report.level.name, "Nivel", "gauge")}
+            ${renderMetric(report.count || 1, "Estudiantes", "users")}
           </div>
           <p class="lead">${report.level.description}</p>
         </article>
@@ -633,8 +633,8 @@ function renderReport(report, mode) {
           <p><strong>Duracion sugerida:</strong> ${report.pilotRecommendation.duration}</p>
           <p><strong>Foco:</strong> ${report.pilotRecommendation.focus}</p>
           <div class="actions">
-            <button class="button">Revisar ruta de piloto</button>
-            <button class="button secondary">Agendar reunion de lectura</button>
+            <button class="button">${icon("route")}Revisar ruta de piloto</button>
+            <button class="button secondary">${icon("calendar")}Agendar reunion de lectura</button>
           </div>
         </article>
 
@@ -703,13 +703,13 @@ function renderInstitutionalDemo() {
               <p class="kicker">Uso interno</p>
               <h3>${demo.internal.title}</h3>
               <p>${demo.internal.opportunity}</p>
-              <button class="button" data-copy-id="commercial">Copiar mensaje comercial</button>
+              <button class="button" data-copy-id="commercial">${icon("copy")}Copiar mensaje comercial</button>
             `
             : `
               <p class="kicker">Decision sugerida</p>
               <h3>${report.pilotRecommendation.name}</h3>
               <p>${report.pilotRecommendation.reason}</p>
-              <button class="button" data-copy-id="executive">Copiar resumen para rectoria</button>
+              <button class="button" data-copy-id="executive">${icon("copy")}Copiar resumen para rectoria</button>
             `
         }
       </aside>
@@ -725,9 +725,9 @@ function renderSchoolDemoView(demo, report, pilotPath) {
       <article class="report-section">
         <p class="kicker">Resultado institucional</p>
         <div class="metrics">
-          <div class="metric"><p class="metric-value">${report.percent}%</p><p class="metric-label">Resultado general</p></div>
-          <div class="metric"><p class="metric-value">${report.level.name}</p><p class="metric-label">Nivel</p></div>
-          <div class="metric"><p class="metric-value">${report.count}</p><p class="metric-label">Respuestas validas</p></div>
+          ${renderMetric(`${report.percent}%`, "Resultado general", "chart")}
+          ${renderMetric(report.level.name, "Nivel", "gauge")}
+          ${renderMetric(report.count, "Respuestas validas", "check")}
         </div>
         <p class="lead">${report.level.description}</p>
       </article>
@@ -834,7 +834,7 @@ function renderInternalDemoView(demo, companion) {
           <li>${companion.nextStep}</li>
         </ul>
         <div class="actions">
-          <button class="button" data-copy-id="commercial">Copiar mensaje comercial</button>
+          <button class="button" data-copy-id="commercial">${icon("copy")}Copiar mensaje comercial</button>
         </div>
       </aside>
     </section>
@@ -1514,12 +1514,49 @@ function updateElapsedTimer() {
   timer.textContent = `Tiempo ${formatElapsedTime(getQuizElapsedMs())}`;
 }
 
-function tab(view, label) {
-  return `<button class="tab ${state.view === view ? "active" : ""}" data-view="${view}">${label}</button>`;
+function tab(view, label, iconName) {
+  return `<button class="tab ${state.view === view ? "active" : ""}" data-view="${view}">${icon(iconName)}${label}</button>`;
 }
 
-function subtab(section, label, activeSection) {
-  return `<button class="subtab ${activeSection === section ? "active" : ""}" data-internal-section="${section}">${label}</button>`;
+function subtab(section, label, activeSection, iconName) {
+  return `<button class="subtab ${activeSection === section ? "active" : ""}" data-internal-section="${section}">${icon(iconName)}${label}</button>`;
+}
+
+function renderMetric(value, label, iconName) {
+  return `
+    <div class="metric">
+      ${icon(iconName, "ui-icon metric-icon")}
+      <p class="metric-value">${escapeHtml(String(value))}</p>
+      <p class="metric-label">${escapeHtml(label)}</p>
+    </div>
+  `;
+}
+
+function icon(name, className = "ui-icon") {
+  const paths = {
+    activity: `<path d="M4 12h4l2-5 4 10 2-5h4" />`,
+    "arrow-left": `<path d="M19 12H5" /><path d="m12 19-7-7 7-7" />`,
+    "arrow-right": `<path d="M5 12h14" /><path d="m12 5 7 7-7 7" />`,
+    calendar: `<rect x="4" y="5" width="16" height="15" rx="2" /><path d="M8 3v4" /><path d="M16 3v4" /><path d="M4 10h16" />`,
+    chart: `<path d="M4 19V5" /><path d="M4 19h16" /><rect x="7" y="11" width="3" height="5" rx="1" /><rect x="12" y="8" width="3" height="8" rx="1" /><rect x="17" y="5" width="3" height="11" rx="1" />`,
+    check: `<path d="m5 12 4 4L19 6" />`,
+    clipboard: `<rect x="5" y="5" width="14" height="16" rx="2" /><path d="M9 5a3 3 0 0 1 6 0" /><path d="M9 10h6" /><path d="M9 14h6" />`,
+    clock: `<circle cx="12" cy="12" r="8" /><path d="M12 8v5l3 2" />`,
+    copy: `<rect x="8" y="8" width="11" height="11" rx="2" /><path d="M5 15V7a2 2 0 0 1 2-2h8" />`,
+    gauge: `<path d="M5 17a8 8 0 1 1 14 0" /><path d="m12 14 4-4" /><path d="M8 17h8" />`,
+    home: `<path d="m4 11 8-7 8 7" /><path d="M6 10v10h12V10" /><path d="M10 20v-6h4v6" />`,
+    layers: `<path d="m12 4 8 4-8 4-8-4 8-4Z" /><path d="m4 12 8 4 8-4" /><path d="m4 16 8 4 8-4" />`,
+    play: `<path d="M8 5v14l11-7-11-7Z" />`,
+    presentation: `<path d="M4 5h16v11H4z" /><path d="M12 16v4" /><path d="M8 20h8" />`,
+    refresh: `<path d="M20 12a8 8 0 0 1-14 5" /><path d="M4 17h5v-5" /><path d="M4 12a8 8 0 0 1 14-5" /><path d="M20 7h-5v5" />`,
+    route: `<circle cx="6" cy="6" r="2" /><circle cx="18" cy="18" r="2" /><path d="M8 6h4a3 3 0 0 1 0 6h-1a3 3 0 0 0 0 6h5" />`,
+    send: `<path d="m4 4 16 8-16 8 3-8-3-8Z" /><path d="M7 12h13" />`,
+    settings: `<circle cx="12" cy="12" r="3" /><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.4 1a7 7 0 0 0-1.7-1L14.5 3h-5l-.4 3a7 7 0 0 0-1.7 1L5 6 3 9.5 5 11a7 7 0 0 0 0 2l-2 1.5L5 18l2.4-1a7 7 0 0 0 1.7 1l.4 3h5l.4-3a7 7 0 0 0 1.7-1l2.4 1 2-3.5-2-1.5c.1-.3.1-.7.1-1Z" />`,
+    sliders: `<path d="M5 6h14" /><path d="M5 12h14" /><path d="M5 18h14" /><circle cx="9" cy="6" r="2" /><circle cx="15" cy="12" r="2" /><circle cx="11" cy="18" r="2" />`,
+    users: `<path d="M16 19v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1" /><circle cx="10" cy="8" r="3" /><path d="M20 19v-1a4 4 0 0 0-3-3.9" /><path d="M15 5.3a3 3 0 0 1 0 5.4" />`,
+  };
+  const body = paths[name] || paths.activity;
+  return `<svg class="${className}" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
 }
 
 async function askCompanion(rawQuestion) {

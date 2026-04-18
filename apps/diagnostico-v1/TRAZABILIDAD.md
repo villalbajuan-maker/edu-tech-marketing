@@ -206,6 +206,7 @@ La V1.5 implementa el modo conversacional guiado:
 - presenta contexto, situacion, artefacto visual, pregunta y opciones;
 - incorpora shell visual tipo conversacion, historial acumulado, burbuja de respuesta del estudiante y transicion con tres puntos entre preguntas;
 - suma thumbnails contextuales inline, pequenos y sin enlaces, para preparar el marco mental de cada situacion;
+- convierte las opciones en botones de respuesta que guardan y avanzan sin boton Continuar;
 - reemplaza el boton global de anterior por edicion contextual de respuestas ya registradas;
 - mantiene scoring, progreso, navegacion, revision y QA;
 - no agrega IA durante la prueba del estudiante;

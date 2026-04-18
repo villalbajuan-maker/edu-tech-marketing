@@ -1099,8 +1099,28 @@ button {
   background: #fff;
 }
 
-.option input {
-  margin-top: 3px;
+.answer-option {
+  width: 100%;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.answer-option b {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  background: #edf5ef;
+  color: var(--green-dark);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.answer-option span {
+  line-height: 1.4;
 }
 
 .option.selected {
@@ -1111,6 +1131,11 @@ button {
 .option.disabled {
   cursor: default;
   opacity: 0.72;
+}
+
+.option:focus-visible {
+  outline: 3px solid rgba(36, 122, 90, 0.24);
+  outline-offset: 2px;
 }
 
 .inline-edit-button {
@@ -1769,9 +1794,9 @@ button {
     padding: 12px;
   }
 
-  .option input {
-    width: 18px;
-    height: 18px;
+  .answer-option b {
+    width: 26px;
+    height: 26px;
   }
 
   .actions {

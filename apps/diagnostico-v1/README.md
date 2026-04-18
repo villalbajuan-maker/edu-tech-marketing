@@ -98,6 +98,7 @@ La V1.5 implementa el modo conversacional guiado para estudiantes:
 - conserva las interacciones anteriores en el hilo para que la conversacion avance hacia arriba;
 - incorpora thumbnails contextuales inline, pequenos y sin enlaces, antes de cada situacion;
 - muestra una senal de tres puntos antes de cargar la siguiente situacion;
+- convierte cada opcion en boton de respuesta: clic o tap guarda y avanza;
 - elimina la navegacion global de anterior y permite corregir desde el historial de la conversacion;
 - mantiene una pregunta por pantalla;
 - conserva progreso, navegacion, revision y envio;

@@ -154,7 +154,6 @@ function renderQuestionStep() {
   const answered = getAnsweredCount();
   const progress = Math.round(((state.revealedIndex + 1) / QUESTIONS.length) * 100);
   const isLatestQuestion = state.currentIndex === state.revealedIndex;
-  const canReview = state.revealedIndex === QUESTIONS.length - 1;
   return `
     <section class="quiz-shell">
       <div class="progress-panel">
@@ -169,9 +168,9 @@ function renderQuestionStep() {
       <div class="question-nav">
         <button class="button secondary" id="saveDemoAnswers" ${state.questionTransition ? "disabled" : ""}>Responder demo</button>
         ${
-          canReview && isLatestQuestion
-            ? `<button class="button" id="goReview" ${state.questionTransition ? "disabled" : ""}>Revisar y enviar</button>`
-            : `<button class="button" id="nextQuestion" ${state.questionTransition ? "disabled" : ""}>${isLatestQuestion ? "Continuar" : "Volver al final"}</button>`
+          isLatestQuestion
+            ? ""
+            : `<button class="button" id="nextQuestion" ${state.questionTransition ? "disabled" : ""}>Volver al final</button>`
         }
       </div>
     </section>
@@ -237,10 +236,10 @@ function renderActiveQuestionExchange(question, selected) {
         ${question.options
           .map(
             (option, index) => `
-              <label class="option ${Number(selected) === index ? "selected" : ""} ${state.questionTransition ? "disabled" : ""}">
-                <input type="radio" name="current-question" value="${index}" ${Number(selected) === index ? "checked" : ""} ${state.questionTransition ? "disabled" : ""} />
-                <span>${String.fromCharCode(65 + index)}. ${escapeHtml(option)}</span>
-              </label>
+              <button class="option answer-option ${Number(selected) === index ? "selected" : ""} ${state.questionTransition ? "disabled" : ""}" data-answer-option="${index}" ${state.questionTransition ? "disabled" : ""}>
+                <b>${String.fromCharCode(65 + index)}</b>
+                <span>${escapeHtml(option)}</span>
+              </button>
             `,
           )
           .join("")}
@@ -1160,12 +1159,10 @@ function bindEvents() {
     });
   });
 
-  document.querySelectorAll('input[name="current-question"]').forEach((input) => {
-    input.addEventListener("change", () => {
+  document.querySelectorAll("[data-answer-option]").forEach((button) => {
+    button.addEventListener("click", () => {
       if (state.questionTransition) return;
-      const question = QUESTIONS[state.currentIndex];
-      state.answers[question.id] = Number(input.value);
-      render();
+      handleAnswerSelection(Number(button.dataset.answerOption));
     });
   });
 
@@ -1198,27 +1195,7 @@ function bindEvents() {
       if (state.currentIndex < state.revealedIndex) {
         state.currentIndex = state.revealedIndex;
         render();
-        return;
       }
-      state.questionTransition = true;
-      render();
-      window.setTimeout(() => {
-        const nextIndex = Math.min(QUESTIONS.length - 1, state.currentIndex + 1);
-        state.currentIndex = nextIndex;
-        state.revealedIndex = Math.max(state.revealedIndex, nextIndex);
-        state.questionTransition = false;
-        render();
-      }, 720);
-    });
-  }
-
-  const goReview = document.querySelector("#goReview");
-  if (goReview) {
-    goReview.addEventListener("click", () => {
-      if (state.questionTransition) return;
-      state.questionTransition = false;
-      state.quizStage = "review";
-      render();
     });
   }
 
@@ -1280,6 +1257,33 @@ function bindEvents() {
       window.setTimeout(() => render(), 900);
     });
   });
+}
+
+function handleAnswerSelection(answerIndex) {
+  const question = QUESTIONS[state.currentIndex];
+  state.answers[question.id] = answerIndex;
+
+  if (state.currentIndex < state.revealedIndex) {
+    render();
+    return;
+  }
+
+  state.questionTransition = true;
+  render();
+  window.setTimeout(() => {
+    if (state.currentIndex === QUESTIONS.length - 1) {
+      state.questionTransition = false;
+      state.quizStage = "review";
+      render();
+      return;
+    }
+
+    const nextIndex = state.currentIndex + 1;
+    state.currentIndex = nextIndex;
+    state.revealedIndex = Math.max(state.revealedIndex, nextIndex);
+    state.questionTransition = false;
+    render();
+  }, 720);
 }
 
 function scrollConversationThread() {

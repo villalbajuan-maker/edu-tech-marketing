@@ -147,6 +147,7 @@ Decision de implementacion:
 - cada situacion entra como mensajes del diagnostico;
 - antes de cada situacion aparece una tira breve de thumbnails contextuales inline, sin enlaces;
 - la respuesta seleccionada aparece como burbuja del estudiante;
+- cada opcion actua como boton de respuesta y dispara el avance conversacional;
 - las respuestas anteriores quedan en un historial acumulado para reforzar la sensacion de avance conversacional;
 - al avanzar, aparece una senal de escritura antes de cargar la siguiente pregunta;
 - no existe boton global de anterior; las correcciones se hacen desde el historial de la conversacion;

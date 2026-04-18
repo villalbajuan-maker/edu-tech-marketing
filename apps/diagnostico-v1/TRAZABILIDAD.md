@@ -114,6 +114,8 @@ La app permite:
 - mostrar dashboard simulado de sesion para colegio;
 - mostrar demo institucional V1.3;
 - mostrar modo interno comercial;
+- abrir Companion Institucional en modal;
+- consultar endpoint LLM `/api/companion` cuando esta configurado;
 - simular cohortes de 300 estudiantes para QA.
 
 ## Evolucion V1.1
@@ -162,6 +164,28 @@ Incluye:
 - copiado de resumen ejecutivo y mensaje comercial.
 
 No agrega login, base de datos, IA contextual real ni integracion con la plataforma CodeIgniter.
+
+## Evolucion V1.4
+
+La V1.4 queda implementada inicialmente como:
+
+```text
+Companion Institucional con LLM contextual inicial
+```
+
+Incluye:
+
+- modal profesional encima del reporte/demo;
+- preguntas sugeridas en pills;
+- historial por sesion de navegador;
+- contexto del reporte demo;
+- separacion vista colegio y vista interna;
+- referencia conceptual a OECD/PISA;
+- endpoint serverless `/api/companion`;
+- uso de OpenAI Responses API si existe `OPENAI_API_KEY`;
+- fallback local si la llave o el endpoint no estan disponibles.
+
+No agrega persistencia real, historial por colegio, cuentas, auditoria ni integracion con plataforma.
 
 ## QA disponible
 

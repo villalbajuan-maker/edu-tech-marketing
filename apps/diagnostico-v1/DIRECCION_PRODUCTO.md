@@ -89,6 +89,30 @@ Incluye:
 - guion de reunion de resultados;
 - copiado de resumen ejecutivo y mensaje comercial.
 
+### V1.4
+
+Companion Institucional con LLM contextual inicial.
+
+Estado: implementacion inicial.
+
+Objetivo:
+
+> Incorporar un Companion modal que usa contexto del reporte, base de conocimiento del diagnostico, referencia conceptual a OECD/PISA y guardrails para orientar decisiones pedagogicas e institucionales.
+
+Documento de alcance:
+
+[../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md](../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md)
+
+Incluye:
+
+- modal Companion;
+- preguntas sugeridas;
+- contexto estructurado del reporte;
+- vista colegio y vista interna;
+- endpoint serverless `/api/companion`;
+- integracion con OpenAI Responses API;
+- fallback local si no hay llave configurada.
+
 ### V2.0
 
 IA contextual real + datos persistentes + integracion a plataforma.

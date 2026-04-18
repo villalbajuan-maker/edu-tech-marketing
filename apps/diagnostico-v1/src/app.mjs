@@ -20,6 +20,9 @@ const state = {
   cohortResult: simulateCohort(300, "baseline"),
   institutionalDemo: buildInstitutionalDemo(),
   demoAudience: "school",
+  companionOpen: false,
+  companionLoading: false,
+  companionMessages: [],
   qaResults: runQaSuite(),
 };
 
@@ -48,6 +51,7 @@ function render() {
         </div>
       </header>
       <main class="main">${renderView()}</main>
+      ${renderCompanionModal()}
     </div>
   `;
   bindEvents();
@@ -415,6 +419,7 @@ function renderInstitutionalDemo() {
               <h3>${report.pilotRecommendation.name}</h3>
               <p>${report.pilotRecommendation.reason}</p>
               <button class="button" data-copy-id="executive">Copiar resumen para rectoria</button>
+              <button class="button secondary" data-open-companion>Abrir Companion</button>
             `
         }
       </aside>
@@ -540,9 +545,57 @@ function renderInternalDemoView(demo, companion) {
         </ul>
         <div class="actions">
           <button class="button" data-copy-id="commercial">Copiar mensaje comercial</button>
+          <button class="button secondary" data-open-companion>Abrir Companion</button>
         </div>
       </aside>
     </section>
+  `;
+}
+
+function renderCompanionModal() {
+  if (!state.companionOpen) return "";
+  const suggestions = getCompanionSuggestions(state.demoAudience);
+  return `
+    <div class="modal-backdrop" data-close-companion>
+      <section class="companion-modal" role="dialog" aria-modal="true" aria-label="Companion del diagnostico" data-modal-panel>
+        <header class="companion-modal-header">
+          <div>
+            <p class="kicker">Companion institucional</p>
+            <h2>Interpreta resultados, brechas y ruta a piloto</h2>
+            <p>Vista activa: ${state.demoAudience === "internal" ? "interna" : "colegio"}. Responde con contexto del diagnostico, OECD/PISA y evidencia del reporte.</p>
+          </div>
+          <button class="icon-button" data-close-companion aria-label="Cerrar Companion">Cerrar</button>
+        </header>
+
+        <div class="suggestion-pills">
+          ${suggestions.map((question) => `<button data-companion-question="${escapeHtml(question)}">${escapeHtml(question)}</button>`).join("")}
+        </div>
+
+        <div class="companion-thread">
+          ${
+            state.companionMessages.length
+              ? state.companionMessages.map(renderCompanionMessage).join("")
+              : `<div class="companion-empty">Haz una pregunta sobre el reporte, la prueba, las brechas, el marco OECD/PISA o la ruta hacia piloto.</div>`
+          }
+          ${state.companionLoading ? `<div class="companion-message assistant"><strong>Companion</strong><p>Analizando el reporte y el contexto...</p></div>` : ""}
+        </div>
+
+        <form class="companion-form" id="companionForm">
+          <textarea id="companionInput" rows="3" placeholder="Pregunta al Companion..."></textarea>
+          <button class="button" ${state.companionLoading ? "disabled" : ""}>Enviar</button>
+        </form>
+        <p class="companion-scope">El Companion no reemplaza criterio pedagogico ni inventa resultados. Orienta decisiones con base en el diagnostico.</p>
+      </section>
+    </div>
+  `;
+}
+
+function renderCompanionMessage(message) {
+  return `
+    <div class="companion-message ${message.role}">
+      <strong>${message.role === "assistant" ? "Companion" : "Usuario"}</strong>
+      <p>${escapeHtml(message.content)}</p>
+    </div>
   `;
 }
 
@@ -741,6 +794,40 @@ function bindEvents() {
     });
   });
 
+  document.querySelectorAll("[data-open-companion]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.companionOpen = true;
+      render();
+    });
+  });
+
+  document.querySelectorAll("[data-close-companion]").forEach((element) => {
+    element.addEventListener("click", () => {
+      state.companionOpen = false;
+      render();
+    });
+  });
+
+  const modalPanel = document.querySelector("[data-modal-panel]");
+  if (modalPanel) {
+    modalPanel.addEventListener("click", (event) => event.stopPropagation());
+  }
+
+  document.querySelectorAll("[data-companion-question]").forEach((button) => {
+    button.addEventListener("click", () => {
+      askCompanion(button.dataset.companionQuestion);
+    });
+  });
+
+  const companionForm = document.querySelector("#companionForm");
+  if (companionForm) {
+    companionForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const input = document.querySelector("#companionInput");
+      askCompanion(input?.value || "");
+    });
+  }
+
   document.querySelectorAll("[data-jump]").forEach((button) => {
     button.addEventListener("click", () => {
       const questionId = Number(button.dataset.jump);
@@ -851,6 +938,123 @@ function getAnsweredCount() {
 
 function tab(view, label) {
   return `<button class="tab ${state.view === view ? "active" : ""}" data-view="${view}">${label}</button>`;
+}
+
+async function askCompanion(rawQuestion) {
+  const question = String(rawQuestion || "").trim();
+  if (!question || state.companionLoading) return;
+
+  state.companionMessages = [...state.companionMessages, { role: "user", content: question }];
+  state.companionLoading = true;
+  render();
+
+  try {
+    const response = await fetch("/api/companion", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        audience: state.demoAudience,
+        question,
+        messages: state.companionMessages.slice(-6),
+        reportContext: buildCompanionContext(),
+      }),
+    });
+    const data = await response.json();
+    const answer = response.ok ? data.answer : data.fallback || data.error || buildLocalCompanionReply(question);
+    state.companionMessages = [...state.companionMessages, { role: "assistant", content: answer }];
+  } catch (error) {
+    state.companionMessages = [...state.companionMessages, { role: "assistant", content: buildLocalCompanionReply(question) }];
+  } finally {
+    state.companionLoading = false;
+    render();
+  }
+}
+
+function getCompanionSuggestions(audience) {
+  if (audience === "internal") {
+    return [
+      "¿Cuál es la oportunidad comercial más clara?",
+      "¿Qué objeciones puede tener el colegio?",
+      "¿Qué debería decir Leonardo en la reunión?",
+      "¿Qué piloto conviene proponer y por qué?",
+    ];
+  }
+  return [
+    "¿Qué significa este resultado para el colegio?",
+    "¿Cuál es la brecha principal?",
+    "¿Cómo se relaciona esto con OECD/PISA?",
+    "¿Qué piloto recomienda el diagnóstico?",
+  ];
+}
+
+function buildCompanionContext() {
+  const demo = state.institutionalDemo;
+  const report = demo.report;
+  return {
+    product: "Diagnostico Escolar de Competencias Financieras",
+    audience: state.demoAudience,
+    school: demo.school,
+    city: demo.city,
+    grades: demo.grades,
+    result: {
+      percent: report.percent,
+      level: report.level,
+      count: report.count,
+      dimensions: report.dimensions.map((dimension) => ({
+        id: dimension.id,
+        name: dimension.name,
+        percent: dimension.percent,
+        status: dimension.status.name,
+      })),
+      gaps: report.gaps.map((gap) => ({
+        id: gap.id,
+        name: gap.name,
+        percent: gap.percent,
+        status: gap.status.name,
+      })),
+      strengths: report.strengths.map((item) => ({
+        id: item.id,
+        name: item.name,
+        percent: item.percent,
+      })),
+      pilot: report.pilotRecommendation,
+    },
+    groupComparison: demo.groups.map((group) => ({
+      group: group.name,
+      percent: group.report.percent,
+      level: group.report.level.name,
+      reading: group.reading,
+    })),
+    executive: demo.executive,
+    internal: demo.internal,
+    contextNotes: [
+      "El diagnostico se inspira en alfabetizacion financiera juvenil y en evaluacion por situaciones reales.",
+      "Puede mencionar OECD/PISA como marco de referencia conceptual, no como certificacion oficial.",
+      "La escalera de valor es diagnostico, reporte, piloto e implementacion.",
+    ],
+  };
+}
+
+function buildLocalCompanionReply(question) {
+  const demo = state.institutionalDemo;
+  const report = demo.report;
+  const mainGap = report.gaps[0];
+  const pilot = report.pilotRecommendation;
+  const prefix =
+    state.demoAudience === "internal"
+      ? "Lectura interna: "
+      : "Lectura institucional: ";
+
+  if (/pisa|oecd|ocde/i.test(question)) {
+    return `${prefix}el diagnostico usa OECD/PISA como referencia conceptual para evaluar competencias financieras en situaciones reales. No debe presentarse como prueba PISA oficial ni certificada por OECD. Sirve para convertir evidencia escolar en una ruta pedagogica hacia piloto.`;
+  }
+  if (/brecha|debil/i.test(question)) {
+    return `${prefix}la brecha principal es ${mainGap?.name || "la dimension con menor desempeno"}, con ${mainGap?.percent ?? report.percent}%. Esta lectura debe conectarse con una intervencion focalizada y medible.`;
+  }
+  if (/piloto|siguiente/i.test(question)) {
+    return `${prefix}el piloto recomendado es ${pilot.name}. ${pilot.reason} El siguiente paso razonable es una reunion de lectura para definir grupo, calendario y medicion antes/despues.`;
+  }
+  return `${prefix}el grupo esta en nivel ${report.level.name} con ${report.percent}%. El Companion debe ayudar a interpretar este resultado, explicar brechas y orientar la decision hacia un piloto proporcional a la evidencia.`;
 }
 
 function buildInstitutionalDemo() {

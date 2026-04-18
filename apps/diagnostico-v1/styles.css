@@ -367,6 +367,147 @@ button {
   margin-bottom: 14px;
 }
 
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: rgba(23, 33, 28, 0.48);
+  padding: 18px;
+}
+
+.companion-modal {
+  display: grid;
+  grid-template-rows: auto auto minmax(180px, 1fr) auto auto;
+  width: min(920px, 100%);
+  max-height: min(820px, 92vh);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  box-shadow: 0 28px 90px rgba(23, 33, 28, 0.35);
+}
+
+.companion-modal-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  align-items: start;
+  border-bottom: 1px solid var(--line);
+  background: #f7faf8;
+  padding: 18px;
+}
+
+.companion-modal-header h2,
+.companion-modal-header p {
+  margin: 0;
+}
+
+.companion-modal-header p:not(.kicker) {
+  margin-top: 6px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.icon-button {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  color: var(--ink);
+  padding: 9px 12px;
+  font-weight: 850;
+}
+
+.suggestion-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid var(--line);
+  padding: 12px 18px;
+}
+
+.suggestion-pills button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px 10px;
+  font-weight: 800;
+}
+
+.companion-thread {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  overflow-y: auto;
+  padding: 18px;
+  background: #fbfcfa;
+}
+
+.companion-empty {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  padding: 18px;
+  text-align: center;
+}
+
+.companion-message {
+  max-width: 82%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  padding: 12px;
+}
+
+.companion-message.user {
+  justify-self: end;
+  background: #f2faf5;
+}
+
+.companion-message.assistant {
+  justify-self: start;
+  background: white;
+}
+
+.companion-message strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.companion-message p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.companion-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding: 14px 18px;
+}
+
+.companion-form textarea {
+  resize: vertical;
+  min-height: 56px;
+  max-height: 140px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 11px;
+}
+
+.companion-scope {
+  margin: 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+  padding: 10px 18px;
+}
+
 .headline {
   margin: 0;
   max-width: 900px;
@@ -1230,6 +1371,19 @@ button {
   .view-toggle {
     display: grid;
     width: 100%;
+  }
+
+  .companion-modal {
+    max-height: 94vh;
+  }
+
+  .companion-modal-header,
+  .companion-form {
+    grid-template-columns: 1fr;
+  }
+
+  .companion-message {
+    max-width: 100%;
   }
 
   .metric {

@@ -27,6 +27,7 @@ Implementacion = contrato institucional
 | V1.1 | Experiencia end-to-end de aplicacion | Implementada |
 | V1.2 | Visuales pedagogicos + companion decisional + ruta a piloto | Implementada |
 | V1.3 | Reporte demo institucional + modo interno comercial | Implementada |
+| V1.4 | Companion Institucional con LLM contextual inicial | Implementada inicial |
 | V2.0 | IA contextual real + datos persistentes + integracion a plataforma | Futura |
 
 ## V1.0
@@ -165,3 +166,17 @@ Criterio estrategico:
 Estado:
 
 > Implementada en la app como vista "Demo institucional".
+
+## V1.4
+
+Documento de alcance:
+
+[companion-institucional.md](companion-institucional.md)
+
+Objetivo:
+
+> Incorporar un Companion modal con LLM, preguntas sugeridas, contexto del reporte, referencia conceptual a OECD/PISA y separacion entre vista colegio y vista interna.
+
+Estado:
+
+> Implementacion inicial disponible con endpoint `/api/companion`, OpenAI Responses API y fallback local cuando no hay llave configurada.

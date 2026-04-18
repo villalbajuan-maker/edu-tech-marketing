@@ -20,6 +20,7 @@ https://edu-tech-marketing-e5s4f3i8z-villalbajuan-makers-projects.vercel.app/
 - Demo institucional con colegio ficticio, resumen para rectoria y comparacion por grupos.
 - Toggle de audiencia: vista colegio y vista interna.
 - Modo interno comercial con oportunidad, objeciones, mensaje sugerido y siguiente accion.
+- Companion Institucional en modal con preguntas sugeridas y conexion LLM via `/api/companion`.
 - Simulacion QA de 300 estudiantes.
 - Script de QA por consola.
 
@@ -58,6 +59,21 @@ La V1.3 convierte el diagnostico en una demo institucional vendible:
 - incorpora lectura pedagogica institucional;
 - agrega modo interno comercial para preparar conversaciones;
 - permite copiar resumen ejecutivo y mensaje comercial.
+
+## Companion con LLM
+
+La app incluye un modal **Companion Institucional**. En local puede responder con fallback controlado si no existe backend disponible. En Vercel usa el endpoint serverless `/api/companion` cuando se configura:
+
+```text
+OPENAI_API_KEY
+OPENAI_MODEL
+```
+
+`OPENAI_MODEL` es opcional. Por defecto se usa `gpt-4.1-mini`.
+
+Documento rector:
+
+[../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md](../../ofertas/diagnostico-escolar-educacion-financiera/companion-institucional.md)
 
 ## Como probar localmente
 

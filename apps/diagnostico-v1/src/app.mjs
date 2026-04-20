@@ -199,7 +199,7 @@ function renderWelcomeStep() {
         <p class="lead">Vas a ver situaciones de la vida diaria sobre compras, ahorro, riesgo digital, trabajo, hogar y decisiones con dinero. La prueba se presenta en modo conversacional guiado: lee cada situacion, revisa el artefacto visual y elige la opcion que consideres mas adecuada.</p>
         <div class="metrics compact">
           ${renderMetric("30", "Preguntas", "clipboard")}
-          ${renderMetric("30", "Minutos aprox.", "clock")}
+          ${renderMetric("50", "Minutos aprox.", "clock")}
           ${renderMetric("6", "Dimensiones", "layers")}
         </div>
         <div class="actions">
@@ -620,7 +620,7 @@ function renderReport(report, mode) {
               <ul class="list">${(report.strengths.length ? report.strengths : report.dimensions.slice(-2)).map((item) => `<li>${item.name}: ${item.percent}%</li>`).join("")}</ul>
             </div>
             <div>
-              <p class="kicker">Actitudinal</p>
+              <p class="kicker">Criterio financiero</p>
               ${renderAttitudes(report)}
             </div>
           </div>
@@ -1116,7 +1116,7 @@ function renderDimensionBar(dimension) {
 
 function renderAttitudes(report) {
   const summary = report.attitudeSummary;
-  if (!summary) return `<p class="metric-label">Disponible en reporte de cohorte.</p>`;
+  if (!summary || !Object.keys(summary).length) return `<p class="metric-label">La version definitiva califica las 30 preguntas dentro de sus dimensiones.</p>`;
   return `
     <ul class="list">
       ${Object.entries(summary)

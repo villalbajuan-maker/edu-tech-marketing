@@ -112,7 +112,7 @@ export function validateSimulation(result) {
   checks.push(check("Puntaje general entre 0 y 100", between(result.report.percent, 0, 100)));
   checks.push(check("Todas las dimensiones tienen porcentaje valido", result.report.dimensions.every((dimension) => between(dimension.percent, 0, 100))));
   checks.push(check("Existe piloto recomendado", Boolean(result.report.pilotRecommendation?.name)));
-  checks.push(check("Cada estudiante tiene maximo 28 puntos", result.students.every((student) => student.correct <= 28 && student.maxScore === 28)));
+  checks.push(check("Cada estudiante tiene maximo 30 puntos", result.students.every((student) => student.correct <= 30 && student.maxScore === 30)));
   checks.push(check("Clave de respuestas sin opcion dominante", hasBalancedAnswerKey()));
   checks.push(check("Clave de respuestas sin rachas evidentes", getLongestAnswerKeyRun() <= 2));
   return checks;

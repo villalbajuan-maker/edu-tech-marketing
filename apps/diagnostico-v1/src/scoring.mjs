@@ -3,10 +3,10 @@ import { DIMENSIONS, PILOTS, QUESTIONS } from "./data.mjs";
 const dimensionById = new Map(DIMENSIONS.map((dimension) => [dimension.id, dimension]));
 
 export function getGeneralLevel(percent) {
-  if (percent <= 35) return level("Reconoce", "Identifica datos, pero tiene dificultad para usarlos en situaciones reales.");
-  if (percent <= 60) return level("Comprende", "Interpreta situaciones basicas, pero le cuesta comparar alternativas, priorizar o anticipar consecuencias.");
-  if (percent <= 80) return level("Decide", "Toma buenas decisiones en varias situaciones financieras y aplica criterios basicos con consistencia.");
-  return level("Proyecta", "Anticipa consecuencias, reconoce riesgos y decide con criterio en diferentes contextos.");
+  if (percent < 50) return level("Inicial", "Requiere reforzar fundamentos de educacion financiera.");
+  if (percent < 70) return level("En desarrollo", "Identifica riesgos basicos, pero falla en decisiones con multiples variables.");
+  if (percent < 90) return level("Adecuado", "Reconoce la mayoria de conceptos, con oportunidades de mejora en analisis complejo.");
+  return level("Excelente", "Muestra pensamiento critico financiero de alto nivel.");
 }
 
 export function getDimensionStatus(percent) {
@@ -168,9 +168,9 @@ export function recommendPilot(dimensions, levelName) {
     return pilot(PILOTS.hogar, "La principal oportunidad esta en prioridades familiares, consumo responsable y decisiones compartidas.");
   }
 
-  if (levelName === "Reconoce") return pilot(PILOTS.bases, "El nivel general sugiere iniciar por bases financieras y planificacion.");
-  if (levelName === "Comprende") return pilot(PILOTS.creditoRiesgo, "El nivel general sugiere pasar de comprension a decisiones en credito, riesgo y planificacion.");
-  if (levelName === "Decide") return pilot(PILOTS.empresa, "El grupo puede abordar aplicaciones de emprendimiento, ingresos y decisiones financieras.");
+  if (levelName === "Inicial") return pilot(PILOTS.bases, "El nivel general sugiere iniciar por bases financieras y planificacion.");
+  if (levelName === "En desarrollo") return pilot(PILOTS.creditoRiesgo, "El nivel general sugiere pasar de identificacion basica a decisiones en credito, riesgo y planificacion.");
+  if (levelName === "Adecuado") return pilot(PILOTS.empresa, "El grupo puede abordar aplicaciones de emprendimiento, ingresos y decisiones financieras.");
   return pilot(PILOTS.planificacion, "El grupo tiene buen punto de partida y puede profundizar con una ruta aplicada.");
 }
 

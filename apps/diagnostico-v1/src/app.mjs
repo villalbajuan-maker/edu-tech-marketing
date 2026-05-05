@@ -198,9 +198,9 @@ function renderWelcomeStep() {
         <h2 class="headline">Este diagnostico no es una nota academica.</h2>
         <p class="lead">Vas a ver situaciones de la vida diaria sobre compras, ahorro, riesgo digital, trabajo, hogar y decisiones con dinero. La prueba se presenta en modo conversacional guiado: lee cada situacion, revisa el artefacto visual y elige la opcion que consideres mas adecuada.</p>
         <div class="metrics compact">
-          ${renderMetric("30", "Preguntas", "clipboard")}
-          ${renderMetric("50", "Minutos aprox.", "clock")}
-          ${renderMetric("6", "Dimensiones", "layers")}
+          ${renderMetric("20", "Preguntas", "clipboard")}
+          ${renderMetric("50-60", "Minutos aprox.", "clock")}
+          ${renderMetric("6", "Focos de lectura", "layers")}
         </div>
         <div class="actions">
           <button class="button" data-quiz-stage="meta">${icon("play")}Comenzar</button>
@@ -1116,7 +1116,7 @@ function renderDimensionBar(dimension) {
 
 function renderAttitudes(report) {
   const summary = report.attitudeSummary;
-  if (!summary || !Object.keys(summary).length) return `<p class="metric-label">La version definitiva califica las 30 preguntas dentro de sus dimensiones.</p>`;
+  if (!summary || !Object.keys(summary).length) return `<p class="metric-label">La version definitiva califica las 20 preguntas dentro de sus focos de lectura.</p>`;
   return `
     <ul class="list">
       ${Object.entries(summary)
